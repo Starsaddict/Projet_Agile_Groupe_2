@@ -6,12 +6,11 @@ labels:
 assignees: []
 
 body:
-  - type: input
+  - type: textarea
     id: ref
     attributes:
       label: Ref
-      description: Numéro de la User Story (format: US01, US12, US25)
-      placeholder: ex: US01
+      description: Numéro de la User Story
     validations:
       required: true
 
@@ -50,18 +49,16 @@ body:
       label: Priorité
       description: Niveau de priorité
       options:
-        - "1"
-        - "2"
-        - "3"
+        - 1
+        - 2
+        - 3
     validations:
       required: true
 
-  - type: input
+  - type: textarea
     id: us_point
     attributes:
       label: US Point
-      description: Charge estimée (1, 2, 3, 5, 8, 13)
-      placeholder: ex: 3
+      description: Charge estimée (complexité)
     validations:
       required: true
-      pattern: "^(1|2|3|5|8|13)$"

@@ -14,7 +14,6 @@ body:
       placeholder: ex: US01
     validations:
       required: true
-      pattern: "^US[0-9]+$"
 
   - type: dropdown
     id: role

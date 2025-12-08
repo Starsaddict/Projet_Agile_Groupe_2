@@ -6,12 +6,140 @@ labels:
 assignees: []
 
 body:
-  - type: dropdown
+  - type: input
     id: ref
     attributes:
       label: Ref
-      description: Numéro de la User Story
+      description: Numéro de la User Story (ex : US01, US12, US25)
+      placeholder: ex: US01
+    validations:
+      required: true
+
+  - type: dropdown
+    id: role
+    attributes:
+      label: En tant que
+      description: Rôle de l'utilisateur
       options:
+        - secrétaire
+        - coach
+        - parent
+        - joueur
+    validations:
+      required: true
+
+  - type: textarea
+    id: want
+    attributes:
+      label: Je veux…
+      description: Action ou besoin exprimé
+    validations:
+      required: true
+
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Afin de…
+      description: Objectif métier
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorité
+      description: Niveau de priorité
+      options:
+        - 1
+        - 2
+        - 3
+    validations:
+      required: true
+
+  - type: input
+    id: us_point
+    attributes:
+      label: US Point
+      description: Charge estimée (ex : 1, 2, 3, 5, 8, 13)
+      placeholder: ex: 3
+    validations:
+      required: truename: User Story
+description: Création d'une User Story standardisée
+title: "[US] "
+labels:
+  - user story
+assignees: []
+
+body:
+  - type: dropdown
+    id: ref
+    attributes:
+name: User Story
+description: Création d'une User Story standardisée
+title: "[US] "
+labels:
+  - user story
+assignees: []
+
+body:
+  - type: input
+    id: ref
+    attributes:
+      label: Ref
+      description: Numéro de la User Story (ex : US01, US12, US25)
+      placeholder: ex: US01
+    validations:
+      required: true
+
+  - type: dropdown
+    id: role
+    attributes:
+      label: En tant que
+      description: Rôle de l'utilisateur
+      options:
+        - secrétaire
+        - coach
+        - parent
+        - joueur
+    validations:
+      required: true
+
+  - type: textarea
+    id: want
+    attributes:
+      label: Je veux…
+      description: Action ou besoin exprimé
+    validations:
+      required: true
+
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Afin de…
+      description: Objectif métier
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorité
+      description: Niveau de priorité
+      options:
+        - 1
+        - 2
+        - 3
+    validations:
+      required: true
+
+  - type: input
+    id: us_point
+    attributes:
+      label: US Point
+      description: Charge estimée (ex : 1, 2, 3, 5, 8, 13)
+      placeholder: ex: 3
+    validations:
+      required: true
         - US01
         - US02
         - US03

@@ -6,13 +6,6 @@ labels:
 assignees: []
 
 body:
-  - type: textarea
-    id: ref
-    attributes:
-      label: Ref
-      description: Numéro de la User Story
-    validations:
-      required: true
 
   - type: dropdown
     id: role
@@ -24,6 +17,7 @@ body:
         - coach
         - parent
         - joueur
+        - tout
     validations:
       required: true
 

@@ -37,22 +37,4 @@ body:
     validations:
       required: true
 
-  - type: dropdown
-    id: priority
-    attributes:
-      label: Priorité
-      description: Niveau de priorité
-      options:
-        - 1
-        - 2
-        - 3
-    validations:
-      required: true
 
-  - type: textarea
-    id: us_point
-    attributes:
-      label: US Point
-      description: Charge estimée (complexité)
-    validations:
-      required: true

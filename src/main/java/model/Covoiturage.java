@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.JoinTable;
 import javax.persistence.Table;
 
@@ -44,11 +45,9 @@ public class Covoiturage {
     )
     private List<Utilisateur> reservers;
 
-
-
-    //TODO: Foreign keys evenement many to one
-    @Column(name = "IdEvenement", nullable = false)
-    private Long idEvenement;
+    @ManyToOne
+    @JoinColumn(name = "IdEvenement", nullable = false)
+    private Evenement evenement ;
 
     public Covoiturage() {
     }
@@ -85,12 +84,12 @@ public class Covoiturage {
         this.lieuDepart = lieuDepart;
     }
 
-    public Long getIdEvenement() {
-        return idEvenement;
+    public Evenement getEvenement() {
+        return evenement;
     }
 
-    public void setIdEvenement(Long idEvenement) {
-        this.idEvenement = idEvenement;
+    public void setEvenement(Evenement evenement) {
+        this.evenement = evenement;
     }
 
     public Utilisateur getConducteur() {

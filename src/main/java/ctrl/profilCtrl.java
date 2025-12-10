@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,11 +13,9 @@ import model.Joueur;
 import model.Parent;
 import model.Secretaire;
 import model.Utilisateur;
-import service.profilService;
-
-@WebServlet("/Profil/*")
+import repo.utilisateurRepo;
 public class profilCtrl extends HttpServlet {
-    private profilService profilService = new profilService();
+    private utilisateurRepo utilisateurRepo = new utilisateurRepo();
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -26,69 +23,67 @@ public class profilCtrl extends HttpServlet {
         
         HttpSession session = request.getSession();
         Utilisateur utilisateur = (Utilisateur) session.getAttribute("user");
-        
-        String pathInfo = request.getPathInfo();
+        // Base path used when redirecting after validation/permission failures
+        String profilPath = request.getContextPath() + "/secretaire/profil/modifier";
         
         try {
-            if (pathInfo != null && pathInfo.length() > 1) {
-                String[] splits = pathInfo.split("/");
-                if (splits.length > 1) {
-                    Long joueurId = Long.parseLong(splits[1]);
+            // Decide which player's profile to load: request parameter first, then fallback to current user
+            String idParam = request.getParameter("idUtilisateur");
+            Long joueurId;
+
+            if (idParam != null && !idParam.trim().isEmpty()) {
+                joueurId = Long.parseLong(idParam.trim());
+            } else if (utilisateur != null) {
+                joueurId = utilisateur.getIdUtilisateur();
+            } else {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+
+            Joueur joueur = (Joueur) utilisateurRepo.loadUtilisateur(joueurId);
+            
+            if (joueur != null) {
+                // 权限检查：秘书可以访问所有人，父母只能访问自己孩子的信息
+                if (utilisateur instanceof Secretaire || 
+                    (utilisateur instanceof Parent && 
+                     isParentOfJoueur((Parent) utilisateur, joueur))) {
                     
-                    Joueur joueur = profilService.getJoueurById(joueurId);
+                    // Profile owner and linked parents are exposed to the JSP layer
+                    request.setAttribute("joueur", joueur);
                     
-                    if (joueur != null) {
-                        // 权限检查：秘书可以访问所有人，父母只能访问自己孩子的信息
-                        if (utilisateur instanceof Secretaire || 
-                            (utilisateur instanceof Parent && 
-                             isParentOfJoueur((Parent) utilisateur, joueur))) {
-                            
-                            request.setAttribute("joueur", joueur);
-                            
-                            // 设置家长信息
-                            List<Parent> parents = joueur.getParents();
-                            if (parents != null && !parents.isEmpty()) {
-                                request.setAttribute("parent1", parents.get(0));
-                                if (parents.size() > 1) {
-                                    request.setAttribute("parent2", parents.get(1));
-                                } else {
-                                    request.setAttribute("parent2", null);
-                                }
-                            } else {
-                                request.setAttribute("parent1", null);
-                                request.setAttribute("parent2", null);
-                            }
-                            
-                            // 设置当前用户类型
-                            request.setAttribute("isSecretaire", utilisateur instanceof Secretaire);
-                            request.setAttribute("currentUserId", utilisateur.getIdUtilisateur());
-                            
-                            request.getRequestDispatcher("/webapp/jsp/profil.jsp")
-                                   .forward(request, response);
+                    // 设置家长信息
+                    List<Parent> parents = joueur.getParents();
+                    if (parents != null && !parents.isEmpty()) {
+                        request.setAttribute("parent1", parents.get(0));
+                        if (parents.size() > 1) {
+                            request.setAttribute("parent2", parents.get(1));
                         } else {
-                            // 没有权限
-                            response.sendRedirect(request.getContextPath() + "/access-denied");
+                            request.setAttribute("parent2", null);
                         }
                     } else {
-                        response.sendRedirect(request.getContextPath() + "/joueurs?error=notfound");
+                        request.setAttribute("parent1", null);
+                        request.setAttribute("parent2", null);
                     }
+                    
+                    // 设置当前用户类型
+                    request.setAttribute("isSecretaire", utilisateur instanceof Secretaire);
+                    request.setAttribute("currentUserId", utilisateur.getIdUtilisateur());
+                    
+                    request.getRequestDispatcher("/webapp/jsp/profil.jsp")
+                           .forward(request, response);
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/joueurs");
+                    // 没有权限
+                    response.sendRedirect(request.getContextPath() + "/access-denied");
                 }
             } else {
-                // 访问自己的个人资料
-                if (utilisateur != null) {
-                    response.sendRedirect(request.getContextPath() + "/Profil/" + utilisateur.getIdUtilisateur());
-                } else {
-                    response.sendRedirect(request.getContextPath() + "/login");
-                }
+                response.sendRedirect(request.getContextPath() + "/joueurs?error=notfound");
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/joueurs?error=invalidid");
+            response.sendRedirect(profilPath + "?error=invalidid");
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/joueurs?error=server");
+            response.sendRedirect(profilPath + "?error=server");
         }
     }
     
@@ -98,6 +93,7 @@ public class profilCtrl extends HttpServlet {
         
         HttpSession session = request.getSession();
         Utilisateur utilisateur = (Utilisateur) session.getAttribute("user");
+        String profilPath = request.getContextPath() + "/secretaire/profil/modifier";
         
         if (utilisateur == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -105,9 +101,10 @@ public class profilCtrl extends HttpServlet {
         }
         
         try {
+            // Target player id to update
             Long idJoueur = Long.parseLong(request.getParameter("idJoueur"));
             
-            Joueur joueur = profilService.getJoueurById(idJoueur);
+            Joueur joueur = (Joueur) utilisateurRepo.loadUtilisateur(idJoueur);
             if (joueur == null) {
                 response.sendRedirect(request.getContextPath() + "/joueurs?error=notfound");
                 return;
@@ -120,7 +117,7 @@ public class profilCtrl extends HttpServlet {
                 return;
             }
             
-            // 更新球员信息
+            // 更新球员信息并允许可选出生日期
             joueur.setNomUtilisateur(request.getParameter("nomJoueur"));
             joueur.setPrenomUtilisateur(request.getParameter("prenomJoueur"));
             
@@ -141,7 +138,7 @@ public class profilCtrl extends HttpServlet {
             
             if (idParent1Str != null && !idParent1Str.trim().isEmpty()) {
                 Long idParent1 = Long.parseLong(idParent1Str);
-                parent1 = profilService.getParentById(idParent1);
+                parent1 = utilisateurRepo.loadParent(idParent1);
                 if (parent1 != null) {
                     // 权限检查：父母只能修改自己的信息
                     if (utilisateur instanceof Secretaire || 
@@ -163,7 +160,7 @@ public class profilCtrl extends HttpServlet {
             
             if (idParent2Str != null && !idParent2Str.trim().isEmpty()) {
                 Long idParent2 = Long.parseLong(idParent2Str);
-                parent2 = profilService.getParentById(idParent2);
+                parent2 = utilisateurRepo.loadParent(idParent2);
                 if (parent2 != null) {
                     // 权限检查：父母只能修改自己的信息
                     if (utilisateur instanceof Secretaire || 
@@ -179,19 +176,19 @@ public class profilCtrl extends HttpServlet {
             }
             
             // 更新数据
-            profilService.updateJoueurAndParents(joueur, parent1, parent2);
+            utilisateurRepo.updateJoueurAndParents(joueur, parent1, parent2);
             
             // 重定向回个人资料页面
-            response.sendRedirect(request.getContextPath() + "/Profil/" + idJoueur + "?success=true");
+            response.sendRedirect(profilPath + "?idUtilisateur=" + idJoueur + "&success=true");
             
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/Profil/" + 
-                                request.getParameter("idJoueur") + "?error=invalidinput");
+            response.sendRedirect(profilPath + "?idUtilisateur=" + 
+                                request.getParameter("idJoueur") + "&error=invalidinput");
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/Profil/" + 
-                                request.getParameter("idJoueur") + "?error=updatefailed");
+            response.sendRedirect(profilPath + "?idUtilisateur=" + 
+                                request.getParameter("idJoueur") + "&error=updatefailed");
         }
     }
     

@@ -6,12 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="servlet">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/secretaireCreerCompteCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/secretaireCreerCompteCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/secretaireRequestCreerCompteFamile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/secretaireRequestCreerCompteFamile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" afterPath="$PROJECT_DIR$/.project" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/profilCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/profilCtrl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Utilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Utilisateur.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/repo/utilisateurRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repo/utilisateurRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/profilService.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/service/utilisateurService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/utilisateurService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/creerCompte.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/creerCompte.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/profil.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/profil.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +32,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="9-us-72-Ziming" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -65,7 +67,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Kaiyang__US7__US8&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;9-us-72-Ziming-merge-to-main&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,

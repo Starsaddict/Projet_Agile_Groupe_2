@@ -13,8 +13,6 @@ import javax.persistence.*;
 @DiscriminatorValue("Utilisateur")
 public class Utilisateur {
 
-    //TODO: 缺一个reserve onetomany
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdUtilisateur")

@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="architecture">
-      <change afterPath="$PROJECT_DIR$/src/main/java/service/utilisateurService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/util/emailUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/util/mdpUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repo/utilisateurRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repo/utilisateurRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/utilisateurService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/utilisateurService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +60,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Kaiyang__US7__US8",
     "last_opened_file_path": "/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",

@@ -5,16 +5,46 @@ import repo.utilisateurRepo;
 import util.emailUtil;
 import util.mdpUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class utilisateurService {
 
+    public Utilisateur creerCompteUtilisateur(String email, String type) {
+        if(!type.equals("Coach") && !type.equals("Joueur") && !type.equals("Parent") && !type.equals("Secretaire")) {
+            return null;
+        }
 
+        if(!emailUtil.isValidEmail(email)) {
+            return null;
+        }
+
+        String mdp;
+        if (email.length() >= 6) {
+            mdp = email.substring(0, 6);
+        } else {
+            mdp = email;
+        }
+
+        switch (type) {
+            case "Coach":
+                return creerCompteCoach(email,mdp);
+            case "Joueur":
+                return creerCompteJoueur(email,mdp);
+            case "Parent":
+                return creerCompteParent(email,mdp);
+            case "Secretaire":
+                return creerCompteSecretaire(email,mdp);
+        }
+
+        return null;
+
+    }
 
     public Secretaire creerCompteSecretaire(String email, String mdp) {
         Secretaire secretaire = new Secretaire();
-        emailUtil emailUtil = new emailUtil();
         if (emailUtil.isValidEmail(email)) {
             secretaire.setEmailUtilisateur(email);
-            mdpUtil mdpUtil = new mdpUtil();
             String password = mdpUtil.mdpString(mdp);
             secretaire.setMdpUtilisateur(password);
 
@@ -26,12 +56,11 @@ public class utilisateurService {
         return null;
     }
 
-    public Coach crerCompteCoach(String email, String mdp) {
+    public Coach creerCompteCoach(String email, String mdp) {
         Coach coach = new Coach();
-        emailUtil emailUtil = new emailUtil();
         if (emailUtil.isValidEmail(email)) {
             coach.setEmailUtilisateur(email);
-            mdpUtil mdpUtil = new mdpUtil();
+
             String password = mdpUtil.mdpString(mdp);
             coach.setMdpUtilisateur(password);
 
@@ -42,12 +71,11 @@ public class utilisateurService {
         return null;
     }
 
-    public Parent crerCompteParent(String email, String mdp) {
+    public Parent creerCompteParent(String email, String mdp) {
         Parent parent = new Parent();
-        emailUtil emailUtil = new emailUtil();
         if (emailUtil.isValidEmail(email)) {
             parent.setEmailUtilisateur(email);
-            mdpUtil mdpUtil = new mdpUtil();
+
             String password = mdpUtil.mdpString(mdp);
             parent.setMdpUtilisateur(password);
 
@@ -58,12 +86,10 @@ public class utilisateurService {
         return null;
     }
 
-    public Joueur crerCompteJoueur(String email, String mdp) {
+    public Joueur creerCompteJoueur(String email, String mdp) {
         Joueur joueur = new Joueur();
-        emailUtil emailUtil = new emailUtil();
         if (emailUtil.isValidEmail(email)) {
             joueur.setEmailUtilisateur(email);
-            mdpUtil mdpUtil = new mdpUtil();
             String password = mdpUtil.mdpString(mdp);
             joueur.setMdpUtilisateur(password);
 
@@ -74,5 +100,44 @@ public class utilisateurService {
         return null;
     }
 
+    public void setFamily(List<Parent> parents, List<Joueur> joueurs) {
+        if (parents == null || joueurs == null) {
+            return;
+        }
+
+        for (Parent parent : parents) {
+            List<Joueur> parentJoueurs = parent.getJoueurs();
+            if (parentJoueurs == null) {
+                parentJoueurs = new ArrayList<>();
+                parent.setJoueurs(parentJoueurs);
+            }
+            for (Joueur joueur : joueurs) {
+                if (!parentJoueurs.contains(joueur)) {
+                    parentJoueurs.add(joueur);
+                }
+            }
+        }
+
+        for (Joueur joueur : joueurs) {
+            List<Parent> joueurParents = joueur.getParents();
+            if (joueurParents == null) {
+                joueurParents = new ArrayList<>();
+                joueur.setParents(joueurParents);
+            }
+            for (Parent parent : parents) {
+                if (!joueurParents.contains(parent)) {
+                    joueurParents.add(parent);
+                }
+            }
+        }
+
+        utilisateurRepo utilisateurRepo = new utilisateurRepo();
+        for (Parent parent : parents) {
+            utilisateurRepo.updateUtilisateur(parent);
+        }
+        for (Joueur joueur : joueurs) {
+            utilisateurRepo.updateUtilisateur(joueur);
+        }
+    }
 
 }

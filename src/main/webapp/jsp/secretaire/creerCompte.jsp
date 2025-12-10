@@ -14,7 +14,12 @@
 
     <h1>Création du compte famille</h1>
 
-    <form method="post" action="/secretaire/creerCompteFamile">
+    <% String error = request.getParameter("error"); %>
+    <% if (error != null && !error.isEmpty()) { %>
+        <div style="color:red;"><%= error %></div>
+    <% } %>
+
+    <form method="post" action="<%=request.getContextPath()%>/secretaire/profil/creerCompteFamile">
 
         <table border="1" cellpadding="10" cellspacing="0">
             <tr>
@@ -62,6 +67,11 @@
                 'Nom: <input type="text" name="joueur_nom[]" /><br/>' +
                 'Prénom: <input type="text" name="joueur_prenom[]" /><br/>' +
                 'Email: <input type="email" name="joueur_email[]" /><br/>';
+            if (col.children.length) {
+                var separator = document.createElement("hr");
+                separator.className = "row-separator";
+                col.appendChild(separator);
+            }
             col.appendChild(div);
         }
 
@@ -73,6 +83,11 @@
                 'Nom: <input type="text" name="parent_nom[]" /><br/>' +
                 'Prénom: <input type="text" name="parent_prenom[]" /><br/>' +
                 'Email: <input type="email" name="parent_email[]" /><br/>';
+            if (col.children.length) {
+                var separator = document.createElement("hr");
+                separator.className = "row-separator";
+                col.appendChild(separator);
+            }
             col.appendChild(div);
         }
     </script>

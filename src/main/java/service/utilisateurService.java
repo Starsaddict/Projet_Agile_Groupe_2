@@ -5,6 +5,7 @@ import repo.utilisateurRepo;
 import util.emailUtil;
 import util.mdpUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class utilisateurService {
@@ -28,7 +29,7 @@ public class utilisateurService {
         switch (type) {
             case "Coach":
                 return creerCompteCoach(email,mdp);
-            case "Jouer":
+            case "Joueur":
                 return creerCompteJoueur(email,mdp);
             case "Parent":
                 return creerCompteParent(email,mdp);
@@ -97,6 +98,46 @@ public class utilisateurService {
             return joueur;
         }
         return null;
+    }
+
+    public void setFamily(List<Parent> parents, List<Joueur> joueurs) {
+        if (parents == null || joueurs == null) {
+            return;
+        }
+
+        for (Parent parent : parents) {
+            List<Joueur> parentJoueurs = parent.getJoueurs();
+            if (parentJoueurs == null) {
+                parentJoueurs = new ArrayList<>();
+                parent.setJoueurs(parentJoueurs);
+            }
+            for (Joueur joueur : joueurs) {
+                if (!parentJoueurs.contains(joueur)) {
+                    parentJoueurs.add(joueur);
+                }
+            }
+        }
+
+        for (Joueur joueur : joueurs) {
+            List<Parent> joueurParents = joueur.getParents();
+            if (joueurParents == null) {
+                joueurParents = new ArrayList<>();
+                joueur.setParents(joueurParents);
+            }
+            for (Parent parent : parents) {
+                if (!joueurParents.contains(parent)) {
+                    joueurParents.add(parent);
+                }
+            }
+        }
+
+        utilisateurRepo utilisateurRepo = new utilisateurRepo();
+        for (Parent parent : parents) {
+            utilisateurRepo.updateUtilisateur(parent);
+        }
+        for (Joueur joueur : joueurs) {
+            utilisateurRepo.updateUtilisateur(joueur);
+        }
     }
 
 }

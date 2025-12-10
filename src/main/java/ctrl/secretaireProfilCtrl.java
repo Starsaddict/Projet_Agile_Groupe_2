@@ -1,19 +1,16 @@
 package ctrl;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
-public class secretaireCreerCompteCtrl extends HttpServlet {
+public class secretaireProfilCtrl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        request.getRequestDispatcher(
-                "/jsp/secretaire/creerCompte.jsp"
-        ).forward(request, response);
+        request.getRequestDispatcher("/jsp/secretaire/profil.jsp").forward(request, response);
     }
 
     @Override
@@ -21,4 +18,4 @@ public class secretaireCreerCompteCtrl extends HttpServlet {
             throws ServletException, IOException {
         doGet(request, response);
     }
-    }
+}

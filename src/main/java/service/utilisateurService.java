@@ -5,6 +5,8 @@ import repo.utilisateurRepo;
 import util.emailUtil;
 import util.mdpUtil;
 
+import java.util.List;
+
 public class utilisateurService {
 
     public Utilisateur creerCompteUtilisateur(String email, String type) {

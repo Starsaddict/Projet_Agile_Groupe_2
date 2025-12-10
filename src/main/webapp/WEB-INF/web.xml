@@ -33,4 +33,14 @@
     <url-pattern>/secretaire/creerCompte</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>SecretaireCreerCompteFamile</servlet-name>
+    <servlet-class>ctrl.secretaireRequestCreerCompteFamile</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SecretaireCreerCompteFamile</servlet-name>
+    <url-pattern>/secretaire/creerCompteFamile</url-pattern>
+  </servlet-mapping>
+
 </web-app>

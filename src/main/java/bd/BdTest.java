@@ -66,7 +66,7 @@ public class BdTest {
             covoiturage.setDateCovoiturage(LocalDateTime.of(2024, 2, 1, 8, 30));
             covoiturage.setNbPlacesMax("4");
             covoiturage.setLieuDepart("City Center");
-            covoiturage.setIdEvenement(evenement.getIdEvenement());
+            covoiturage.setEvenement(evenement);
             covoiturage.setConducteur(conducteur);
             covoiturage.addUtilisateur(passager);
             session.save(covoiturage);

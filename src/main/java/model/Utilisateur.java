@@ -3,20 +3,14 @@ package model;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Utilisateur")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="TypeU",
+        discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorValue("Utilisateur")
 public class Utilisateur {
 
     //TODO: 缺一个reserve onetomany
@@ -41,10 +35,10 @@ public class Utilisateur {
     @Column(name = "DateNaissanceUtilisateur")
     private LocalDate dateNaissanceUtilisateur;
 
-    @ManyToMany(mappedBy = "reservers")
+    @ManyToMany(mappedBy = "reservers", cascade = CascadeType.ALL)
     private List<Covoiturage> covoiturages;
 
-    @OneToMany(mappedBy = "conducteur")
+    @OneToMany(mappedBy = "conducteur", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Covoiturage> conduits;
 
     public Utilisateur() {

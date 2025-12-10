@@ -18,7 +18,7 @@
 		<property name="hibernate.current_session_context_class">thread</property>
 		
 		<!-- Mode de mise à jour de la base de données - create, validate, update, none -->
-		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="hibernate.hbm2ddl.auto">create</property>
 
 	</session-factory>
 </hibernate-configuration>

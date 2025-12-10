@@ -22,6 +22,15 @@
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
+<!-- "/secretaire/creerCompte" => ctrl.secretaireCreerCompteCtrl -->
+  <servlet>
+    <servlet-name>SecretaireCreerCompte</servlet-name>
+    <servlet-class>ctrl.secretaireCreerCompteCtrl</servlet-class>
+  </servlet>
 
+  <servlet-mapping>
+    <servlet-name>SecretaireCreerCompte</servlet-name>
+    <url-pattern>/secretaire/creerCompte</url-pattern>
+  </servlet-mapping>
 
 </web-app>

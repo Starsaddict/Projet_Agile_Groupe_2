@@ -14,12 +14,13 @@ public class utilisateurRepo {
         }
     }
 
-    public void saveUtilisateur(Utilisateur u) {
+    public Utilisateur saveUtilisateur(Utilisateur u) {
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.save(u);
             session.getTransaction().commit();
             session.close();
+            return u;
         }
     }
 

@@ -14,92 +14,93 @@ import bd.HibernateUtil;
 import model.Evenement;
 import model.Groupe;
 
-@WebServlet("/CtrlConvoquer")    
+@WebServlet("/CtrlConvoquer")
 public class CtrlConvoquer extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        String action = request.getParameter("action");
+		String action = request.getParameter("action");
 
-        if ("selectionEvenement".equals(action)) {
-            afficherSelection(request, response);
-        } else {
-        	//
-        }
-    }
+		if ("selectionEvenement".equals(action)) {
+			afficherSelection(request, response);
+		} else {
+			//
+		}
+	}
 
-    private void afficherSelection(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+	private void afficherSelection(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        String idEvtStr = request.getParameter("idEvenement");
-        if (idEvtStr == null) {
-        	request.setAttribute("messageErreur", "Mauvaise id de l'évènement.");
-        	request.getRequestDispatcher("/jsp/pageConvoquer.jsp").forward(request, response);
-            return;
-        }
+		String idEvtStr = request.getParameter("idEvenement");
+		if (idEvtStr == null) {
+			request.setAttribute("messageErreur", "Mauvaise id de l'évènement.");
+			//To do: à modifier.
+			request.getRequestDispatcher("/jsp/PageConvoquer.jsp").forward(request, response);
+			return;
+		}
 
-        int idEvenement = Integer.parseInt(idEvtStr);
+		 Long idEvenement = Long.parseLong(idEvtStr);
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Evenement evt = session.get(Evenement.class, idEvenement);
-            List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			Evenement evt = session.get(Evenement.class, idEvenement);
+			List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
 
-            request.setAttribute("evenementSelectionne", evt);
-            request.setAttribute("groupesCoach", groupes);
-        }
+			request.setAttribute("evenementSelectionne", evt);
+			request.setAttribute("groupesCoach", groupes);
+		}
 
-        request.getRequestDispatcher("/jsp/pageSelection.jsp").forward(request, response);
-    }
+		request.getRequestDispatcher("/jsp/PageSelection.jsp").forward(request, response);
+	}
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        String action = request.getParameter("action");
+		String action = request.getParameter("action");
 
-        if ("validerConvocation".equals(action)) {
-            validerConvocation(request, response);
-        } else {
-        	//
-        }
-    }
+		if ("validerConvocation".equals(action)) {
+			validerConvocation(request, response);
+		} else {
+			//
+		}
+	}
 
-    private void validerConvocation(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+	private void validerConvocation(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        String idEvtStr = request.getParameter("idEvenement");
-        String idGroupeStr = request.getParameter("idGroupe"); 
+		String idEvtStr = request.getParameter("idEvenement");
+		String idGroupeStr = request.getParameter("idGroupe");
 
-        if (idEvtStr == null || idGroupeStr == null) {
-            request.setAttribute("messageErreur", "Veuillez sélectionner un groupe.");
-            afficherSelection(request, response);
-            return;
-        }
+		if (idEvtStr == null || idGroupeStr == null) {
+			request.setAttribute("messageErreur", "Veuillez sélectionner un groupe.");
+			afficherSelection(request, response);
+			return;
+		}
 
-        int idEvenement = Integer.parseInt(idEvtStr);
-        int idGroupe = Integer.parseInt(idGroupeStr);
+		 Long idEvenement = Long.parseLong(idEvtStr);
+		Long idGroupe = Long.parseLong(idGroupeStr);
 
-        Evenement evt = null;
+		Evenement evt = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			Transaction tx = session.beginTransaction();
 
-            evt = session.get(Evenement.class, idEvenement);
-            Groupe g = session.get(Groupe.class, idGroupe);
+			evt = session.get(Evenement.class, idEvenement);
+			Groupe g = session.get(Groupe.class, idGroupe);
 
-            evt.setGroupe(g);
-            session.update(evt);
-            tx.commit();
+			evt.setGroupe(g);
+			session.update(evt);
+			tx.commit();
 
-            List<Groupe> tousGroupes = session.createQuery("from Groupe", Groupe.class).list();
-            request.setAttribute("groupesCoach", tousGroupes);
-        }
+			List<Groupe> tousGroupes = session.createQuery("from Groupe", Groupe.class).list();
+			request.setAttribute("groupesCoach", tousGroupes);
+		}
 
-        request.setAttribute("evenementSelectionne", evt);
-        request.setAttribute("messageSucces", "Le groupe a bien été convoqué !");
-        request.getRequestDispatcher("/jsp/pageSelection.jsp").forward(request, response);
-    }
+		request.setAttribute("evenementSelectionne", evt);
+		request.setAttribute("messageSucces", "Le groupe a bien été convoqué !");
+		request.getRequestDispatcher("/jsp/PageSelection.jsp").forward(request, response);
+	}
 
 }

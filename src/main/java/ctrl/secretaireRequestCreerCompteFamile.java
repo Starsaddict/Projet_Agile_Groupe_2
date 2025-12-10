@@ -88,6 +88,7 @@ public class secretaireRequestCreerCompteFamile extends HttpServlet {
             if (joueur != null) {
                 joueur.setNomUtilisateur(joueurNom[i]);
                 joueur.setPrenomUtilisateur(joueurPrenom[i]);
+                utilisateurRepo.updateUtilisateur(joueur); // persist names before reloading in setFamily
                 joueurs.add(joueur);
             }
         }
@@ -98,6 +99,7 @@ public class secretaireRequestCreerCompteFamile extends HttpServlet {
             if (parent != null) {
                 parent.setNomUtilisateur(parentNom[i]);
                 parent.setPrenomUtilisateur(parentPrenom[i]);
+                utilisateurRepo.updateUtilisateur(parent); // persist names before reloading in setFamily
                 parents.add(parent);
             }
         }

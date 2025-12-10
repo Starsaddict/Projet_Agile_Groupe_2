@@ -10,8 +10,7 @@
         <div style="color:green;">Compte famille créé avec succès</div>
     <% } %>
     <ul>
-        <li><a href="<%=request.getContextPath()%>/secretaire/profil/creerCompte">Créer un compte famille</a></li>
-        <li><a href="<%=request.getContextPath()%>/secretaire/profil/creerCompteFamile">Créer une famille (soumission)</a></li>
+        <li><a href="<%=request.getContextPath()%>/secretaire/profil/creerCompteFamile">Créer une famille</a></li>
         <li><a href="<%=request.getContextPath()%>/secretaire/profil/modifier">Modifier un compte</a></li>
     </ul>
 </body>

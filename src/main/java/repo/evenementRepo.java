@@ -1,4 +1,4 @@
-package DAO;
+package repo;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.hibernate.Transaction;
 import bd.HibernateUtil;
 import model.Evenement;
 
-public class EvenementDAO {
+public class evenementRepo {
 
     // CREATE
     public void creer(Evenement e) {

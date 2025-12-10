@@ -52,10 +52,24 @@
     <%
         List<Groupe> groupes = (List<Groupe>) request.getAttribute("groupesCoach");
         if (groupes == null || groupes.isEmpty()) {
+        	Groupe groupeSelectionne = null;
     %>
         <p>Aucun groupe disponible.</p>
     <%
         } else if (evt != null) {
+        	Groupe groupeSelectionne = evt.getGroupe();
+        	if (groupeSelectionne != null) {
+    %>
+            <p><strong>Groupe déjà convoqué :</strong>
+               <%= groupeSelectionne.getIdGroupe() %> - 
+               <%= groupeSelectionne.getNomGroupe() %>
+            </p>
+	<%
+        } else {
+	%>
+            <p><em>Aucun groupe n'a encore été convoqué pour cet événement.</em></p>
+	<%
+        		}
     %>
         <form action="CtrlConvoquer" method="post">
             <input type="hidden" name="action" value="validerConvocation">
@@ -68,15 +82,24 @@
                     <th>Nom du groupe</th>
                 </tr>
                 <%
-                    for (Groupe g : groupes) {
-                %>
+                for (Groupe g : groupes) {
+
+                    boolean checked = false;
+                    if (groupeSelectionne != null &&
+                        groupeSelectionne.getIdGroupe() != null &&
+                        groupeSelectionne.getIdGroupe().equals(g.getIdGroupe())) {
+                        checked = true;
+                    }
+           		 %>
                 <tr>
-                    <td>
-                        <input type="radio" name="idGroupe" value="<%= g.getIdGroupe() %>">
-                    </td>
-                    <td><%= g.getIdGroupe() %></td>
-                    <td><%= g.getNomGroupe() %></td>
-                </tr>
+                <td>
+                    <input type="radio" name="idGroupe"
+                           value="<%= g.getIdGroupe() %>"
+                           <%= checked ? "checked" : "" %> >
+                </td>
+                <td><%= g.getIdGroupe() %></td>
+                <td><%= g.getNomGroupe() %></td>
+            </tr>
                 <%
                     }
                 %>
@@ -87,7 +110,6 @@
     <%
         }
     %>
-
     <br>
     <form action="CtrlCoach" method="get">
 		<input type="hidden" name="action" value="ConvocationGroupe">

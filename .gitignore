@@ -47,7 +47,7 @@ local.properties
 # PDT-specific (PHP Development Tools)
 .buildpath
 
-# sbteclipse plugin
+# sbteclipse plugin˚
 .target
 
 # Tern plugin
@@ -74,7 +74,6 @@ local.properties
 .project
 
 # JDT-specific (Eclipse Java Development Tools)
-.classpath
 
 # Annotation Processing
 .apt_generated

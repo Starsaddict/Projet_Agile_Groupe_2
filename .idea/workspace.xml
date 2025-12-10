@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="creer compte">
+    <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="&#10;creer compte">
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
     </list>
@@ -25,7 +27,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Kaiyang_US7_US8" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -167,13 +169,13 @@
       <option name="project" value="LOCAL" />
       <updated>1765320780528</updated>
     </task>
-    <task id="LOCAL-00009" summary="creer compte">
+    <task id="LOCAL-00009" summary="&#10;creer compte">
       <option name="closed" value="true" />
-      <created>1765365654650</created>
+      <created>1765367979193</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1765365654650</updated>
+      <updated>1765367979193</updated>
     </task>
     <option name="localTasksCounter" value="10" />
     <servers />
@@ -208,7 +210,7 @@
     <MESSAGE value="init" />
     <MESSAGE value="models" />
     <MESSAGE value="architecture" />
-    <MESSAGE value="creer compte" />
-    <option name="LAST_COMMIT_MESSAGE" value="creer compte" />
+    <MESSAGE value="&#10;creer compte" />
+    <option name="LAST_COMMIT_MESSAGE" value="&#10;creer compte" />
   </component>
 </project>

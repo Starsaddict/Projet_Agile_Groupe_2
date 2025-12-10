@@ -43,7 +43,6 @@ local.properties
 .autotools
 
 # Java annotation processor (APT)
-.factorypath
 
 # PDT-specific (PHP Development Tools)
 .buildpath
@@ -58,7 +57,6 @@ local.properties
 .texlipse
 
 # STS (Spring Tool Suite)
-.springBeans
 
 # Code Recommenders
 .recommenders/
@@ -185,18 +183,12 @@ build/
 .#*
 *#
 *~
-.classpath
-.project
-.settings
 bin
 build
 target
-dependency-reduced-pom.xml
 *.sublime-*
 /scratch
 .gradle
 README.html
-*.iml
-.idea
 .exercism
 /.idea/

@@ -3,16 +3,7 @@ package model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Evenement")
@@ -23,37 +14,41 @@ public class Evenement {
     @Column(name = "IdEvenement")
     private Long idEvenement;
 
-    @Column(name = "NomEvenement")
+    @Column(name = "NomEvenement", nullable = false)
     private String nomEvenement;
 
-    @Column(name = "LieuEvenement")
+    @Column(name = "LieuEvenement", nullable = false)
     private String lieuEvenement;
 
-    @Column(name = "DateEvenement")
+    @Column(name = "DateEvenement", nullable = false)
     private LocalDateTime dateEvenement;
 
-    @Column(name = "TypeEvenement")
+    @Column(name = "TypeEvenement", nullable = false)
     private String typeEvenement;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "IdGroupe", nullable = false)
     private Groupe groupe;
 
-    @Column(name = "IdGroupe", nullable = false, insertable = false, updatable = false)
-    private Long idGroupe;
-
     @OneToMany(mappedBy = "evenement", fetch = FetchType.LAZY)
     private List<Covoiturage> covoiturages;
-    
-    public Evenement() {
+
+    // Constructeur vide obligatoire
+    public Evenement() {}
+
+    // Constructeur utile
+    public Evenement(String nom, String lieu, LocalDateTime date, String type, Groupe groupe) {
+        this.nomEvenement = nom;
+        this.lieuEvenement = lieu;
+        this.dateEvenement = date;
+        this.typeEvenement = type;
+        this.groupe = groupe;
     }
+
+    // ===================== GETTERS / SETTERS =====================
 
     public Long getIdEvenement() {
         return idEvenement;
-    }
-
-    public void setIdEvenement(Long idEvenement) {
-        this.idEvenement = idEvenement;
     }
 
     public String getNomEvenement() {
@@ -80,12 +75,12 @@ public class Evenement {
         this.dateEvenement = dateEvenement;
     }
 
-    public Long getIdGroupe() {
-        return idGroupe;
+    public String getTypeEvenement() {
+        return typeEvenement;
     }
 
-    public void setIdGroupe(Long idGroupe) {
-        this.idGroupe = idGroupe;
+    public void setTypeEvenement(String typeEvenement) {
+        this.typeEvenement = typeEvenement;
     }
 
     public Groupe getGroupe() {
@@ -94,16 +89,12 @@ public class Evenement {
 
     public void setGroupe(Groupe groupe) {
         this.groupe = groupe;
-        this.idGroupe = groupe != null ? groupe.getIdGroupe() : null;
     }
-
-    public String getTypeEvenement() { return this.typeEvenement; }
-
-    public void setTypeEvenement(String typeEvenement) { this.typeEvenement=typeEvenement; }
 
     public List<Covoiturage> getCovoiturages() {
         return covoiturages;
     }
+
     public void setCovoiturages(List<Covoiturage> covoiturages) {
         this.covoiturages = covoiturages;
     }

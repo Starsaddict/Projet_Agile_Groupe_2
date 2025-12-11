@@ -37,7 +37,7 @@ public class CtrlConvoquer extends HttpServlet {
 		if (idEvtStr == null) {
 			request.setAttribute("messageErreur", "Mauvaise id de l'évènement.");
 			//To do: à modifier.
-			request.getRequestDispatcher("/jsp/PageConvoquer.jsp").forward(request, response);
+			request.getRequestDispatcher("/jsp/coach/PageConvoquer.jsp").forward(request, response);
 			return;
 		}
 
@@ -51,7 +51,7 @@ public class CtrlConvoquer extends HttpServlet {
 			request.setAttribute("groupesCoach", groupes);
 		}
 
-		request.getRequestDispatcher("/jsp/PageSelection.jsp").forward(request, response);
+		request.getRequestDispatcher("/jsp/coach/PageSelection.jsp").forward(request, response);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class CtrlConvoquer extends HttpServlet {
 
 		request.setAttribute("evenementSelectionne", evt);
 		request.setAttribute("messageSucces", "Le groupe est marqué pour convocation");
-		request.getRequestDispatcher("/jsp/PageSelection.jsp").forward(request, response);
+		request.getRequestDispatcher("/jsp/coach/PageSelection.jsp").forward(request, response);
 	}
 
 }

@@ -32,7 +32,7 @@ public class CtrlCoach extends HttpServlet {
         switch (action) {
 
             case "PageCoach":
-                request.getRequestDispatcher("/jsp/PageCoach.jsp").forward(request, response);
+                request.getRequestDispatcher("/jsp/coach/PageCoach.jsp").forward(request, response);
                 break;
 
             case "ConvocationGroupe":
@@ -46,7 +46,7 @@ public class CtrlCoach extends HttpServlet {
 
                     request.setAttribute("evenements", evenements);
                 }
-                request.getRequestDispatcher("/jsp/PageConvoquer.jsp").forward(request, response);
+                request.getRequestDispatcher("/jsp/coach/PageConvoquer.jsp").forward(request, response);
                 break;
 
             case "GestionGroupe":
@@ -66,7 +66,7 @@ public class CtrlCoach extends HttpServlet {
                     request.setAttribute("joueurs", joueurs);
                     request.setAttribute("groupes", groupesSansDoublons);
                 }
-                request.getRequestDispatcher("/jsp/PageGestionGroupe.jsp").forward(request, response);
+                request.getRequestDispatcher("/jsp/coach/PageGestionGroupe.jsp").forward(request, response);
                 break;
 
             default:

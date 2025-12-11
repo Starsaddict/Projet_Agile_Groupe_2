@@ -14,7 +14,7 @@
 
     <servlet>
         <servlet-name>Coach</servlet-name>
-        <jsp-file>/jsp/PageCoach.jsp</jsp-file>
+        <jsp-file>/jsp/coach/PageCoach.jsp</jsp-file>
     </servlet>
 
     <servlet-mapping>

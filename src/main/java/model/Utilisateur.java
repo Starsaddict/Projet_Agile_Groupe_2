@@ -13,8 +13,6 @@ import javax.persistence.*;
 @DiscriminatorValue("Utilisateur")
 public class Utilisateur {
 
-    //TODO: 缺一个reserve onetomany
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdUtilisateur")
@@ -34,6 +32,9 @@ public class Utilisateur {
 
     @Column(name = "DateNaissanceUtilisateur")
     private LocalDate dateNaissanceUtilisateur;
+
+    @Column(name = "TypeU", insertable = false, updatable = false)
+    private String typeU;
 
     @ManyToMany(mappedBy = "reservers", cascade = CascadeType.ALL)
     private List<Covoiturage> covoiturages;
@@ -84,6 +85,15 @@ public class Utilisateur {
         this.prenomUtilisateur = prenomUtilisateur;
     }
 
+    public String getTypeU() {
+        return typeU;
+    }
+
+    public void setTypeU(String typeU) {
+        this.typeU = typeU;
+    }
+
+
     public LocalDate getDateNaissanceUtilisateur() {
         return dateNaissanceUtilisateur;
     }
@@ -106,5 +116,12 @@ public class Utilisateur {
 
     public void setConduits(List<Covoiturage> conduits) {
         this.conduits = conduits;
+    }
+
+    @Override
+    public String toString() {
+        return "Utilisateur [idUtilisateur=" + idUtilisateur + ", emailUtilisateur=" + emailUtilisateur
+                + ", nomUtilisateur=" + nomUtilisateur + ", prenomUtilisateur=" + prenomUtilisateur + ", typeU="
+                + typeU + "]";
     }
 }

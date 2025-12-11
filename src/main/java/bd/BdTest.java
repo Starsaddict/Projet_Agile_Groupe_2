@@ -36,6 +36,8 @@ public class BdTest {
             session.save(parent);
 
             Joueur joueur = new Joueur();
+            joueur.setEmailUtilisateur("lucas@test.com");
+            joueur.setMdpUtilisateur("test");
             joueur.setNomUtilisateur("Joueur");
             joueur.setPrenomUtilisateur("J");
             session.save(joueur);

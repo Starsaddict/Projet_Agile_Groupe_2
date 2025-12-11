@@ -15,6 +15,7 @@ import model.Joueur;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 @WebServlet("/CtrlCoach")
@@ -50,11 +51,20 @@ public class CtrlCoach extends HttpServlet {
 
             case "GestionGroupe":
                 try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+                    // Charger tous les joueurs pour le formulaire
                     List<Joueur> joueurs = session.createQuery("from Joueur", Joueur.class).list();
-                    List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
+
+                    // Charger les groupes avec leurs joueurs
+                    List<Groupe> groupes = session.createQuery(
+                        "SELECT DISTINCT g FROM Groupe g LEFT JOIN FETCH g.joueurs", Groupe.class
+                    ).list();
+
+                    // Supprimer les doublons éventuels causés par le fetch join
+                    List<Groupe> groupesSansDoublons = new ArrayList<>(new LinkedHashSet<>(groupes));
 
                     request.setAttribute("joueurs", joueurs);
-                    request.setAttribute("groupes", groupes);
+                    request.setAttribute("groupes", groupesSansDoublons);
                 }
                 request.getRequestDispatcher("/jsp/PageGestionGroupe.jsp").forward(request, response);
                 break;

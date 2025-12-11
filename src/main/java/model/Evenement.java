@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -31,8 +32,12 @@ public class Evenement {
     @JoinColumn(name = "IdGroupe", nullable = true)
     private Groupe groupe;
 
-    @OneToMany(mappedBy = "evenement", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Covoiturage> covoiturages;
+    
+    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<EtrePresent> etresPresents = new ArrayList<>();
+
 
     // Constructeur vide obligatoire
     public Evenement() {}

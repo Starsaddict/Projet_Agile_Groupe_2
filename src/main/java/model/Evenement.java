@@ -26,8 +26,9 @@ public class Evenement {
     @Column(name = "TypeEvenement", nullable = false)
     private String typeEvenement;
 
+ // Pour Tester us 13 il faut laisser gourpe lié vide.
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "IdGroupe", nullable = false)
+    @JoinColumn(name = "IdGroupe", nullable = true)
     private Groupe groupe;
 
     @OneToMany(mappedBy = "evenement", fetch = FetchType.LAZY)
@@ -43,6 +44,13 @@ public class Evenement {
         this.dateEvenement = date;
         this.typeEvenement = type;
         this.groupe = groupe;
+    }
+    // Pour Tester us 13 il faut laisser gourpe lié vide.
+    public Evenement(String nom, String lieu, LocalDateTime date, String type) {
+        this.nomEvenement = nom;
+        this.lieuEvenement = lieu;
+        this.dateEvenement = date;
+        this.typeEvenement = type;
     }
 
     // ===================== GETTERS / SETTERS =====================

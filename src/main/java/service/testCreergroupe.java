@@ -10,7 +10,7 @@ import model.Groupe;
 import model.Joueur;
 import bd.HibernateUtil;
 
-public class testMain {
+public class testCreergroupe {
 
     public static void main(String[] args) {
 

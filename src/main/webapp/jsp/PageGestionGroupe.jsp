@@ -1,23 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<h2>Créer un groupe</h2>
+<h2>Créer Groupe</h2>
 
-<form action="CtrlCoach?action=EnregistrerGroupe" method="post">
+<form action="CtrlCoach" method="post">
+    <input type="hidden" name="action" value="EnregistrerGroupe"/>
+
     Nom du groupe :
-    <input type="text" name="nomGroupe" required>
+    <input type="text" name="nomGroupe" /><br/><br/>
 
-    <h3>Choisir des joueurs</h3>
-
+    Joueurs : <br/>
     <c:forEach var="j" items="${joueurs}">
-        <input type="checkbox" name="joueursIds" value="${j.idUtilisateur}">
-        ${j.nomUtilisateur} ${j.prenomUtilisateur} <br>
+        <input type="checkbox" name="joueursIds" value="${j.idUtilisateur}" />
+        ${j.nomUtilisateur} ${j.prenomUtilisateur}<br/>
     </c:forEach>
 
-    <button type="submit">Créer le groupe</button>
+    <br/>
+    <button type="submit">Créer</button>
 </form>
-
-<hr>
 
 <h2>Groupes existants</h2>
 
@@ -33,15 +33,18 @@
             <td>${g.nomGroupe}</td>
             <td>
                 <c:forEach var="j" items="${g.joueurs}">
-                    ${j.nomUtilisateur} ${j.prenomUtilisateur} <br>
+                    ${j.nomUtilisateur} ${j.prenomUtilisateur}<br/>
                 </c:forEach>
             </td>
             <td>
-                <a href="CtrlCoach?action=ModifierGroupe&id=${g.idGroupe}">
-                    Modifier
-                </a>
+                <form action="CtrlCoach" method="post" style="display:inline;">
+                    <input type="hidden" name="action" value="SupprimerGroupe"/>
+                    <input type="hidden" name="idGroupe" value="${g.idGroupe}"/>
+                    <button type="submit" onclick="return confirm('Voulez-vous vraiment supprimer ce groupe ?');">
+                        Supprimer
+                    </button>
+                </form>
             </td>
         </tr>
     </c:forEach>
-
 </table>

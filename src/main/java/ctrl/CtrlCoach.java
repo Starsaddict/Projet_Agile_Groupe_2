@@ -60,7 +60,7 @@ public class CtrlCoach extends HttpServlet {
                 break;
 
             default:
-                request.getRequestDispatcher("/jsp/PageCoach.jsp").forward(request, response);
+                response.sendRedirect("CtrlCoach?action=GestionGroupe");
         }
     }
 
@@ -69,27 +69,27 @@ public class CtrlCoach extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
-
         if (action == null) action = "";
 
         switch (action) {
             case "EnregistrerGroupe":
                 creerGroupe(request, response);
                 break;
-
+            case "SupprimerGroupe":
+                supprimerGroupe(request, response);
+                break;
             default:
                 response.sendRedirect("CtrlCoach?action=GestionGroupe");
         }
     }
 
     private void creerGroupe(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
 
         String nom = request.getParameter("nomGroupe");
         String[] joueursIds = request.getParameterValues("joueursIds");
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-
             Transaction tx = session.beginTransaction();
 
             Groupe groupe = new Groupe();
@@ -97,15 +97,12 @@ public class CtrlCoach extends HttpServlet {
 
             if (joueursIds != null) {
                 for (String idStr : joueursIds) {
-
                     Joueur j = session.get(Joueur.class, Long.parseLong(idStr));
-
                     groupe.getJoueurs().add(j);
 
                     if (j.getGroupes() == null) {
                         j.setGroupes(new ArrayList<>());
                     }
-
                     j.getGroupes().add(groupe);
                 }
             }
@@ -116,4 +113,25 @@ public class CtrlCoach extends HttpServlet {
 
         response.sendRedirect("CtrlCoach?action=GestionGroupe");
     }
+
+    private void supprimerGroupe(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        Long idGroupe = Long.parseLong(request.getParameter("idGroupe"));
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+
+            Groupe groupe = session.get(Groupe.class, idGroupe);
+            if (groupe != null) {
+                session.delete(groupe);
+            }
+
+            tx.commit();
+        }
+
+        response.sendRedirect("CtrlCoach?action=GestionGroupe");
+    }
+
+    
 }

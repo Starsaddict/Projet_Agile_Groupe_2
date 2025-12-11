@@ -62,43 +62,59 @@
     <c:forEach var="e" items="${evenements}">
         <tr>
 
-            <!-- FORM UPDATE -->
-            <form method="post" action="/ProjetAgile/evenementSecre" class="d-flex gap-2">
+            <td>${e.idEvenement}</td>
 
-                <input type="hidden" name="id" value="${e.idEvenement}">
-                <input type="hidden" name="action" value="update">
+            <td>
+                <input class="form-control" form="formUpdate${e.idEvenement}"
+                       name="nom" value="${e.nomEvenement}">
+            </td>
 
-                <td>${e.idEvenement}</td>
+            <td>
+                <input class="form-control" form="formUpdate${e.idEvenement}"
+                       name="lieu" value="${e.lieuEvenement}">
+            </td>
 
-                <td><input class="form-control" name="nom" value="${e.nomEvenement}"></td>
+            <td>
+                <input type="datetime-local" class="form-control"
+                       form="formUpdate${e.idEvenement}"
+                       name="date" value="${e.dateEvenement}">
+            </td>
 
-                <td><input class="form-control" name="lieu" value="${e.lieuEvenement}"></td>
+            <td>
+                <input class="form-control" form="formUpdate${e.idEvenement}"
+                       name="type" value="${e.typeEvenement}">
+            </td>
 
-                <td>
-                    <input type="datetime-local"
-                           class="form-control"
-                           name="date"
-                           value="${e.dateEvenement}">
-                </td>
+            <td class="d-flex gap-2">
 
-                <td><input class="form-control" name="type" value="${e.typeEvenement}"></td>
+                <!-- FORM UPDATE -->
+                <form id="formUpdate${e.idEvenement}"
+                      method="post"
+                      action="/ProjetAgile/evenementSecre">
 
-                <td class="d-flex gap-2">
+                    <input type="hidden" name="id" value="${e.idEvenement}">
+                    <input type="hidden" name="action" value="update">
+                </form>
 
-                    <!-- Bouton modifier -->
-                    <button class="btn btn-warning btn-sm">Modifier</button>
+                <button class="btn btn-warning btn-sm"
+                        form="formUpdate${e.idEvenement}">
+                    Modifier
+                </button>
 
-            </form>
+                <!-- FORM DELETE -->
+                <form method="post"
+                      action="/ProjetAgile/evenementSecre"
+                      onsubmit="return confirm('Supprimer cet événement ?');">
 
-            <!-- FORM DELETE (Séparé) -->
-            <form method="post" action="/ProjetAgile/evenementSecre"
-                  onsubmit="return confirm('Supprimer cet événement ?');">
+                    <input type="hidden" name="id" value="${e.idEvenement}">
+                    <input type="hidden" name="action" value="delete">
 
-                <input type="hidden" name="id" value="${e.idEvenement}">
-                <input type="hidden" name="action" value="delete">
+                    <button class="btn btn-danger btn-sm">
+                        Supprimer
+                    </button>
+                </form>
 
-                <button class="btn btn-danger btn-sm">Supprimer</button>
-            </form>
+            </td>
 
         </tr>
     </c:forEach>

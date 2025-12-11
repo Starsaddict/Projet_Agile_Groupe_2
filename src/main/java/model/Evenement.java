@@ -2,6 +2,9 @@ package model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
+
 
 @Entity
 @Table(name = "Evenement")
@@ -24,11 +27,15 @@ public class Evenement {
     @Column(name = "TypeEvenement")
     private String typeEvenement;
 
-    // 👉 IdGroupe est maintenant NULL autorisé
     @ManyToOne
     @JoinColumn(name = "IdGroupe", nullable = true)
     private Groupe groupe;
 
+    
+    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Covoiturage> covoiturages;
+
+  
     public int getIdEvenement() { return idEvenement; }
     public void setIdEvenement(int idEvenement) { this.idEvenement = idEvenement; }
 

@@ -35,9 +35,10 @@ public class Covoiturage {
     )
     private List<Utilisateur> reservers;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "IdEvenement", nullable = false)
-    private Evenement evenement ;
+    private Evenement evenement;
+
 
     public Covoiturage() {
     }

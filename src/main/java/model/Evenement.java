@@ -10,7 +10,7 @@ public class Evenement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdEvenement")
-    private Long idEvenement;
+    private int idEvenement;
 
     @Column(name = "NomEvenement")
     private String nomEvenement;
@@ -24,8 +24,13 @@ public class Evenement {
     @Column(name = "TypeEvenement")
     private String typeEvenement;
 
-    public Long getIdEvenement() { return idEvenement; }
-    public void setIdEvenement(Long idEvenement) { this.idEvenement = idEvenement; }
+    // 👉 IdGroupe est maintenant NULL autorisé
+    @ManyToOne
+    @JoinColumn(name = "IdGroupe", nullable = true)
+    private Groupe groupe;
+
+    public int getIdEvenement() { return idEvenement; }
+    public void setIdEvenement(int idEvenement) { this.idEvenement = idEvenement; }
 
     public String getNomEvenement() { return nomEvenement; }
     public void setNomEvenement(String nomEvenement) { this.nomEvenement = nomEvenement; }
@@ -39,5 +44,6 @@ public class Evenement {
     public String getTypeEvenement() { return typeEvenement; }
     public void setTypeEvenement(String typeEvenement) { this.typeEvenement = typeEvenement; }
 
- 
+    public Groupe getGroupe() { return groupe; }
+    public void setGroupe(Groupe groupe) { this.groupe = groupe; }
 }

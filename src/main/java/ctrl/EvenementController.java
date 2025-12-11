@@ -30,68 +30,41 @@ public class EvenementController extends HttpServlet {
 
         String action = request.getParameter("action");
 
-        switch (action) {
-            case "create":
-                create(request);
-                break;
-
-            case "update":
-                update(request);
-                break;
-
-            case "delete":
-                delete(request);
-                break;
+        if ("create".equals(action)) {
+            create(request);
+        } else if ("update".equals(action)) {
+            update(request);
+        } else if ("delete".equals(action)) {
+            delete(request);
         }
 
-        response.sendRedirect("evenementSecre");
+        response.sendRedirect(request.getContextPath() + "/evenementSecre");
     }
 
-
-    // -------------------------
-    //     CRUD METHODS
-    // -------------------------
-
     private void create(HttpServletRequest r) {
-        Evenement e = map(r, new Evenement());
-        repo.save(e);
+        Evenement e = new Evenement();
+        e.setNomEvenement(r.getParameter("nom"));
+        e.setLieuEvenement(r.getParameter("lieu"));
+        e.setTypeEvenement(r.getParameter("type"));
+        e.setDateEvenement(LocalDateTime.parse(r.getParameter("date")));
+        e.setGroupe(null); // ⭐ Groupe optionnel
+        repo.create(e);
     }
 
     private void update(HttpServletRequest r) {
         int id = Integer.parseInt(r.getParameter("id"));
-        repo.findById(id).ifPresent(e -> {
-            map(r, e);
-            repo.save(e);
-        });
+        Evenement e = repo.findById(id);
+        e.setNomEvenement(r.getParameter("nom"));
+        e.setLieuEvenement(r.getParameter("lieu"));
+        e.setTypeEvenement(r.getParameter("type"));
+        e.setDateEvenement(LocalDateTime.parse(r.getParameter("date")));
+        e.setGroupe(null); // ⭐ Toujours optionnel
+        repo.update(e);
     }
 
     private void delete(HttpServletRequest r) {
         int id = Integer.parseInt(r.getParameter("id"));
-        repo.findById(id).ifPresent(repo::delete);
-    }
-
-
-    // -------------------------
-    //  Mapping form → entity
-    // -------------------------
-
-    private Evenement map(HttpServletRequest r, Evenement e) {
-
-        e.setNomEvenement(r.getParameter("nom"));
-        e.setLieuEvenement(r.getParameter("lieu"));
-        e.setTypeEvenement(r.getParameter("type"));
-
-        // 🟦 CORRECTION : Gestion propre de la date (évite l'erreur 500)
-        String dateStr = r.getParameter("date");
-
-        if (dateStr == null || dateStr.isBlank()) {
-            throw new IllegalArgumentException("La date est obligatoire.");
-        }
-
-        // ⚠ Le champ datetime-local doit donner un format comme : 2025-12-11T15:30
-        LocalDateTime date = LocalDateTime.parse(dateStr);
-        e.setDateEvenement(date);
-
-        return e;
+        Evenement e = repo.findById(id);
+        repo.delete(e);
     }
 }

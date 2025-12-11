@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <title>Gestion des événements</title>
 
-    <!-- Bootstrap -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
@@ -15,7 +14,7 @@
 
 <h2>Créer un événement</h2>
 
-<form method="post" action="../evenementSecre" class="row g-3">
+<form method="post" action="/ProjetAgile/evenementSecre" class="row g-3">
     <input type="hidden" name="action" value="create">
 
     <div class="col-md-6">
@@ -30,7 +29,6 @@
 
     <div class="col-md-6">
         <label>Date</label>
-        <!-- Format strict pour éviter les erreurs dans le servlet -->
         <input type="datetime-local" class="form-control" name="date" required>
     </div>
 
@@ -63,7 +61,9 @@
     <tbody>
     <c:forEach var="e" items="${evenements}">
         <tr>
-            <form method="post" action="../evenementSecre">
+
+            <!-- FORM UPDATE -->
+            <form method="post" action="/ProjetAgile/evenementSecre" class="d-flex gap-2">
 
                 <input type="hidden" name="id" value="${e.idEvenement}">
                 <input type="hidden" name="action" value="update">
@@ -81,26 +81,25 @@
                            value="${e.dateEvenement}">
                 </td>
 
-                <td>
-                    <input class="form-control" name="type" value="${e.typeEvenement}">
-                </td>
+                <td><input class="form-control" name="type" value="${e.typeEvenement}"></td>
 
                 <td class="d-flex gap-2">
-                    <button class="btn btn-warning btn-sm">
-                        Modifier
-                    </button>
 
-                    <button formmethod="post"
-                            formaction="../evenementSecre"
-                            name="action"
-                            value="delete"
-                            onclick="return confirm('Supprimer cet événement ?');"
-                            class="btn btn-danger btn-sm">
-                        Supprimer
-                    </button>
-                </td>
+                    <!-- Bouton modifier -->
+                    <button class="btn btn-warning btn-sm">Modifier</button>
 
             </form>
+
+            <!-- FORM DELETE (Séparé) -->
+            <form method="post" action="/ProjetAgile/evenementSecre"
+                  onsubmit="return confirm('Supprimer cet événement ?');">
+
+                <input type="hidden" name="id" value="${e.idEvenement}">
+                <input type="hidden" name="action" value="delete">
+
+                <button class="btn btn-danger btn-sm">Supprimer</button>
+            </form>
+
         </tr>
     </c:forEach>
     </tbody>

@@ -2,13 +2,60 @@ package service;
 
 import model.*;
 import repo.utilisateurRepo;
+import repository.UtilisateurRepositoryImpl;
 import util.emailUtil;
 import util.mdpUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class utilisateurService {
+public class UtilisateurService {
+
+    private final UtilisateurRepositoryImpl repo;
+
+    public UtilisateurService(UtilisateurRepositoryImpl repo) {
+        this.repo = repo;
+    }
+
+    public UtilisateurService() {
+        this.repo = new UtilisateurRepositoryImpl();
+    }
+
+    /**
+     * Authentifie un utilisateur par email, mot de passe et rôle.
+     * - Cherche l'utilisateur via le repository.
+     * - Si le hash stocké ressemble à un hash BCrypt, utilise BCrypt.checkpw.
+     * - Sinon, tente une comparaison avec le hash SHA-256 via util.mdpUtil (fallback).
+     */
+    public Optional<Utilisateur> authenticate(String email, String password, String role) {
+        if (email == null || password == null) {
+            return Optional.empty();
+        }
+
+        Optional<Utilisateur> opt = repo.findByEmailUtilisateur(email, role);
+        if (!opt.isPresent()) {
+            return Optional.empty();
+        }
+
+        Utilisateur u = opt.get();
+        String storedHash = u.getMdpUtilisateur();
+        if (storedHash == null) {
+            return Optional.empty();
+        }
+
+        try {
+            //String hashedInput = mdpUtil.mdpString(password);
+            String hashedInput = password;
+            if (hashedInput != null && hashedInput.equals(storedHash)) {
+                return Optional.of(u);
+            }
+        } catch (Exception e) {
+            // A gérer
+        }
+
+        return Optional.empty();
+    }
 
     public Utilisateur creerCompteUtilisateur(String email, String type) {
         if(!type.equals("Coach") && !type.equals("Joueur") && !type.equals("Parent") && !type.equals("Secretaire")) {

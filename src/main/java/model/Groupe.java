@@ -29,7 +29,7 @@ public class Groupe {
     @OneToMany(mappedBy = "groupe", fetch = FetchType.LAZY)
     private List<Evenement> evenements = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(
         name = "Groupe_Joueur",
         joinColumns = @JoinColumn(name = "IdGroupe", referencedColumnName = "IdGroupe"),

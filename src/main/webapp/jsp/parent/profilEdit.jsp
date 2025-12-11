@@ -1,17 +1,12 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+[%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="model.Utilisateur" %>
 <%
     Utilisateur utilisateur = (Utilisateur) request.getAttribute("utilisateur");
-    String parentId = (String) request.getAttribute("parentId");
     String error = (String) request.getAttribute("error");
     String contextPath = request.getContextPath();
     
     if (utilisateur == null) {
-        String redirectUrl = contextPath + "/parent/profil?error=Utilisateur non trouvé";
-        if (parentId != null) {
-            redirectUrl += "&parentId=" + parentId;
-        }
-        response.sendRedirect(redirectUrl);
+        response.sendRedirect(contextPath + "/parent/profil?error=Utilisateur non trouvé");
         return;
     }
 %>
@@ -87,9 +82,6 @@
         
         <form method="post" action="<%= contextPath %>/parent/profil/edit">
             <input type="hidden" name="id" value="<%= utilisateur.getIdUtilisateur() %>">
-            <% if (parentId != null) { %>
-                <input type="hidden" name="parentId" value="<%= parentId %>">
-            <% } %>
             
             <div class="form-group">
                 <label for="description">Mon profil:</label>
@@ -99,7 +91,7 @@
             
             <div class="button-group">
                 <button type="submit" class="btn btn-primary">Enregistrer mon profil</button>
-                <a href="<%= contextPath %>/parent/profil<% if (parentId != null) { %>?parentId=<%= parentId %><% } %>" class="btn btn-secondary">Annuler</a>
+                <a href="<%= contextPath %>/parent/profil" class="btn btn-secondary">Annuler</a>
             </div>
         </form>
     </div>

@@ -103,7 +103,7 @@
             <% } %>
             
             <div style="margin-top: 10px;">
-                <a href="<%= contextPath %>/parent/profil/edit?id=<%= user.getIdUtilisateur() %>&parentId=<%= parent.getIdUtilisateur() %>" class="btn btn-primary">
+                <a href="<%= contextPath %>/parent/profil/edit?id=<%= user.getIdUtilisateur() %>" class="btn btn-primary">
                     Créer/Modifier le profil
                 </a>
             </div>

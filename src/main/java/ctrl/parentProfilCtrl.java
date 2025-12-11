@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,20 +22,18 @@ public class parentProfilCtrl extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String parentIdStr = request.getParameter("parentId");
-
         try {
-            if (parentIdStr == null || parentIdStr.isEmpty()) {
-                request.setAttribute("error", "Parent ID non fourni");
-                request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
+            HttpSession session = request.getSession();
+            Utilisateur utilisateur = (Utilisateur) session.getAttribute("user");
+
+            if (utilisateur == null) {
+                request.setAttribute("error", "Vous devez être connecté");
+                request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
                 return;
             }
 
-            Long parentId = Long.parseLong(parentIdStr);
-            Utilisateur utilisateur = utilisateurRepo.loadUtilisateur(parentId);
-
-            if (utilisateur == null || !(utilisateur instanceof Parent)) {
-                request.setAttribute("error", "Parent non trouvé");
+            if (!(utilisateur instanceof Parent)) {
+                request.setAttribute("error", "Accès réservé aux parents");
                 request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
                 return;
             }

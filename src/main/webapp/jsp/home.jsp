@@ -21,7 +21,10 @@
         <p>Accès rapide : <a href="/joueur/dashboard">Mon tableau de bord</a></p>
       </c:when>
       <c:when test="${sessionScope.user.typeU == 'Parent'}">
-        <p>Accès parent : <a href="/parent/enfants">Mes enfants</a></p>
+        <p>Accès parent : 
+          <a href="<%= request.getContextPath() %>/parent/profil">Mes profils</a> | 
+          <a href="/parent/enfants">Mes enfants</a>
+        </p>
       </c:when>
       <c:when test="${sessionScope.user.typeU == 'Coach'}">
         <p>Accès coach : <a href="/coach/agenda">Mon agenda</a></p>

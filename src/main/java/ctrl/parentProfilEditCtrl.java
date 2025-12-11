@@ -8,8 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 public class parentProfilEditCtrl extends HttpServlet {
 
@@ -20,49 +20,53 @@ public class parentProfilEditCtrl extends HttpServlet {
             throws ServletException, IOException {
 
         String idStr = request.getParameter("id");
-        String parentIdStr = request.getParameter("parentId");
 
         try {
+            HttpSession session = request.getSession();
+            Utilisateur loginUser = (Utilisateur) session.getAttribute("user");
+
+            if (loginUser == null) {
+                request.setAttribute("error", "Vous devez être connecté");
+                request.getRequestDispatcher("/jsp/parent/profilEdit.jsp").forward(request, response);
+                return;
+            }
+
+            if (!(loginUser instanceof Parent)) {
+                request.setAttribute("error", "Accès réservé aux parents");
+                request.getRequestDispatcher("/jsp/parent/profilEdit.jsp").forward(request, response);
+                return;
+            }
+
+            Parent parent = (Parent) loginUser;
+
             Long id = Long.parseLong(idStr);
             Utilisateur utilisateur = utilisateurRepo.loadUtilisateur(id);
 
             if (utilisateur == null) {
-                String redirectUrl = request.getContextPath() + "/parent/profil";
-                if (parentIdStr != null) {
-                    redirectUrl += "?parentId=" + parentIdStr + "&error=Utilisateur non trouvé";
-                } else {
-                    redirectUrl += "?error=Utilisateur non trouvé";
-                }
-                response.sendRedirect(redirectUrl);
+                request.setAttribute("error", "Utilisateur non trouvé");
+                request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
                 return;
             }
 
-            // Vérifier que c'est le parent lui-même ou un enfant du parent
-            if (parentIdStr != null) {
-                Long parentId = Long.parseLong(parentIdStr);
-                Utilisateur parentUser = utilisateurRepo.loadUtilisateur(parentId);
-                if (!(parentUser instanceof Parent)) {
-                    response.sendRedirect(
-                            request.getContextPath() + "/parent/profil?parentId=" + parentId + "&error=Accès refusé");
+            // Vérifier que l'utilisateur à éditer est soit le parent lui-même, soit un
+            // enfant du parent
+            if (!parent.getIdUtilisateur().equals(utilisateur.getIdUtilisateur())) {
+                boolean isChild = parent.getJoueurs() != null && parent.getJoueurs().stream()
+                        .anyMatch(j -> j.getIdUtilisateur().equals(utilisateur.getIdUtilisateur()));
+                if (!isChild) {
+                    request.setAttribute("error", "Accès refusé");
+                    request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
                     return;
                 }
-            } else if (!(utilisateur instanceof Parent)) {
-                response.sendRedirect(request.getContextPath() + "/parent/profil?error=Accès refusé");
-                return;
             }
 
             request.setAttribute("utilisateur", utilisateur);
-            request.setAttribute("parentId", parentIdStr);
             request.getRequestDispatcher("/jsp/parent/profilEdit.jsp").forward(request, response);
 
         } catch (Exception e) {
-            String redirectUrl = request.getContextPath() + "/parent/profil";
-            if (parentIdStr != null) {
-                redirectUrl += "?parentId=" + parentIdStr + "&error=Erreur";
-            } else {
-                redirectUrl += "?error=Erreur";
-            }
-            response.sendRedirect(redirectUrl);
+            e.printStackTrace();
+            request.setAttribute("error", "Erreur: " + e.getMessage());
+            request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
         }
     }
 
@@ -71,71 +75,52 @@ public class parentProfilEditCtrl extends HttpServlet {
             throws ServletException, IOException {
 
         try {
+            HttpSession session = request.getSession();
+            Utilisateur loginUser = (Utilisateur) session.getAttribute("user");
+
+            if (loginUser == null) {
+                response.sendRedirect(request.getContextPath() + "/parent/profil?error=Vous devez être connecté");
+                return;
+            }
+
+            if (!(loginUser instanceof Parent)) {
+                response.sendRedirect(request.getContextPath() + "/parent/profil?error=Accès refusé");
+                return;
+            }
+
+            Parent parent = (Parent) loginUser;
+
             Long id = Long.parseLong(request.getParameter("id"));
             String description = request.getParameter("description");
-            String parentIdStr = request.getParameter("parentId");
 
             Utilisateur utilisateur = utilisateurRepo.loadUtilisateur(id);
 
             if (utilisateur == null) {
-                String redirectUrl = request.getContextPath() + "/parent/profil";
-                if (parentIdStr != null) {
-                    redirectUrl += "?parentId=" + parentIdStr + "&error=Utilisateur non trouvé";
-                } else {
-                    redirectUrl += "?error=Utilisateur non trouvé";
-                }
-                response.sendRedirect(redirectUrl);
+                response.sendRedirect(request.getContextPath() + "/parent/profil?error=Utilisateur non trouvé");
                 return;
             }
 
-            // Vérifier l'accès: le parent lui-même ou un enfant du parent
-            if (parentIdStr != null) {
-                Long parentId = Long.parseLong(parentIdStr);
-                Utilisateur parentUser = utilisateurRepo.loadUtilisateur(parentId);
-                if (!(parentUser instanceof Parent)) {
-                    response.sendRedirect(
-                            request.getContextPath() + "/parent/profil?parentId=" + parentId + "&error=Accès refusé");
+            // Vérifier que l'utilisateur à éditer est soit le parent lui-même, soit un
+            // enfant du parent
+            if (!parent.getIdUtilisateur().equals(utilisateur.getIdUtilisateur())) {
+                boolean isChild = parent.getJoueurs() != null && parent.getJoueurs().stream()
+                        .anyMatch(j -> j.getIdUtilisateur().equals(utilisateur.getIdUtilisateur()));
+                if (!isChild) {
+                    response.sendRedirect(request.getContextPath() + "/parent/profil?error=Accès refusé");
                     return;
                 }
-                // Le utilisateur doit être soit le parent lui-même, soit un enfant du parent
-                if (!parentId.equals(utilisateur.getIdUtilisateur())) {
-                    Parent parent = (Parent) parentUser;
-                    boolean isChild = parent.getJoueurs() != null && parent.getJoueurs().stream()
-                            .anyMatch(j -> j.getIdUtilisateur().equals(utilisateur.getIdUtilisateur()));
-                    if (!isChild) {
-                        response.sendRedirect(request.getContextPath() + "/parent/profil?parentId=" + parentId
-                                + "&error=Accès refusé");
-                        return;
-                    }
-                }
-            } else if (!(utilisateur instanceof Parent)) {
-                response.sendRedirect(request.getContextPath() + "/parent/profil?error=Accès refusé");
-                return;
             }
 
             // Mettre à jour la description
             utilisateur.setDescription(description);
             utilisateurRepo.updateUtilisateur(utilisateur);
 
-            // Rediriger vers la page de profil
-            String redirectUrl = request.getContextPath() + "/parent/profil?success=1";
-            if (parentIdStr != null) {
-                redirectUrl += "&parentId=" + parentIdStr;
-            } else if (utilisateur instanceof Parent) {
-                redirectUrl += "&parentId=" + utilisateur.getIdUtilisateur();
-            }
-            response.sendRedirect(redirectUrl);
+            // Rediriger vers la page de profil avec succès
+            response.sendRedirect(request.getContextPath() + "/parent/profil?success=1");
 
         } catch (Exception e) {
             e.printStackTrace();
-            String parentIdStr = request.getParameter("parentId");
-            String redirectUrl = request.getContextPath() + "/parent/profil";
-            if (parentIdStr != null) {
-                redirectUrl += "?parentId=" + parentIdStr + "&error=Erreur";
-            } else {
-                redirectUrl += "?error=Erreur";
-            }
-            response.sendRedirect(redirectUrl);
+            response.sendRedirect(request.getContextPath() + "/parent/profil?error=Erreur");
         }
     }
 }

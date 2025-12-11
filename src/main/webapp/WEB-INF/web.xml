@@ -72,4 +72,26 @@
     <url-pattern>/secretaire/profil/pageModifier</url-pattern>
   </servlet-mapping>
 
+  <!--  "/parent/profil" => ctrl.parentProfilCtrl -->
+
+  <servlet>
+    <servlet-name>ParentProfil</servlet-name>
+    <servlet-class>ctrl.parentProfilCtrl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ParentProfil</servlet-name>
+    <url-pattern>/parent/profil</url-pattern>
+</servlet-mapping>
+
+<!-- "/parent/profil/edit" => ctrl.parentProfilEditCtrl -->
+<servlet>
+  <servlet-name>ParentProfilEdit</servlet-name>
+  <servlet-class>ctrl.parentProfilEditCtrl</servlet-class>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>ParentProfilEdit</servlet-name>
+  <url-pattern>/parent/profil/edit</url-pattern>
+</servlet-mapping>
 </web-app>

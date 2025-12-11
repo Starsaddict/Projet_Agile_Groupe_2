@@ -1,0 +1,74 @@
+package ctrl;
+
+import model.Joueur;
+import model.Parent;
+import model.Utilisateur;
+import repo.utilisateurRepo;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class parentProfilCtrl extends HttpServlet {
+
+    private utilisateurRepo utilisateurRepo = new utilisateurRepo();
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String parentIdStr = request.getParameter("parentId");
+
+        try {
+            if (parentIdStr == null || parentIdStr.isEmpty()) {
+                request.setAttribute("error", "Parent ID non fourni");
+                request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
+                return;
+            }
+
+            Long parentId = Long.parseLong(parentIdStr);
+            Utilisateur utilisateur = utilisateurRepo.loadUtilisateur(parentId);
+
+            if (utilisateur == null || !(utilisateur instanceof Parent)) {
+                request.setAttribute("error", "Parent non trouvé");
+                request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
+                return;
+            }
+
+            Parent parent = (Parent) utilisateur;
+
+            // Créer une liste contenant le parent et ses enfants
+            List<Utilisateur> profiles = new ArrayList<>();
+            profiles.add(parent);
+
+            // Ajouter les joueurs (enfants) du parent
+            if (parent.getJoueurs() != null && !parent.getJoueurs().isEmpty()) {
+                profiles.addAll(parent.getJoueurs());
+            }
+
+            request.setAttribute("parent", parent);
+            request.setAttribute("profiles", profiles);
+            request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Erreur lors du chargement des profils: " + e.getMessage());
+            try {
+                request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // POST 处理由专用的创建/修改控制器处理
+        doGet(request, response);
+    }
+}

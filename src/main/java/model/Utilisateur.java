@@ -8,8 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Utilisateur")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="TypeU",
-        discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "TypeU", discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Utilisateur")
 public class Utilisateur {
 
@@ -32,6 +31,9 @@ public class Utilisateur {
 
     @Column(name = "DateNaissanceUtilisateur")
     private LocalDate dateNaissanceUtilisateur;
+
+    @Column(name = "Description", length = 1000)
+    private String description;
 
     @ManyToMany(mappedBy = "reservers", cascade = CascadeType.ALL)
     private List<Covoiturage> covoiturages;
@@ -105,7 +107,15 @@ public class Utilisateur {
     public void setConduits(List<Covoiturage> conduits) {
         this.conduits = conduits;
     }
-    
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getRoleLabel() {
         if (this instanceof Joueur) {
             return "Joueur";

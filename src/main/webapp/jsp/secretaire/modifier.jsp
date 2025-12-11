@@ -1,10 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List, model.Utilisateur" %>
+<%@ page import="java.util.List, model.Utilisateur, java.util.LinkedHashMap, java.util.Map" %>
 <%
     List<Utilisateur> utilisateurs = (List<Utilisateur>) request.getAttribute("utilisateurs");
     String contextPath = request.getContextPath();
     String success = request.getParameter("success");
     String error = (String) request.getAttribute("error");
+    
+    // Grouper par email - garder l'ordre et éviter les doublons
+    Map<String, Utilisateur> emailGroupMap = new LinkedHashMap<>();
+    if (utilisateurs != null && !utilisateurs.isEmpty()) {
+        for (Utilisateur u : utilisateurs) {
+            String email = u.getEmailUtilisateur() != null ? u.getEmailUtilisateur() : "";
+            // Garder seulement le premier utilisateur pour chaque email
+            if (!emailGroupMap.containsKey(email)) {
+                emailGroupMap.put(email, u);
+            }
+        }
+    }
 %>
 <html>
 <head>
@@ -38,28 +50,33 @@
         <th>Nom</th>
         <th>Prénom</th>
         <th>Email</th>
+        <th>Role</th>
         <th>Action</th>
+        
     </tr>
     </thead>
     <tbody>
-    <% if (utilisateurs != null && !utilisateurs.isEmpty()) {
-           for (Utilisateur utilisateur : utilisateurs) {
+    <% if (emailGroupMap != null && !emailGroupMap.isEmpty()) {
+           for (Map.Entry<String, Utilisateur> entry : emailGroupMap.entrySet()) {
+               Utilisateur utilisateur = entry.getValue();
                String nom = utilisateur.getNomUtilisateur() != null ? utilisateur.getNomUtilisateur() : "";
                String prenom = utilisateur.getPrenomUtilisateur() != null ? utilisateur.getPrenomUtilisateur() : "";
                String email = utilisateur.getEmailUtilisateur() != null ? utilisateur.getEmailUtilisateur() : "";
+               String role = utilisateur.getRoleLabel() != null ? utilisateur.getRoleLabel() : "";
     %>
         <tr>
             <td><%= nom %></td>
             <td><%= prenom %></td>
             <td><%= email %></td>
+            <td><%= role %></td>
             <td class="actions">
-                <a href="<%= contextPath %>/secretaire/profil/modifier?id=<%= utilisateur.getIdUtilisateur() %>">Modifier</a>
+                <a href="<%= contextPath %>/secretaire/profil/pageModifier?id=<%= utilisateur.getIdUtilisateur() %>">Modifier</a>
             </td>
         </tr>
     <%   }
        } else { %>
         <tr>
-            <td colspan="4" class="empty">Aucun compte à afficher.</td>
+            <td colspan="5" class="empty">Aucun compte à afficher.</td>
         </tr>
     <% } %>
     </tbody>

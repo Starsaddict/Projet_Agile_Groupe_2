@@ -105,4 +105,17 @@ public class Utilisateur {
     public void setConduits(List<Covoiturage> conduits) {
         this.conduits = conduits;
     }
+    
+    public String getRoleLabel() {
+        if (this instanceof Joueur) {
+            return "Joueur";
+        } else if (this instanceof Parent) {
+            return "Parent";
+        } else if (this.getClass().getSimpleName().equals("Secretaire")) {
+            return "Secrétaire";
+        } else if (this.getClass().getSimpleName().equals("Admin")) {
+            return "Administrateur";
+        }
+        return this.getClass().getSimpleName();
+    }
 }

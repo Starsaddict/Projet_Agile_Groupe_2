@@ -13,9 +13,9 @@ import java.util.List;
 
 public class utilisateurRepo {
     public Utilisateur loadUtilisateur(Long id) {
-        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            Utilisateur u =  (Utilisateur) session.get(Utilisateur.class, id);
+            Utilisateur u = (Utilisateur) session.get(Utilisateur.class, id);
             if (u instanceof Joueur) {
                 Joueur joueur = (Joueur) u;
                 List<Parent> parents = joueur.getParents();
@@ -36,7 +36,7 @@ public class utilisateurRepo {
     }
 
     public Utilisateur saveUtilisateur(Utilisateur u) {
-        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.save(u);
             session.getTransaction().commit();
@@ -46,7 +46,7 @@ public class utilisateurRepo {
     }
 
     public Utilisateur updateUtilisateur(Utilisateur u) {
-        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.update(u);
             session.getTransaction().commit();
@@ -56,7 +56,7 @@ public class utilisateurRepo {
     }
 
     public Utilisateur deleteUtilisateur(Utilisateur u) {
-        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.delete(u);
             session.getTransaction().commit();
@@ -66,7 +66,7 @@ public class utilisateurRepo {
     }
 
     public Utilisateur refreshUtilisateur(Utilisateur u) {
-        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             long id = u.getIdUtilisateur();
             Utilisateur u2 = (Utilisateur) session.get(Utilisateur.class, id);
@@ -82,6 +82,15 @@ public class utilisateurRepo {
             query.setParameter("email", email);
             Long count = query.uniqueResult();
             return count != null && count > 0;
+        }
+    }
+
+    public List<Utilisateur> findByEmail(String email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Utilisateur> query = session.createQuery(
+                    "from Utilisateur u where u.emailUtilisateur = :email", Utilisateur.class);
+            query.setParameter("email", email);
+            return query.list();
         }
     }
 

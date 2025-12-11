@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import model.Parent;
 import model.Utilisateur;
 import repository.UtilisateurRepositoryImpl;
 import service.UtilisateurService;
@@ -33,10 +35,12 @@ public class ControllerLogin extends HttpServlet {
         Optional<Utilisateur> opt = utilisateurService.authenticate(email, password, role);
         if (opt.isPresent()) {
             HttpSession session = request.getSession(true);
-            session.setAttribute("user", opt.get());
+            Utilisateur user = opt.get();
+            session.setAttribute("user", user);
             request.getRequestDispatcher("Home").forward(request, response);
         } else {
             request.setAttribute("msg_connection", "Connexion échouée : identifiants invalides");
+            request.setAttribute("role_connexion", role);
             request.getRequestDispatcher("Login").forward(request, response);
         }
     }

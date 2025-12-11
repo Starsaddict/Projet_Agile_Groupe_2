@@ -29,27 +29,30 @@ public class BdTest {
             session.save(conducteur);
             session.save(passager);
 
-            Parent parent = new Parent();
-            parent.setEmailUtilisateur("parent@example.com");
-            parent.setNomUtilisateur("Parent");
-            parent.setPrenomUtilisateur("P");
-            session.save(parent);
+            // Création des parents
+            Parent parent1 = buildParent("parent1@example.com", "pwd_parent1", "Parent", "Un", LocalDate.of(1985, 3, 3));
+            Parent parent2 = buildParent("parent2@example.com", "pwd_parent2", "Parent", "Deux", LocalDate.of(1986, 4, 4));
 
-            Joueur joueur = new Joueur();
-            joueur.setEmailUtilisateur("lucas@test.com");
-            joueur.setMdpUtilisateur("test");
-            joueur.setNomUtilisateur("Joueur");
-            joueur.setPrenomUtilisateur("J");
-            session.save(joueur);
+            // Création des joueurs
+            Joueur joueur1 = buildJoueur("lucas@test.com", "test", "Joueur", "Lucas", LocalDate.of(2005, 8, 15));
+            Joueur joueur2 = buildJoueur("lea@test.com", "test2", "Joueuse", "Lea", LocalDate.of(2006, 9, 20));
 
-            Coach coach = new Coach();
-            coach.setNomUtilisateur("Coach");
-            coach.setPrenomUtilisateur("C");
+            // Lier les parents aux joueurs
+            // Lucas a deux parents
+            parent1.addEnfant(joueur1);
+            parent2.addEnfant(joueur1);
+            // Lea a un parent
+            parent1.addEnfant(joueur2);
+
+            session.save(parent1);
+            session.save(parent2);
+            session.save(joueur1);
+            session.save(joueur2);
+
+            Coach coach = buildCoach("coach@example.com", "pwd_coach", "Coach", "C", LocalDate.of(1980, 4, 4));
             session.save(coach);
 
-            Secretaire secretaire = new Secretaire();
-            secretaire.setNomUtilisateur("Secretaire");
-            secretaire.setPrenomUtilisateur("S");
+            Secretaire secretaire = buildSecretaire("secretaire@example.com", "pwd_sec", "Secretaire", "S", LocalDate.of(1975, 5, 5));
             session.save(secretaire);
 
             Groupe groupe = new Groupe();
@@ -63,13 +66,6 @@ public class BdTest {
             evenement.setTypeEvenement("GAME");
             evenement.setGroupe(groupe);
             session.save(evenement);
-            
-         // ================= SUPPRESSION DE L'ÉVÉNEMENT MODIFIÉ =================
-           // session.delete(evenement);
-           // System.out.println("🗑 Événement modifié supprimé");
-
-
-            // ================= AJOUT DE 3 AUTRES ÉVÉNEMENTS =================
 
             Evenement e2 = new Evenement();
             e2.setNomEvenement("Entraînement Mardi");
@@ -95,28 +91,7 @@ public class BdTest {
             e4.setGroupe(groupe);
             session.save(e4);
 
-            System.out.println("✅ 3 événements ajoutés");
-
-
-            // ================= AFFICHAGE FINAL =================
-            System.out.println("\n📋 LISTE FINALE DES ÉVÉNEMENTS :");
-
-            for (Evenement e : session
-                    .createQuery("FROM Evenement", Evenement.class)
-                    .getResultList()) {
-
-                System.out.println("📅 " + e.getIdEvenement()
-                        + " | " + e.getNomEvenement()
-                        + " | " + e.getLieuEvenement()
-                        + " | " + e.getDateEvenement());
-            }
-
-
-            
-            
-            
-            
-            
+            System.out.println("✅ 4 événements ajoutés");
 
             Covoiturage covoiturage = new Covoiturage();
             covoiturage.setDateCovoiturage(LocalDateTime.of(2024, 2, 1, 8, 30));
@@ -131,14 +106,14 @@ public class BdTest {
             absence.setCertificat("certificat.pdf");
             absence.setAbsenceDebut("2024-01-01");
             absence.setAbsenceTerminee(true);
-            absence.setJoueur(joueur);
+            absence.setJoueur(joueur1);
             session.save(absence);
 
-            session.flush(); // ensure generated IDs are available for composite keys
+            session.flush();
 
-            EtrePresent_id epId = new EtrePresent_id(joueur.getIdUtilisateur(), groupe.getIdGroupe(), evenement.getIdEvenement());
+            EtrePresent_id epId = new EtrePresent_id(joueur1.getIdUtilisateur(), groupe.getIdGroupe(), evenement.getIdEvenement());
             EtrePresent etrePresent = new EtrePresent(epId);
-            etrePresent.setJoueur(joueur);
+            etrePresent.setJoueur(joueur1);
             etrePresent.setGroupe(groupe);
             etrePresent.setEvenement(evenement);
             etrePresent.setConfirmerPresenceJoueur("YES");
@@ -146,15 +121,6 @@ public class BdTest {
             etrePresent.setConfirmerPresenceParent2("MAYBE");
             etrePresent.setPresenceReelle(true);
             session.save(etrePresent);
-            
-            
-            
-            
-            
-            
-            
-            
-            
 
             tx.commit();
             System.out.println("C'est tout bon");
@@ -165,6 +131,46 @@ public class BdTest {
 
     private static Utilisateur buildUtilisateur(String email, String pwd, String nom, String prenom, LocalDate dateNaissance) {
         Utilisateur u = new Utilisateur();
+        u.setEmailUtilisateur(email);
+        u.setMdpUtilisateur(pwd);
+        u.setNomUtilisateur(nom);
+        u.setPrenomUtilisateur(prenom);
+        u.setDateNaissanceUtilisateur(dateNaissance);
+        return u;
+    }
+
+    private static Parent buildParent(String email, String pwd, String nom, String prenom, LocalDate dateNaissance) {
+        Parent u = new Parent();
+        u.setEmailUtilisateur(email);
+        u.setMdpUtilisateur(pwd);
+        u.setNomUtilisateur(nom);
+        u.setPrenomUtilisateur(prenom);
+        u.setDateNaissanceUtilisateur(dateNaissance);
+        return u;
+    }
+
+    private static Joueur buildJoueur(String email, String pwd, String nom, String prenom, LocalDate dateNaissance) {
+        Joueur u = new Joueur();
+        u.setEmailUtilisateur(email);
+        u.setMdpUtilisateur(pwd);
+        u.setNomUtilisateur(nom);
+        u.setPrenomUtilisateur(prenom);
+        u.setDateNaissanceUtilisateur(dateNaissance);
+        return u;
+    }
+
+    private static Coach buildCoach(String email, String pwd, String nom, String prenom, LocalDate dateNaissance) {
+        Coach u = new Coach();
+        u.setEmailUtilisateur(email);
+        u.setMdpUtilisateur(pwd);
+        u.setNomUtilisateur(nom);
+        u.setPrenomUtilisateur(prenom);
+        u.setDateNaissanceUtilisateur(dateNaissance);
+        return u;
+    }
+
+    private static Secretaire buildSecretaire(String email, String pwd, String nom, String prenom, LocalDate dateNaissance) {
+        Secretaire u = new Secretaire();
         u.setEmailUtilisateur(email);
         u.setMdpUtilisateur(pwd);
         u.setNomUtilisateur(nom);

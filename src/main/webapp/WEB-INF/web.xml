@@ -32,6 +32,17 @@
     <url-pattern>/Home</url-pattern>
   </servlet-mapping>
 
+<!-- Déclarer absence en tant que parent -->
+  <servlet>
+    <servlet-name>Absence</servlet-name>
+    <jsp-file>/jsp/parent/absence.jsp</jsp-file>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Absence</servlet-name>
+    <url-pattern>/Absence</url-pattern>
+  </servlet-mapping>
+
 <!-- "/secretaire/profil" => ctrl.secretaireProfilCtrl -->
   <servlet>
     <servlet-name>SecretaireProfil</servlet-name>

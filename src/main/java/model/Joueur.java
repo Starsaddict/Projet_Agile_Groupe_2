@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -15,9 +16,9 @@ public class Joueur extends Utilisateur {
 
     @ManyToMany
     @JoinTable(
-        name = "Parent_Joueur",
-        joinColumns = @JoinColumn(name = "IdJoueur", referencedColumnName = "IdUtilisateur"),
-        inverseJoinColumns = @JoinColumn(name = "IdParent", referencedColumnName = "IdUtilisateur")
+            name = "Parent_Joueur",
+            joinColumns = @JoinColumn(name = "IdJoueur", referencedColumnName = "IdUtilisateur"),
+            inverseJoinColumns = @JoinColumn(name = "IdParent", referencedColumnName = "IdUtilisateur")
     )
     private List<Parent> parents;
 
@@ -27,8 +28,18 @@ public class Joueur extends Utilisateur {
     @ManyToMany(mappedBy = "joueurs", cascade = CascadeType.ALL)
     private List<Groupe> groupes;
 
-    
+
     public Joueur() {
+        this.parents = new ArrayList<>();
+        this.absences = new ArrayList<>();
+        this.groupes = new ArrayList<>();
+    }
+
+    public void addParent(Parent parent) {
+        if (!this.parents.contains(parent)) {
+            this.parents.add(parent);
+            parent.addEnfant(this);
+        }
     }
 
     public Long getIdUtilisateur() {
@@ -38,22 +49,22 @@ public class Joueur extends Utilisateur {
     public void setIdUtilisateur(Long idUtilisateur) {
         this.idUtilisateur = idUtilisateur;
     }
-    
-    
+
+
     public Parent getParent1() {
-        if (parents != null && parents.size() > 0) {
+        if (parents != null && !parents.isEmpty()) {
             return parents.get(0);
         }
         return null;
     }
-    
+
     public Parent getParent2() {
         if (parents != null && parents.size() > 1) {
             return parents.get(1);
         }
         return null;
     }
-    
+
     public List<Parent> getParents() {
         return parents;
     }

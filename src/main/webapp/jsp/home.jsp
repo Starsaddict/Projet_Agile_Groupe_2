@@ -22,6 +22,7 @@
       </c:when>
       <c:when test="${sessionScope.user.typeU == 'Parent'}">
         <p>Accès parent : <a href="/parent/enfants">Mes enfants</a></p>
+        <p>Déclare absence : <a href="CtrlFrontAbsence">Déclarer une absence</a></p>
       </c:when>
       <c:when test="${sessionScope.user.typeU == 'Coach'}">
         <p>Accès coach : <a href="/coach/agenda">Mon agenda</a></p>

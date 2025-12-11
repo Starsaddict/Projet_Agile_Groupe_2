@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,6 +30,14 @@ public class Parent extends Utilisateur {
     private List<Covoiturage> covoituragesReserves;
 
     public Parent() {
+        this.joueurs = new ArrayList<>();
+    }
+
+    public void addEnfant(Joueur enfant) {
+        if (!this.joueurs.contains(enfant)) {
+            this.joueurs.add(enfant);
+            enfant.addParent(this);
+        }
     }
 
     public Long getIdUtilisateur() {

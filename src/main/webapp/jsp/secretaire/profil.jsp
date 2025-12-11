@@ -16,7 +16,7 @@
     <ul>
         <li><a href="<%=request.getContextPath()%>/secretaire/profil/creerCompteFamile">Créer une famille</a></li>
         <li><a href="<%=request.getContextPath()%>/secretaire/profil/modifier">Modifier un compte</a></li>
-        <li><a href="<%=request.getContextPath()%>/secretaire/profil/batchCreate">批量导入账户 (Excel)</a></li>
+        <li><a href="<%=request.getContextPath()%>/secretaire/profil/batchCreate">batch create ( avec Excel )</a></li>
     </ul>
 </body>
 </html>

@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="US11">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Utilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Utilisateur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/UtilisateurService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/UtilisateurService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/profil.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/profil.jsp" afterDir="false" />
     </list>
@@ -28,7 +30,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="9-us-72-Ziming" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -65,6 +67,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Maven.projetAgile [clean].executor": "Run",
+    "Maven.projetAgile [package].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "OpenRewrite.JavaxAuthorizationMigrationToJakartaAuthorization.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -72,7 +76,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Smart Tomcat.Unnamed.executor": "Run",
     "Smart Tomcat.projetAgile.executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "US08",
     "last_opened_file_path": "/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -155,7 +159,7 @@
       <workItem from="1765357268297" duration="3467000" />
       <workItem from="1765448572043" duration="20000" />
       <workItem from="1765448601629" duration="19000" />
-      <workItem from="1765448630056" duration="2289000" />
+      <workItem from="1765448630056" duration="6874000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -253,7 +257,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765407200267</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="US11">
+      <option name="closed" value="true" />
+      <created>1765451664453</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1765451664453</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

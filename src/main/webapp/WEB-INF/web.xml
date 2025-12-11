@@ -71,4 +71,26 @@
     <url-pattern>/secretaire/profil/modifier</url-pattern>
   </servlet-mapping>
 
+<!-- "/secretaire/profil/batchCreate" => ctrl.secretaireBatchCreateCtrl -->
+  <servlet>
+    <servlet-name>ProfilBatchCreate</servlet-name>
+    <servlet-class>ctrl.secretaireBatchCreateCtrl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ProfilBatchCreate</servlet-name>
+    <url-pattern>/secretaire/profil/batchCreate</url-pattern>
+  </servlet-mapping>
+
+<!-- "/secretaire/profil/batchCreate/confirm" => ctrl.secretaireBatchCreateConfirmCtrl -->
+  <servlet>
+    <servlet-name>ProfilBatchCreateConfirm</servlet-name>
+    <servlet-class>ctrl.secretaireBatchCreateConfirmCtrl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ProfilBatchCreateConfirm</servlet-name>
+    <url-pattern>/secretaire/profil/batchCreate/confirm</url-pattern>
+  </servlet-mapping>
+
 </web-app>

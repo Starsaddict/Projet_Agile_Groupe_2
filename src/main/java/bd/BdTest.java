@@ -20,7 +20,7 @@ import model.Utilisateur;
 
 public class BdTest {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
 
@@ -171,5 +171,5 @@ public class BdTest {
         u.setPrenomUtilisateur(prenom);
         u.setDateNaissanceUtilisateur(dateNaissance);
         return u;
-    }
+    }*/
 }

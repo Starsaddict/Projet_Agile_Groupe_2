@@ -14,5 +14,16 @@
 
     <p>Bienvenue !</p>
 
+    <p>Se connecter en tant que :</p>
+        <ul>
+            <li><a href="CtrlFrontLogin?role=Joueur">Joueur</a></li>
+            <li><a href="CtrlFrontLogin?role=Coach">Coach</a></li>
+            <li><a href="CtrlFrontLogin?role=Parent">Parent</a></li>
+            <li><a href="CtrlFrontLogin?role=Secretaire">Secrétaire</a></li>
+        </ul>
+
+    ${message != null ? message : ""}
+
+
 </body>
 </html>

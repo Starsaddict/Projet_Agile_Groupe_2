@@ -13,13 +13,23 @@
   </welcome-file-list>
 
   <servlet>
-    <servlet-name>Accueil</servlet-name>
-    <jsp-file>/jsp/test.html</jsp-file>
+    <servlet-name>Login</servlet-name>
+    <jsp-file>/jsp/login.jsp</jsp-file>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>Accueil</servlet-name>
-    <url-pattern>/</url-pattern>
+    <servlet-name>Login</servlet-name>
+    <url-pattern>/Login</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Home</servlet-name>
+    <jsp-file>/jsp/home.jsp</jsp-file>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Home</servlet-name>
+    <url-pattern>/Home</url-pattern>
   </servlet-mapping>
 
 <!-- "/secretaire/profil" => ctrl.secretaireProfilCtrl -->

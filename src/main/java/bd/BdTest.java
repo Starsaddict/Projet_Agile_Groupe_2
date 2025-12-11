@@ -52,16 +52,22 @@ public class BdTest {
             secretaire.setPrenomUtilisateur("S");
             session.save(secretaire);
 
-            Groupe groupe = new Groupe();
-            groupe.setNomGroupe("Groupe A");
-            session.save(groupe);
+            Groupe groupeA = new Groupe();
+            groupeA.setNomGroupe("Groupe A");
+            session.save(groupeA);
+            Groupe groupeB = new Groupe();
+            groupeB.setNomGroupe("Groupe B");
+            session.save(groupeB);
+            Groupe groupeC = new Groupe();
+            groupeC.setNomGroupe("Groupe C");
+            session.save(groupeC);
 
             Evenement evenement = new Evenement();
             evenement.setNomEvenement("Match");
             evenement.setLieuEvenement("Stadium");
             evenement.setDateEvenement(LocalDateTime.of(2024, 1, 1, 10, 0));
             evenement.setTypeEvenement("GAME");
-            evenement.setGroupe(groupe);
+            evenement.setGroupe(groupeA);
             session.save(evenement);
             
          // ================= SUPPRESSION DE L'ÉVÉNEMENT MODIFIÉ =================
@@ -76,7 +82,7 @@ public class BdTest {
             e2.setLieuEvenement("Salle A");
             e2.setDateEvenement(LocalDateTime.of(2024, 1, 3, 18, 0));
             e2.setTypeEvenement("ENTRAINEMENT");
-            e2.setGroupe(groupe);
+            e2.setGroupe(groupeA);
             session.save(e2);
 
             Evenement e3 = new Evenement();
@@ -84,7 +90,7 @@ public class BdTest {
             e3.setLieuEvenement("Complexe Sportif");
             e3.setDateEvenement(LocalDateTime.of(2024, 1, 10, 9, 0));
             e3.setTypeEvenement("TOURNOI");
-            e3.setGroupe(groupe);
+            e3.setGroupe(groupeA);
             session.save(e3);
 
             Evenement e4 = new Evenement();
@@ -92,10 +98,24 @@ public class BdTest {
             e4.setLieuEvenement("Salle de réunion");
             e4.setDateEvenement(LocalDateTime.of(2024, 1, 5, 20, 0));
             e4.setTypeEvenement("REUNION");
-            e4.setGroupe(groupe);
+            e4.setGroupe(groupeA);
             session.save(e4);
 
             System.out.println("✅ 3 événements ajoutés");
+            
+            Evenement e5 = new Evenement();
+            e5.setNomEvenement("Yajing's birthday party");
+            e5.setLieuEvenement("l'hotêl de 5 *");
+            e5.setDateEvenement(LocalDateTime.of(2026, 10, 8, 20, 0));
+            e5.setTypeEvenement("Party");
+            session.save(e5);
+            
+            Evenement e6 = new Evenement();
+            e6.setNomEvenement("Volleyball");
+            e6.setLieuEvenement("Gym");
+            e6.setDateEvenement(LocalDateTime.of(2026, 1, 5, 20, 0));
+            e6.setTypeEvenement("Volleyball game");
+            session.save(e6);
 
 
             // ================= AFFICHAGE FINAL =================
@@ -136,10 +156,10 @@ public class BdTest {
 
             session.flush(); // ensure generated IDs are available for composite keys
 
-            EtrePresent_id epId = new EtrePresent_id(joueur.getIdUtilisateur(), groupe.getIdGroupe(), evenement.getIdEvenement());
+            EtrePresent_id epId = new EtrePresent_id(joueur.getIdUtilisateur(), groupeA.getIdGroupe(), evenement.getIdEvenement());
             EtrePresent etrePresent = new EtrePresent(epId);
             etrePresent.setJoueur(joueur);
-            etrePresent.setGroupe(groupe);
+            etrePresent.setGroupe(groupeA);
             etrePresent.setEvenement(evenement);
             etrePresent.setConfirmerPresenceJoueur("YES");
             etrePresent.setConfirmerPresenceParent1("NO");

@@ -13,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.CascadeType;
+
 
 @Entity
 @Table(name = "Groupe")
@@ -26,7 +28,7 @@ public class Groupe {
     @Column(name = "NomGroupe")
     private String nomGroupe;
 
-    @OneToMany(mappedBy = "groupe", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "groupe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Evenement> evenements = new ArrayList<>();
 
     @ManyToMany

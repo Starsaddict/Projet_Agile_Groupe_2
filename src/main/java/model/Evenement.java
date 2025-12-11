@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -26,12 +27,17 @@ public class Evenement {
     @Column(name = "TypeEvenement", nullable = false)
     private String typeEvenement;
 
+ // Pour Tester us 13 il faut laisser gourpe lié vide.
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "IdGroupe", nullable = false)
+    @JoinColumn(name = "IdGroupe", nullable = true)
     private Groupe groupe;
 
-    @OneToMany(mappedBy = "evenement", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Covoiturage> covoiturages;
+    
+    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<EtrePresent> etresPresents = new ArrayList<>();
+
 
     // Constructeur vide obligatoire
     public Evenement() {}
@@ -43,6 +49,13 @@ public class Evenement {
         this.dateEvenement = date;
         this.typeEvenement = type;
         this.groupe = groupe;
+    }
+    // Pour Tester us 13 il faut laisser gourpe lié vide.
+    public Evenement(String nom, String lieu, LocalDateTime date, String type) {
+        this.nomEvenement = nom;
+        this.lieuEvenement = lieu;
+        this.dateEvenement = date;
+        this.typeEvenement = type;
     }
 
     // ===================== GETTERS / SETTERS =====================

@@ -38,7 +38,22 @@ public class Joueur extends Utilisateur {
     public void setIdUtilisateur(Long idUtilisateur) {
         this.idUtilisateur = idUtilisateur;
     }
-
+    
+    
+    public Parent getParent1() {
+        if (parents != null && parents.size() > 0) {
+            return parents.get(0);
+        }
+        return null;
+    }
+    
+    public Parent getParent2() {
+        if (parents != null && parents.size() > 1) {
+            return parents.get(1);
+        }
+        return null;
+    }
+    
     public List<Parent> getParents() {
         return parents;
     }

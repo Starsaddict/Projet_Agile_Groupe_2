@@ -57,6 +57,46 @@ public class UtilisateurService {
         return Optional.empty();
     }
 
+    public static utilisateurRepo utilisateurRepo = new utilisateurRepo();
+
+    
+    public Joueur loadJoueur(Long id) {
+        Utilisateur u = utilisateurRepo.loadUtilisateur(id);
+        if (u instanceof Joueur) {
+            return (Joueur) u;
+        }
+        return null;
+    }
+
+    public Parent loadParent(Long id) {
+        Utilisateur u = utilisateurRepo.loadUtilisateur(id);
+        if (u instanceof Parent) {
+            return (Parent) u;
+        }
+        return null;
+    }
+
+    public void modifierUtilisateurNom(Utilisateur u, String nom) {
+        u.setNomUtilisateur(nom);
+        utilisateurRepo.updateUtilisateur(u);
+    }
+
+    public void modifierUtilisateurPrenom(Utilisateur u, String prenom) {
+        u.setPrenomUtilisateur(prenom);
+        utilisateurRepo.updateUtilisateur(u);
+    }
+
+    public void modifierUtilisateurDateNaissance(Utilisateur u, String dateNaissance) {
+        u.setDateNaissanceUtilisateur(java.time.LocalDate.parse(dateNaissance));
+        utilisateurRepo.updateUtilisateur(u);
+    }
+
+    public void modifierUtilisateurMdp(Utilisateur u, String mdp) {
+        String password = mdpUtil.mdpString(mdp);
+        u.setMdpUtilisateur(password);
+        utilisateurRepo.updateUtilisateur(u);
+    }
+
     public Utilisateur creerCompteUtilisateur(String email, String type) {
         if(!type.equals("Coach") && !type.equals("Joueur") && !type.equals("Parent") && !type.equals("Secretaire")) {
             return null;
@@ -95,7 +135,6 @@ public class UtilisateurService {
             String password = mdpUtil.mdpString(mdp);
             secretaire.setMdpUtilisateur(password);
 
-            utilisateurRepo utilisateurRepo = new utilisateurRepo();
             secretaire = (Secretaire) utilisateurRepo.saveUtilisateur(secretaire);
             return secretaire;
         }
@@ -111,7 +150,6 @@ public class UtilisateurService {
             String password = mdpUtil.mdpString(mdp);
             coach.setMdpUtilisateur(password);
 
-            utilisateurRepo utilisateurRepo = new utilisateurRepo();
             coach = (Coach) utilisateurRepo.saveUtilisateur(coach);
             return coach;
         }
@@ -126,7 +164,6 @@ public class UtilisateurService {
             String password = mdpUtil.mdpString(mdp);
             parent.setMdpUtilisateur(password);
 
-            utilisateurRepo utilisateurRepo = new utilisateurRepo();
             parent = (Parent) utilisateurRepo.saveUtilisateur(parent);
             return parent;
         }
@@ -140,7 +177,6 @@ public class UtilisateurService {
             String password = mdpUtil.mdpString(mdp);
             joueur.setMdpUtilisateur(password);
 
-            utilisateurRepo utilisateurRepo = new utilisateurRepo();
             joueur = (Joueur) utilisateurRepo.saveUtilisateur(joueur);
             return joueur;
         }
@@ -148,43 +184,117 @@ public class UtilisateurService {
     }
 
     public void setFamily(List<Parent> parents, List<Joueur> joueurs) {
-        if (parents == null || joueurs == null) {
+        if (parents == null || parents.isEmpty() || joueurs == null || joueurs.isEmpty()) {
             return;
         }
 
+        List<Parent> managedParents = new ArrayList<>();
         for (Parent parent : parents) {
-            List<Joueur> parentJoueurs = parent.getJoueurs();
-            if (parentJoueurs == null) {
-                parentJoueurs = new ArrayList<>();
-                parent.setJoueurs(parentJoueurs);
+            Parent managedParent = resolveParent(parent);
+            if (managedParent.getJoueurs() == null) {
+                managedParent.setJoueurs(new ArrayList<>());
             }
-            for (Joueur joueur : joueurs) {
-                if (!parentJoueurs.contains(joueur)) {
-                    parentJoueurs.add(joueur);
-                }
+            if (!containsParent(managedParents, managedParent)) {
+                managedParents.add(managedParent);
             }
         }
 
+        List<Joueur> managedJoueurs = new ArrayList<>();
         for (Joueur joueur : joueurs) {
-            List<Parent> joueurParents = joueur.getParents();
-            if (joueurParents == null) {
-                joueurParents = new ArrayList<>();
-                joueur.setParents(joueurParents);
+            Joueur managedJoueur = resolveJoueur(joueur);
+            if (managedJoueur.getParents() == null) {
+                managedJoueur.setParents(new ArrayList<>());
             }
-            for (Parent parent : parents) {
-                if (!joueurParents.contains(parent)) {
+            if (!containsJoueur(managedJoueurs, managedJoueur)) {
+                managedJoueurs.add(managedJoueur);
+            }
+        }
+
+        for (Parent parent : managedParents) {
+            List<Joueur> parentJoueurs = parent.getJoueurs();
+            for (Joueur joueur : managedJoueurs) {
+                if (!containsJoueur(parentJoueurs, joueur)) {
+                    parentJoueurs.add(joueur);
+                }
+
+                List<Parent> joueurParents = joueur.getParents();
+                if (!containsParent(joueurParents, parent)) {
                     joueurParents.add(parent);
                 }
             }
         }
 
-        utilisateurRepo utilisateurRepo = new utilisateurRepo();
-        for (Parent parent : parents) {
+        for (Parent parent : managedParents) {
             utilisateurRepo.updateUtilisateur(parent);
         }
-        for (Joueur joueur : joueurs) {
+        for (Joueur joueur : managedJoueurs) {
             utilisateurRepo.updateUtilisateur(joueur);
         }
     }
 
+    private Parent resolveParent(Parent parent) {
+        if (parent == null) {
+            return null;
+        }
+
+        if (parent.getIdUtilisateur() != null) {
+            Parent loadedParent = utilisateurRepo.loadParent(parent.getIdUtilisateur());
+            if (loadedParent != null) {
+                return loadedParent;
+            }
+        } else {
+            parent = (Parent) utilisateurRepo.saveUtilisateur(parent);
+        }
+        return parent;
+    }
+
+    private Joueur resolveJoueur(Joueur joueur) {
+        if (joueur == null) {
+            return null;
+        }
+
+        if (joueur.getIdUtilisateur() != null) {
+            Joueur loadedJoueur = loadJoueur(joueur.getIdUtilisateur());
+            if (loadedJoueur != null) {
+                return loadedJoueur;
+            }
+        } else {
+            joueur = (Joueur) utilisateurRepo.saveUtilisateur(joueur);
+        }
+        return joueur;
+    }
+
+    private boolean containsParent(List<Parent> parents, Parent parent) {
+        if (parents == null || parent == null) {
+            return false;
+        }
+        Long id = parent.getIdUtilisateur();
+        for (Parent p : parents) {
+            if (p == parent) {
+                return true;
+            }
+            if (id != null && id.equals(p.getIdUtilisateur())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean containsJoueur(List<Joueur> joueurs, Joueur joueur) {
+        if (joueurs == null || joueur == null) {
+            return false;
+        }
+        Long id = joueur.getIdUtilisateur();
+        for (Joueur j : joueurs) {
+            if (j == joueur) {
+                return true;
+            }
+            if (id != null && id.equals(j.getIdUtilisateur())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
 }

@@ -43,17 +43,8 @@
     <url-pattern>/secretaire/profil</url-pattern>
   </servlet-mapping>
 
-<!-- "/secretaire/profil/creerCompte" => ctrl.secretaireCreerCompteCtrl -->
-  <servlet>
-    <servlet-name>SecretaireCreerCompte</servlet-name>
-    <servlet-class>ctrl.secretaireCreerCompteCtrl</servlet-class>
-  </servlet>
 
-  <servlet-mapping>
-    <servlet-name>SecretaireCreerCompte</servlet-name>
-    <url-pattern>/secretaire/profil/creerCompte</url-pattern>
-  </servlet-mapping>
-
+<!-- "/secretaire/profil/creerCompte" & "/secretaire/profil/creerCompteFamile" => ctrl.secretaireRequestCreerCompteFamile -->
   <servlet>
     <servlet-name>SecretaireCreerCompteFamile</servlet-name>
     <servlet-class>ctrl.secretaireRequestCreerCompteFamile</servlet-class>
@@ -61,7 +52,23 @@
 
   <servlet-mapping>
     <servlet-name>SecretaireCreerCompteFamile</servlet-name>
+    <url-pattern>/secretaire/profil/creerCompte</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>SecretaireCreerCompteFamile</servlet-name>
     <url-pattern>/secretaire/profil/creerCompteFamile</url-pattern>
+  </servlet-mapping>
+
+<!-- "/secretaire/profil/modifier" => ctrl.secretaireModifierCompte -->
+  <servlet>
+    <servlet-name>ProfilModifier</servlet-name>
+    <servlet-class>ctrl.secretaireModifierCompteCtrl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ProfilModifier</servlet-name>
+    <url-pattern>/secretaire/profil/modifier</url-pattern>
   </servlet-mapping>
 
 </web-app>

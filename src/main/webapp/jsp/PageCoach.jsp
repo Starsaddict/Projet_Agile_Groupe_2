@@ -16,7 +16,7 @@
 	<br>
 	<form action="CtrlCoach" method="get">
 		<input type="hidden" name="action" value="ConvocationGroupe">
-		<button type="submit">Convquer</button>
+		<button type="submit">Convoquer</button>
 	</form>
 </body>
 </html>

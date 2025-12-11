@@ -99,7 +99,7 @@ public class CtrlConvoquer extends HttpServlet {
 		}
 
 		request.setAttribute("evenementSelectionne", evt);
-		request.setAttribute("messageSucces", "Le groupe a bien été convoqué !");
+		request.setAttribute("messageSucces", "Le groupe est marqué pour convocation");
 		request.getRequestDispatcher("/jsp/PageSelection.jsp").forward(request, response);
 	}
 

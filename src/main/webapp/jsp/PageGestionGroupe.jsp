@@ -3,11 +3,11 @@
 
 <h2>Créer Groupe</h2>
 
-<form action="CtrlCoach" method="post">
+<form id="creerGroupeForm" action="CtrlCoach" method="post">
     <input type="hidden" name="action" value="EnregistrerGroupe"/>
 
     Nom du groupe :
-    <input type="text" name="nomGroupe" /><br/><br/>
+    <input type="text" name="nomGroupe" required /><br/><br/>
 
     Joueurs : <br/>
     <c:forEach var="j" items="${joueurs}">
@@ -48,3 +48,19 @@
         </tr>
     </c:forEach>
 </table>
+
+<br>
+<form action="CtrlCoach" method="get">
+    <input type="hidden" name="action" value="PageCoach"/>
+    <button type="submit">Retour à l'accueil Coach</button>
+</form>
+
+<script>
+document.getElementById("creerGroupeForm").addEventListener("submit", function(event) {
+    const checkboxes = document.querySelectorAll('input[name="joueursIds"]:checked');
+    if (checkboxes.length === 0) {
+        alert("Veuillez sélectionner au moins un joueur !");
+        event.preventDefault(); // Empêche l'envoi du formulaire
+    }
+});
+</script>

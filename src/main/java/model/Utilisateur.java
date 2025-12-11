@@ -35,6 +35,9 @@ public class Utilisateur {
     @Column(name = "Description", length = 1000)
     private String description;
 
+    @Column(name = "TypeU", insertable = false, updatable = false)
+    private String typeU;
+
     @ManyToMany(mappedBy = "reservers", cascade = CascadeType.ALL)
     private List<Covoiturage> covoiturages;
 
@@ -84,6 +87,14 @@ public class Utilisateur {
         this.prenomUtilisateur = prenomUtilisateur;
     }
 
+    public String getTypeU() {
+        return typeU;
+    }
+
+    public void setTypeU(String typeU) {
+        this.typeU = typeU;
+    }
+
     public LocalDate getDateNaissanceUtilisateur() {
         return dateNaissanceUtilisateur;
     }
@@ -127,5 +138,12 @@ public class Utilisateur {
             return "Administrateur";
         }
         return this.getClass().getSimpleName();
+    }
+
+    @Override
+    public String toString() {
+        return "Utilisateur [idUtilisateur=" + idUtilisateur + ", emailUtilisateur=" + emailUtilisateur
+                + ", nomUtilisateur=" + nomUtilisateur + ", prenomUtilisateur=" + prenomUtilisateur + ", typeU="
+                + typeU + "]";
     }
 }

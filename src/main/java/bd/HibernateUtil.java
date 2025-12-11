@@ -19,7 +19,15 @@ public class HibernateUtil
 		{
 		try	{
             Configuration configuration = new Configuration();
-            configuration.configure("hibernate.cfg.xml");
+            java.net.URL cfgUrl = Thread.currentThread().getContextClassLoader().getResource("hibernate.cfg.xml");
+            if (cfgUrl == null) {
+                cfgUrl = HibernateUtil.class.getResource("/hibernate.cfg.xml");
+            }
+            if (cfgUrl != null) {
+                configuration.configure(cfgUrl);
+            } else {
+                configuration.configure();
+            }
             System.out.println("Hibernate Configuration loaded");
 
 			/**

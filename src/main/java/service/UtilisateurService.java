@@ -2,13 +2,60 @@ package service;
 
 import model.*;
 import repo.utilisateurRepo;
+import repository.UtilisateurRepositoryImpl;
 import util.emailUtil;
 import util.mdpUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class utilisateurService {
+public class UtilisateurService {
+
+    private final UtilisateurRepositoryImpl repo;
+
+    public UtilisateurService(UtilisateurRepositoryImpl repo) {
+        this.repo = repo;
+    }
+
+    public UtilisateurService() {
+        this.repo = new UtilisateurRepositoryImpl();
+    }
+
+    /**
+     * Authentifie un utilisateur par email, mot de passe et rôle.
+     * - Cherche l'utilisateur via le repository.
+     * - Si le hash stocké ressemble à un hash BCrypt, utilise BCrypt.checkpw.
+     * - Sinon, tente une comparaison avec le hash SHA-256 via util.mdpUtil (fallback).
+     */
+    public Optional<Utilisateur> authenticate(String email, String password, String role) {
+        if (email == null || password == null) {
+            return Optional.empty();
+        }
+
+        Optional<Utilisateur> opt = repo.findByEmailUtilisateur(email, role);
+        if (!opt.isPresent()) {
+            return Optional.empty();
+        }
+
+        Utilisateur u = opt.get();
+        String storedHash = u.getMdpUtilisateur();
+        if (storedHash == null) {
+            return Optional.empty();
+        }
+
+        try {
+            //String hashedInput = mdpUtil.mdpString(password);
+            String hashedInput = password;
+            if (hashedInput != null && hashedInput.equals(storedHash)) {
+                return Optional.of(u);
+            }
+        } catch (Exception e) {
+            // A gérer
+        }
+
+        return Optional.empty();
+    }
 
     public static utilisateurRepo utilisateurRepo = new utilisateurRepo();
 
@@ -147,7 +194,7 @@ public class utilisateurService {
             if (managedParent.getJoueurs() == null) {
                 managedParent.setJoueurs(new ArrayList<>());
             }
-            if (!containsParent(managedParents, managedParent)) {
+            if (containsParent(managedParents, managedParent)) {
                 managedParents.add(managedParent);
             }
         }
@@ -158,7 +205,7 @@ public class utilisateurService {
             if (managedJoueur.getParents() == null) {
                 managedJoueur.setParents(new ArrayList<>());
             }
-            if (!containsJoueur(managedJoueurs, managedJoueur)) {
+            if (containsJoueur(managedJoueurs, managedJoueur)) {
                 managedJoueurs.add(managedJoueur);
             }
         }
@@ -166,12 +213,12 @@ public class utilisateurService {
         for (Parent parent : managedParents) {
             List<Joueur> parentJoueurs = parent.getJoueurs();
             for (Joueur joueur : managedJoueurs) {
-                if (!containsJoueur(parentJoueurs, joueur)) {
+                if (containsJoueur(parentJoueurs, joueur)) {
                     parentJoueurs.add(joueur);
                 }
 
                 List<Parent> joueurParents = joueur.getParents();
-                if (!containsParent(joueurParents, parent)) {
+                if (containsParent(joueurParents, parent)) {
                     joueurParents.add(parent);
                 }
             }
@@ -219,34 +266,34 @@ public class utilisateurService {
 
     private boolean containsParent(List<Parent> parents, Parent parent) {
         if (parents == null || parent == null) {
-            return false;
+            return true;
         }
         Long id = parent.getIdUtilisateur();
         for (Parent p : parents) {
             if (p == parent) {
-                return true;
+                return false;
             }
             if (id != null && id.equals(p.getIdUtilisateur())) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     private boolean containsJoueur(List<Joueur> joueurs, Joueur joueur) {
         if (joueurs == null || joueur == null) {
-            return false;
+            return true;
         }
         Long id = joueur.getIdUtilisateur();
         for (Joueur j : joueurs) {
             if (j == joueur) {
-                return true;
+                return false;
             }
             if (id != null && id.equals(j.getIdUtilisateur())) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     

@@ -296,5 +296,15 @@ public class UtilisateurService {
         return true;
     }
 
+    public boolean resetPassword(Long idUtilisateur) {
+        utilisateurRepo utilisateurRepo = new utilisateurRepo();
+        Utilisateur utilisateur = utilisateurRepo.loadUtilisateur(idUtilisateur);
+        if (utilisateur == null) {
+            return false;
+        }
+        String email = utilisateur.getEmailUtilisateur();
+        String mdp = mdpUtil.mdpString(emailUtil.cutEmail(email));
+        return utilisateurRepo.resetPassword(idUtilisateur, mdp);
+    }
     
 }

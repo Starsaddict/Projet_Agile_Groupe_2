@@ -83,6 +83,13 @@
         ${message != null ? message : ""}
     </div>
 </div>
-
+      <div class="role-list">
+        <a href="CtrlFrontLogin?role=Joueur">Joueur</a>
+        <a href="CtrlFrontLogin?role=Coach">Coach</a>
+        <a href="CtrlFrontLogin?role=Parent">Parent</a>
+        <a href="CtrlFrontLogin?role=Secretaire">Secrétaire</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

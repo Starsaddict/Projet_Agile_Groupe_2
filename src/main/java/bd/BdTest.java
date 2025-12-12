@@ -137,7 +137,7 @@ public class BdTest {
             
             
             
-
+/*
             Covoiturage covoiturage = new Covoiturage();
             covoiturage.setDateCovoiturage(LocalDateTime.of(2024, 2, 1, 8, 30));
             covoiturage.setNbPlacesMax("4");
@@ -146,17 +146,20 @@ public class BdTest {
             covoiturage.setConducteur(conducteur);
             covoiturage.addUtilisateur(passager);
             session.save(covoiturage);
-
+*/
+            
+/*            
             EtreAbsent absence = new EtreAbsent();
             absence.setCertificat("certificat.pdf");
             absence.setAbsenceDebut("2024-01-01");
             absence.setAbsenceTerminee(true);
             absence.setJoueur(joueur);
             session.save(absence);
-
+*/
             session.flush(); // ensure generated IDs are available for composite keys
 
-            EtrePresent_id epId = new EtrePresent_id(joueur.getIdUtilisateur(), groupeA.getIdGroupe(), evenement.getIdEvenement());
+/*            
+            EtrePresent_id epId = new EtrePresent_id(joueur.getIdUtilisateur(), groupe.getIdGroupe(), evenement.getIdEvenement());
             EtrePresent etrePresent = new EtrePresent(epId);
             etrePresent.setJoueur(joueur);
             etrePresent.setGroupe(groupeA);
@@ -166,7 +169,7 @@ public class BdTest {
             etrePresent.setConfirmerPresenceParent2("MAYBE");
             etrePresent.setPresenceReelle(true);
             session.save(etrePresent);
-            
+*/         
             
             
             

@@ -1,29 +1,29 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: kaiyangzhang
-  Date: 2025/12/9
-  Time: 14:21
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-    <title>Accueil</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Accueil</title>
+  <link rel="stylesheet" href="<%= request.getContextPath() %>/css/style.css" />
 </head>
-<body>
+<body class="page index">
+  <div class="container">
+    <div class="card">
+      <h1>Se connecter en tant que</h1>
 
-    <p>Bienvenue !</p>
+      <% String message = (String) request.getAttribute("message");
+         if (message != null && !message.isEmpty()) { %>
+          <div class="alert error"><%= message %></div>
+      <% } %>
 
-    <p>Se connecter en tant que :</p>
-        <ul>
-            <li><a href="CtrlFrontLogin?role=Joueur">Joueur</a></li>
-            <li><a href="CtrlFrontLogin?role=Coach">Coach</a></li>
-            <li><a href="CtrlFrontLogin?role=Parent">Parent</a></li>
-            <li><a href="CtrlFrontLogin?role=Secretaire">Secrétaire</a></li>
-        </ul>
-
-    ${message != null ? message : ""}
-
-
+      <div class="role-list">
+        <a href="CtrlFrontLogin?role=Joueur">Joueur</a>
+        <a href="CtrlFrontLogin?role=Coach">Coach</a>
+        <a href="CtrlFrontLogin?role=Parent">Parent</a>
+        <a href="CtrlFrontLogin?role=Secretaire">Secrétaire</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

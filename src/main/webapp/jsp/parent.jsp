@@ -1,147 +1,114 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Espace Parent</title>
-
-    <!-- Bootstrap -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
         body {
-            background-color: #f4f6f9;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
         }
 
-        .page-wrapper {
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 26px;
+        }
+
+        .container {
             max-width: 1000px;
-            margin: 70px auto;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
         }
 
-        .page-title {
-            font-weight: 700;
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
         }
 
-        .action-card {
-            border-radius: 14px;
-            transition: all 0.25s ease;
-            height: 100%;
+        .card:hover {
+            transform: translateY(-5px);
         }
 
-        .action-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        .card h2 {
+            margin-bottom: 15px;
+            color: #2c3e50;
         }
 
-        .icon-box {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 15px;
+        .card p {
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .card a {
+            display: inline-block;
+            text-decoration: none;
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .card a:hover {
+            background: #2980b9;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #888;
         }
     </style>
 </head>
 
 <body>
 
-<div class="page-wrapper">
+<header>
+    👨‍👩‍👧 Espace Parent
+</header>
 
-    <!-- Header -->
-    <div class="text-center mb-5">
-        <h1 class="page-title">👨‍👩‍👧 Espace Parent</h1>
-        <p class="text-muted mt-2">
-            Gestion des déplacements, convocations et documents médicaux
-        </p>
+<div class="container">
+
+    <div class="card">
+        <h2>🚗 Proposer un covoiturage</h2>
+        <p>Proposer ou gérer un trajet pour les événements.</p>
+        <a href="<%=request.getContextPath()%>/jsp/covoiturage.jsp">Accéder</a>
     </div>
 
-    <!-- Actions -->
-    <div class="row g-4">
+    <div class="card">
+        <h2>👤 Modifier le profil</h2>
+        <p>Modifier vos informations personnelles.</p>
+        <a href="<%=request.getContextPath()%>/jsp/modifierProfil.jsp">Accéder</a>
+    </div>
 
-        <!-- Proposer covoiturage -->
-        <div class="col-md-6 col-lg-3">
-            <a href="${pageContext.request.contextPath}/jsp/covoiturage/proposer.jsp"
-               class="text-decoration-none text-dark">
+    <div class="card">
+        <h2>📅 Valider une convocation</h2>
+        <p>Confirmer la présence à un événement.</p>
+        <a href="<%=request.getContextPath()%>/jsp/convocation.jsp">Accéder</a>
+    </div>
 
-                <div class="card action-card p-4 text-center">
-                    <div class="icon-box bg-primary text-white">
-                        <i class="bi bi-car-front-fill"></i>
-                    </div>
-                    <h5>Proposer un covoiturage</h5>
-                    <p class="text-muted small">
-                        Offrir un trajet pour un événement
-                    </p>
-                </div>
-
-            </a>
-        </div>
-
-        <!-- Modifier profil -->
-        <div class="col-md-6 col-lg-3">
-            <a href="${pageContext.request.contextPath}/jsp/parent/modifierProfil.jsp"
-               class="text-decoration-none text-dark">
-
-                <div class="card action-card p-4 text-center">
-                    <div class="icon-box bg-warning text-white">
-                        <i class="bi bi-person-gear"></i>
-                    </div>
-                    <h5>Modifier le profil</h5>
-                    <p class="text-muted small">
-                        Mettre à jour vos informations
-                    </p>
-                </div>
-
-            </a>
-        </div>
-
-        <!-- Valider convocation -->
-        <div class="col-md-6 col-lg-3">
-            <a href="${pageContext.request.contextPath}/jsp/convocation/liste.jsp"
-               class="text-decoration-none text-dark">
-
-                <div class="card action-card p-4 text-center">
-                    <div class="icon-box bg-success text-white">
-                        <i class="bi bi-envelope-check-fill"></i>
-                    </div>
-                    <h5>Convocations</h5>
-                    <p class="text-muted small">
-                        Valider ou refuser une convocation
-                    </p>
-                </div>
-
-            </a>
-        </div>
-
-        <!-- Certificat médical -->
-        <div class="col-md-6 col-lg-3">
-            <a href="${pageContext.request.contextPath}/jsp/certificat/deposer.jsp"
-               class="text-decoration-none text-dark">
-
-                <div class="card action-card p-4 text-center">
-                    <div class="icon-box bg-danger text-white">
-                        <i class="bi bi-heart-pulse-fill"></i>
-                    </div>
-                    <h5>Certificat médical</h5>
-                    <p class="text-muted small">
-                        Déposer et déclarer un certificat
-                    </p>
-                </div>
-
-            </a>
-        </div>
-
+    <div class="card">
+        <h2>📄 Certificat médical</h2>
+        <p>Déposer et déclarer un certificat médical.</p>
+        <a href="<%=request.getContextPath()%>/jsp/certificat.jsp">Accéder</a>
     </div>
 
 </div>
+
+<footer>
+    © Projet Agile — Espace Parent
+</footer>
 
 </body>
 </html>

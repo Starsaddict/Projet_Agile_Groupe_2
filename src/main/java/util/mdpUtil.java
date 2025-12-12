@@ -22,5 +22,8 @@ public class mdpUtil {
             throw new RuntimeException("Hash algorithm not found", e);
         }
     }
-
+    public static void main(String[] args) {
+    	String mdp = "pwd_coach";
+    	System.out.print(mdpString(mdp));
+    }
 }

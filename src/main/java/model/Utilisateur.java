@@ -118,4 +118,11 @@ public class Utilisateur {
     public void setConduits(List<Covoiturage> conduits) {
         this.conduits = conduits;
     }
+
+    @Override
+    public String toString() {
+        return "Utilisateur [idUtilisateur=" + idUtilisateur + ", emailUtilisateur=" + emailUtilisateur
+                + ", nomUtilisateur=" + nomUtilisateur + ", prenomUtilisateur=" + prenomUtilisateur + ", typeU="
+                + typeU + "]";
+    }
 }

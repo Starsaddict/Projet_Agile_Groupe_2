@@ -194,7 +194,7 @@ public class UtilisateurService {
             if (managedParent.getJoueurs() == null) {
                 managedParent.setJoueurs(new ArrayList<>());
             }
-            if (!containsParent(managedParents, managedParent)) {
+            if (containsParent(managedParents, managedParent)) {
                 managedParents.add(managedParent);
             }
         }
@@ -205,7 +205,7 @@ public class UtilisateurService {
             if (managedJoueur.getParents() == null) {
                 managedJoueur.setParents(new ArrayList<>());
             }
-            if (!containsJoueur(managedJoueurs, managedJoueur)) {
+            if (containsJoueur(managedJoueurs, managedJoueur)) {
                 managedJoueurs.add(managedJoueur);
             }
         }
@@ -213,12 +213,12 @@ public class UtilisateurService {
         for (Parent parent : managedParents) {
             List<Joueur> parentJoueurs = parent.getJoueurs();
             for (Joueur joueur : managedJoueurs) {
-                if (!containsJoueur(parentJoueurs, joueur)) {
+                if (containsJoueur(parentJoueurs, joueur)) {
                     parentJoueurs.add(joueur);
                 }
 
                 List<Parent> joueurParents = joueur.getParents();
-                if (!containsParent(joueurParents, parent)) {
+                if (containsParent(joueurParents, parent)) {
                     joueurParents.add(parent);
                 }
             }
@@ -266,35 +266,45 @@ public class UtilisateurService {
 
     private boolean containsParent(List<Parent> parents, Parent parent) {
         if (parents == null || parent == null) {
-            return false;
+            return true;
         }
         Long id = parent.getIdUtilisateur();
         for (Parent p : parents) {
             if (p == parent) {
-                return true;
+                return false;
             }
             if (id != null && id.equals(p.getIdUtilisateur())) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     private boolean containsJoueur(List<Joueur> joueurs, Joueur joueur) {
         if (joueurs == null || joueur == null) {
-            return false;
+            return true;
         }
         Long id = joueur.getIdUtilisateur();
         for (Joueur j : joueurs) {
             if (j == joueur) {
-                return true;
+                return false;
             }
             if (id != null && id.equals(j.getIdUtilisateur())) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
+    public boolean resetPassword(Long idUtilisateur) {
+        utilisateurRepo utilisateurRepo = new utilisateurRepo();
+        Utilisateur utilisateur = utilisateurRepo.loadUtilisateur(idUtilisateur);
+        if (utilisateur == null) {
+            return false;
+        }
+        String email = utilisateur.getEmailUtilisateur();
+        String mdp = mdpUtil.mdpString(emailUtil.cutEmail(email));
+        return utilisateurRepo.resetPassword(idUtilisateur, mdp);
+    }
     
 }

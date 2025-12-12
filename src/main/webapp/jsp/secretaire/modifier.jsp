@@ -3,7 +3,7 @@
 <%
     List<Utilisateur> utilisateurs = (List<Utilisateur>) request.getAttribute("utilisateurs");
     String contextPath = request.getContextPath();
-    String success = request.getParameter("success");
+    String success = (String) request.getAttribute("success");
     String error = (String) request.getAttribute("error");
 %>
 <html>
@@ -16,6 +16,9 @@
         th { background-color: #f3f3f3; }
         .actions a { display: inline-block; padding: 6px 10px; background: #1976d2; color: #fff; text-decoration: none; border-radius: 4px; }
         .actions a:hover { background: #125aa0; }
+        .actions form { display: inline-block; margin-right: 6px; }
+        .actions button { padding: 6px 10px; background: #d32f2f; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        .actions button:hover { background: #9a2323; }
         .alert { padding: 10px 12px; border-radius: 4px; margin: 10px 0; }
         .alert.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .empty { text-align: center; color: #666; }
@@ -28,8 +31,8 @@
     <div class="alert" style="background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;"><%= error %></div>
 <% } %>
 
-<% if ("1".equals(success)) { %>
-    <div class="alert success">Compte modifié avec succès.</div>
+<% if (success != null) { %>
+    <div class="alert success"><%= success %></div>
 <% } %>
 
 <table>
@@ -53,6 +56,10 @@
             <td><%= prenom %></td>
             <td><%= email %></td>
             <td class="actions">
+                <form method="post" action="<%= contextPath %>/secretaire/profil/resetMdp">
+                    <input type="hidden" name="idUtilisateur" value="<%= utilisateur.getIdUtilisateur() %>"/>
+                    <button type="submit">reset password</button>
+                </form>
                 <a href="<%= contextPath %>/secretaire/profil/modifier?id=<%= utilisateur.getIdUtilisateur() %>">Modifier</a>
             </td>
         </tr>

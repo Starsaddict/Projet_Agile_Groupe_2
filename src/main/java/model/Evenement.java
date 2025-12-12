@@ -2,9 +2,8 @@ package model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.ArrayList;
-
+import java.util.List;
 
 @Entity
 @Table(name = "Evenement")
@@ -13,7 +12,7 @@ public class Evenement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "IdEvenement")
-    private int idEvenement;
+    private Long idEvenement;
 
     @Column(name = "NomEvenement")
     private String nomEvenement;
@@ -27,17 +26,37 @@ public class Evenement {
     @Column(name = "TypeEvenement")
     private String typeEvenement;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "IdGroupe", nullable = true)
     private Groupe groupe;
 
-    
-    @OneToMany(mappedBy = "evenement", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<EtrePresent> presences;
+    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Covoiturage> covoiturages = new ArrayList<>();
 
-  
-    public int getIdEvenement() { return idEvenement; }
-    public void setIdEvenement(int idEvenement) { this.idEvenement = idEvenement; }
+    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<EtrePresent> etresPresents = new ArrayList<>();
+
+    // Constructors
+    public Evenement() {}
+
+    public Evenement(String nom, String lieu, LocalDateTime date, String type, Groupe groupe) {
+        this.nomEvenement = nom;
+        this.lieuEvenement = lieu;
+        this.dateEvenement = date;
+        this.typeEvenement = type;
+        this.groupe = groupe;
+    }
+
+    public Evenement(String nom, String lieu, LocalDateTime date, String type) {
+        this.nomEvenement = nom;
+        this.lieuEvenement = lieu;
+        this.dateEvenement = date;
+        this.typeEvenement = type;
+    }
+
+    // Getters and setters
+    public Long getIdEvenement() { return idEvenement; }
+    public void setIdEvenement(Long idEvenement) { this.idEvenement = idEvenement; }
 
     public String getNomEvenement() { return nomEvenement; }
     public void setNomEvenement(String nomEvenement) { this.nomEvenement = nomEvenement; }
@@ -53,4 +72,10 @@ public class Evenement {
 
     public Groupe getGroupe() { return groupe; }
     public void setGroupe(Groupe groupe) { this.groupe = groupe; }
+
+    public List<Covoiturage> getCovoiturages() { return covoiturages; }
+    public void setCovoiturages(List<Covoiturage> covoiturages) { this.covoiturages = covoiturages; }
+
+    public List<EtrePresent> getEtresPresents() { return etresPresents; }
+    public void setEtresPresents(List<EtrePresent> etresPresents) { this.etresPresents = etresPresents; }
 }

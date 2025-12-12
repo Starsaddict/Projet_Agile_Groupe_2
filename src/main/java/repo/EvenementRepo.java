@@ -1,65 +1,57 @@
 package repo;
 
-import java.util.List;
-
+import bd.HibernateUtil;
+import model.Evenement;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import bd.HibernateUtil;
-import model.Evenement;
+import java.util.List;
 
-public class evenementRepo {
+public class EvenementRepo {
 
-    // CREATE
-    public void creer(Evenement e) {
+    public void create(Evenement e) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
             session.save(e);
             tx.commit();
-            System.out.println("✅ Evénement créé");
         } catch (Exception ex) {
             if (tx != null) tx.rollback();
             ex.printStackTrace();
         }
     }
 
-    // UPDATE
-    public void modifier(Evenement e) {
+    public void update(Evenement e) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
             session.update(e);
             tx.commit();
-            System.out.println("✅ Evénement modifié");
         } catch (Exception ex) {
             if (tx != null) tx.rollback();
             ex.printStackTrace();
         }
     }
 
-    // DELETE
-    public void supprimer(Evenement e) {
+    public void delete(Evenement e) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
             session.delete(e);
             tx.commit();
-            System.out.println("🗑 Evénement supprimé");
         } catch (Exception ex) {
             if (tx != null) tx.rollback();
             ex.printStackTrace();
         }
     }
 
-    // READ
-    public Evenement trouverParId(Long id) {
+    public Evenement findById(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Evenement.class, id);
         }
     }
 
-    public List<Evenement> toutAfficher() {
+    public List<Evenement> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM Evenement", Evenement.class).list();
         }

@@ -28,19 +28,15 @@ public class Groupe {
     @Column(name = "NomGroupe")
     private String nomGroupe;
 
-    @OneToMany(mappedBy = "groupe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Evenement> evenements = new ArrayList<>();
-
     @ManyToMany
     @JoinTable(
         name = "Groupe_Joueur",
-        joinColumns = @JoinColumn(name = "IdGroupe", referencedColumnName = "IdGroupe"),
-        inverseJoinColumns = @JoinColumn(name = "IdJoueur", referencedColumnName = "IdUtilisateur")
+        joinColumns = @JoinColumn(name = "IdGroupe"),
+        inverseJoinColumns = @JoinColumn(name = "IdJoueur")
     )
     private List<Joueur> joueurs = new ArrayList<>();
 
-    public Groupe() {
-    }
+    public Groupe() {}
 
     public Long getIdGroupe() {
         return idGroupe;
@@ -58,42 +54,19 @@ public class Groupe {
         this.nomGroupe = nomGroupe;
     }
 
-    public List<Evenement> getEvenements() {
-        return evenements;
-    }
-
-    public void setEvenements(List<Evenement> evenements) {
-        this.evenements = evenements;
-    }
-
-    public void addEvenement(Evenement evenement) {
-        if (evenement == null) {
-            return;
-        }
-        if (evenements == null) {
-            evenements = new ArrayList<>();
-        }
-        if (!evenements.contains(evenement)) {
-            evenements.add(evenement);
-        }
-        evenement.setGroupe(this);
-    }
-
-    public void removeEvenement(Evenement evenement) {
-        if (evenement == null || evenements == null) {
-            return;
-        }
-        evenements.remove(evenement);
-        if (evenement.getGroupe() == this) {
-            evenement.setGroupe(null);
-        }
-    }
-
     public List<Joueur> getJoueurs() {
         return joueurs;
     }
 
     public void setJoueurs(List<Joueur> joueurs) {
         this.joueurs = joueurs;
+    }
+  
+      public List<Evenement> getEvenements() {
+        return evenements;
+    }
+
+    public void setEvenements(List<Evenement> evenements) {
+        this.evenements = evenements;
     }
 }

@@ -38,8 +38,9 @@ public class Utilisateur {
     @Column(name = "TypeU", insertable = false, updatable = false)
     private String typeU;
 
-    @ManyToMany(mappedBy = "reservers", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "reservers", fetch = FetchType.LAZY)
     private List<Covoiturage> covoiturages;
+
 
     @OneToMany(mappedBy = "conducteur", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Covoiturage> conduits;

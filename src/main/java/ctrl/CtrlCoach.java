@@ -33,12 +33,14 @@ public class CtrlCoach extends HttpServlet {
             case "PageCoach":
             	try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             		LocalDateTime now = LocalDateTime.now();
-			        List<Evenement> evenements = session
-			                .createQuery(
-			                        "from Evenement e where e.dateEvenement >= :now order by e.dateEvenement",
-			                        Evenement.class)
-			                .setParameter("now", now)
-			                .list();
+
+            		List<Evenement> evenements = session
+            		        .createQuery(
+            		                "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
+            		                Evenement.class)
+            		        .setParameter("now", now)
+            		        .setParameter("typeEvt", "Match-officiel")
+            		        .list();
 
 			        List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
 			        for (Groupe g : groupes) {
@@ -54,11 +56,14 @@ public class CtrlCoach extends HttpServlet {
             case "ConvocationGroupe":
                 try (Session session = HibernateUtil.getSessionFactory().openSession()) {
                 	LocalDateTime now = LocalDateTime.now();
-                    List<Evenement> evenements = session
-                            .createQuery("from Evenement e where e.dateEvenement >= :now order by e.dateEvenement",
-                                    Evenement.class)
-                            .setParameter("now", now)
-                            .list();
+
+                	List<Evenement> evenements = session
+                	        .createQuery(
+                	                "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
+                	                Evenement.class)
+                	        .setParameter("now", now)
+                	        .setParameter("typeEvt", "Match-officiel")
+                	        .list();
                     
 			        request.setAttribute("evenements", evenements);
                 }

@@ -45,7 +45,7 @@ public class EvenementRepo {
         }
     }
 
-    public Evenement findById(int id) {
+    public Evenement findById(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Evenement.class, id);
         }

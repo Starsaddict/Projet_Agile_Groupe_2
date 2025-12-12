@@ -22,6 +22,9 @@ public class UtilisateurService {
         this.repo = new UtilisateurRepositoryImpl();
     }
 
+    public Utilisateur loadUtilisateur(Long id){
+        return utilisateurRepo.loadUtilisateur(id);
+    }
     /**
      * Authentifie un utilisateur par email, mot de passe et rôle.
      * - Cherche l'utilisateur via le repository.
@@ -117,7 +120,7 @@ public class UtilisateurService {
 
     public void modifierUtilisateurMdp(Utilisateur u, String mdp) {
         String password = mdpUtil.mdpString(mdp);
-        u.setMdpUtilisateur(password);
+        u.setMdpUtilisateur(mdp);
         utilisateurRepo.updateUtilisateur(u);
     }
 

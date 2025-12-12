@@ -35,9 +35,12 @@ public class ControllerLogin extends HttpServlet {
         if (opt.isPresent()) {
             HttpSession session = request.getSession(true);
             session.setAttribute("user", opt.get());
-            request.getRequestDispatcher("Home").forward(request, response);
+            String url = "";
+            url = role;
+            request.getRequestDispatcher(url).forward(request, response);
         } else {
             request.setAttribute("msg_connection", "Connexion échouée : identifiants invalides");
+            request.setAttribute("role_connexion", role);
             request.getRequestDispatcher("Login").forward(request, response);
         }
     }

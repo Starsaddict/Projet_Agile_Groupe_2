@@ -5,10 +5,9 @@ import model.Joueur;
 import model.Parent;
 import model.Utilisateur;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import util.mdpUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class utilisateurRepo {
@@ -58,7 +57,18 @@ public class utilisateurRepo {
             return null;
         } finally {
             session.close();
-            System.out.println("DEBUG: Session closed");
+            return u;
+        }
+    }
+
+    public Boolean resetPassword(Long id, String password) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            Utilisateur u = loadUtilisateur(id);
+            u.setMdpUtilisateur(mdpUtil.mdpString(password));
+            return updateUtilisateur(u);
+        } catch (Exception ex) {
+            return false;
         }
     }
 
@@ -72,13 +82,16 @@ public class utilisateurRepo {
         }
     }
 
-    public Utilisateur updateUtilisateur(Utilisateur u) {
+    public Boolean updateUtilisateur(Utilisateur u) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.update(u);
             session.getTransaction().commit();
             session.close();
-            return u;
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
 
@@ -136,38 +149,4 @@ public class utilisateurRepo {
         }
     }
 
-    public void updateJoueurAndParents(Joueur joueur, Parent parent1, Parent parent2) {
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            session.update(joueur);
-
-            if (parent1 != null) {
-                session.update(parent1);
-            }
-
-            if (parent2 != null) {
-                session.update(parent2);
-            }
-
-            if (parent1 != null || parent2 != null) {
-                List<Parent> parents = new ArrayList<>();
-                if (parent1 != null) {
-                    parents.add(parent1);
-                }
-                if (parent2 != null) {
-                    parents.add(parent2);
-                }
-                joueur.setParents(parents);
-            }
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw e;
-        }
-    }
 }

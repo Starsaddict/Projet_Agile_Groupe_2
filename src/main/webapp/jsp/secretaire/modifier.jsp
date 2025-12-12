@@ -3,7 +3,7 @@
 <%
     List<Utilisateur> utilisateurs = (List<Utilisateur>) request.getAttribute("utilisateurs");
     String contextPath = request.getContextPath();
-    String success = request.getParameter("success");
+    String success = (String) request.getAttribute("success");
     String error = (String) request.getAttribute("error");
     
     // Grouper par email - garder seulement le premier utilisateur pour chaque email

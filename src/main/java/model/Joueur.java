@@ -13,6 +13,12 @@ public class Joueur extends Utilisateur {
     @Column(name = "IdUtilisateur")
     private Long idUtilisateur;
 
+    @Column(name = "NumeroJoueur")
+    private String numeroJoueur;
+
+    @Column(name = "ProfilePicRoute")
+    private String profilePicRoute;
+
     @ManyToMany
     @JoinTable(
         name = "Parent_Joueur",
@@ -20,6 +26,7 @@ public class Joueur extends Utilisateur {
         inverseJoinColumns = @JoinColumn(name = "IdParent", referencedColumnName = "IdUtilisateur")
     )
     private List<Parent> parents;
+
 
     @OneToMany(mappedBy = "joueur", cascade = CascadeType.ALL)
     private List<EtreAbsent> absences;

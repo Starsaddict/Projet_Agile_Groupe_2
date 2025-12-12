@@ -32,8 +32,8 @@ public class Evenement {
     private Groupe groupe;
 
     
-    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Covoiturage> covoiturages;
+    @OneToMany(mappedBy = "evenement", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<EtrePresent> presences;
 
   
     public int getIdEvenement() { return idEvenement; }

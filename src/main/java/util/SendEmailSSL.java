@@ -56,6 +56,16 @@ public class SendEmailSSL {
 
         sendEmail(toRecipients, subject, body);
     }
+
+    public static void main(String[] args) throws MessagingException {
+        SendEmailSSL sendEmailSSL = new SendEmailSSL();
+        sendEmailSSL.sendEmail(
+                "18201122059zky@gmail.com",
+                "test",
+                "ok"
+
+        );
+    }
 }
 
     public static void main(String[] args) throws MessagingException {

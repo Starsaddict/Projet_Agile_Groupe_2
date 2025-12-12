@@ -22,12 +22,12 @@ public class EtrePresent {
 
     @MapsId("idGroupe")
     @ManyToOne(optional = false)
-    @JoinColumn(name = "IdGroupe", nullable = false)
+    @JoinColumn(name = "IdGroupe", referencedColumnName = "IdGroupe", nullable = false)
     private Groupe groupe;
 
     @MapsId("idEvenement")
     @ManyToOne(optional = false)
-    @JoinColumn(name = "IdEvenement", nullable = false)
+    @JoinColumn(name = "IdEvenement", referencedColumnName = "IdEvenement", nullable = false)
     private Evenement evenement;
 
     @Column(name = "ConfirmerPresenceJoueur")
@@ -42,11 +42,13 @@ public class EtrePresent {
     @Column(name = "PresenceReelle")
     private Boolean presenceReelle;
 
-    public EtrePresent() {
-    }
+    public EtrePresent() {}
 
-    public EtrePresent(EtrePresent_id etrePresent_id) {
+    public EtrePresent(EtrePresent_id etrePresent_id, Joueur joueur, Groupe groupe, Evenement evenement) {
         this.etrePresent_id = etrePresent_id;
+        this.joueur = joueur;
+        this.groupe = groupe;
+        this.evenement = evenement;
     }
 
     public EtrePresent_id getEtrePresent_id() {
@@ -113,4 +115,13 @@ public class EtrePresent {
         this.presenceReelle = presenceReelle;
     }
 
+    @Override
+    public String toString() {
+        return "EtrePresent{" +
+                "id=" + etrePresent_id +
+                ", joueur=" + (joueur != null ? joueur.getIdUtilisateur() : null) +
+                ", groupe=" + (groupe != null ? groupe.getIdGroupe() : null) +
+                ", evenement=" + (evenement != null ? evenement.getIdEvenement() : null) +
+                '}';
+    }
 }

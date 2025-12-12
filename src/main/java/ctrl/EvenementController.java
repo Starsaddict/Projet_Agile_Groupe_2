@@ -63,8 +63,8 @@ public class EvenementController extends HttpServlet {
     }
 
     private void delete(HttpServletRequest r) {
-        int id = Integer.parseInt(r.getParameter("id"));
-        Evenement e = repo.findById(id);
+    	Long id = Long.parseLong(r.getParameter("id"));
+    	Evenement e = repo.findById(id);
         repo.delete(e);
     }
 }

@@ -44,7 +44,7 @@
     <br>
     <form action="CtrlCoach" method="get">
         <input type="hidden" name="action" value="PageCoach">
-        <button type="submit">Accueil</button>
+        <button type="submit">Retour à l'accueil Coach</button>
     </form>
 </body>
 </html>

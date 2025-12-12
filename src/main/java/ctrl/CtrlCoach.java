@@ -32,6 +32,23 @@ public class CtrlCoach extends HttpServlet {
         switch (action) {
 
             case "PageCoach":
+            	try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			        Date now = new Date();
+			        List<Evenement> evenements = session
+			                .createQuery(
+			                        "from Evenement e where e.dateEvenement >= :now order by e.dateEvenement",
+			                        Evenement.class)
+			                .setParameter("now", now)
+			                .list();
+
+			        List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
+			        for (Groupe g : groupes) {
+			            g.getJoueurs().size();
+			        }
+			        
+			        request.setAttribute("evenements", evenements);
+			        request.setAttribute("groupes", groupes);
+			    }
                 request.getRequestDispatcher("/jsp/coach/PageCoach.jsp").forward(request, response);
                 break;
 
@@ -43,8 +60,8 @@ public class CtrlCoach extends HttpServlet {
                                     Evenement.class)
                             .setParameter("now", now)
                             .list();
-
-                    request.setAttribute("evenements", evenements);
+                    
+			        request.setAttribute("evenements", evenements);
                 }
                 request.getRequestDispatcher("/jsp/coach/PageConvoquer.jsp").forward(request, response);
                 break;

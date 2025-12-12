@@ -18,7 +18,7 @@
     <br/>
     <button type="submit">Créer</button>
 </form>
-
+<hr>
 <h2>Groupes existants</h2>
 
 <table border="1">

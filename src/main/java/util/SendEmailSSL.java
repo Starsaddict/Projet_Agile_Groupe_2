@@ -34,18 +34,38 @@ public class SendEmailSSL {
         message.setFrom(new InternetAddress(from));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toRecipients));
         message.setSubject(subject);
-        message.setText(body);
+        message.setContent(body, "text/html; charset=UTF-8");
 
         Transport.send(message);
     }
 
-    public void sendResetRequest(String toRecipients, Utilisateur u) throws MessagingException {
-        String subject = "";
+    public void sendResetRequest(Utilisateur u) throws MessagingException {
+        String subject = "Réinitialisation du mot de passe";
 
-        String body = "";
+        String toRecipients = u.getEmailUtilisateur();
 
-
+        String body =
+                "<html>" +
+                        "<body>" +
+                        "<h2>Bonjour " + u.getPrenomUtilisateur() + " " + u.getNomUtilisateur() + ",</h2>" +
+                        "<p>Vous avez demandé une réinitialisation de mot de passe.</p>" +
+                        "<p>Veuillez cliquer sur le lien suivant :</p>" +
+                        "<a href='http://localhost:8080/Projet_Agile_Groupe_2/resetPassword?uid=" + u.getIdUtilisateur() + "'>Réinitialiser le mot de passe</a>" +
+                        "<br/><br/>" +
+                        "<p>Si vous n'êtes pas à l'origine de cette demande, ignorez ce message.</p>" +
+                        "</body>" +
+                        "</html>";
 
         sendEmail(toRecipients, subject, body);
+    }
+
+    public static void main(String[] args) throws MessagingException {
+        SendEmailSSL sendEmailSSL = new SendEmailSSL();
+        sendEmailSSL.sendEmail(
+                "18201122059zky@gmail.com",
+                "test",
+                "ok"
+
+        );
     }
 }

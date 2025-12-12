@@ -22,6 +22,9 @@ public class UtilisateurService {
         this.repo = new UtilisateurRepositoryImpl();
     }
 
+    public Utilisateur loadUtilisateur(Long id){
+        return utilisateurRepo.loadUtilisateur(id);
+    }
     /**
      * Authentifie un utilisateur par email, mot de passe et rôle.
      * - Cherche l'utilisateur via le repository.

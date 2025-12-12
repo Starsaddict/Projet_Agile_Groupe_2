@@ -20,63 +20,10 @@
 <html>
 <head>
     <title>Modifier un compte</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        h1 { color: #1976d2; border-bottom: 2px solid #1976d2; padding-bottom: 10px; }
-        .alert { padding: 10px 12px; border-radius: 4px; margin: 10px 0; }
-        .alert.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .alert.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .back-link { margin-bottom: 20px; }
-        .back-link a { color: #1976d2; text-decoration: none; }
-        .back-link a:hover { text-decoration: underline; }
-        .profile-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .profile-table th {
-            background: #1976d2;
-            color: white;
-            padding: 12px;
-            text-align: left;
-            font-weight: bold;
-        }
-        .profile-table td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-        .profile-table tr:hover {
-            background: #f9f9f9;
-        }
-        .actions {
-            text-align: center;
-        }
-        .btn {
-            display: inline-block;
-            padding: 6px 12px;
-            margin: 2px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 13px;
-            text-decoration: none;
-            color: white;
-            background: #1976d2;
-        }
-        .btn:hover {
-            background: #125aa0;
-        }
-        .empty {
-            text-align: center;
-            padding: 30px;
-            color: #666;
-        }
-    </style>
+    <link rel="stylesheet" href="<%= contextPath %>/css/secretaire-profil.css">
 </head>
 <body>
-<div class="container">
+<div class="container container-wide">
     <h1>Gestion des utilisateurs</h1>
     
     <div class="back-link">

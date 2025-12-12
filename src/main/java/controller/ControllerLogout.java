@@ -18,7 +18,7 @@ public class ControllerLogout extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        request.getRequestDispatcher("").forward(request, response);
+        request.getRequestDispatcher("Home").forward(request, response);
     }
 
     @Override

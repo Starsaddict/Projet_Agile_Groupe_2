@@ -44,7 +44,7 @@
 
     <servlet>
         <servlet-name>Home</servlet-name>
-        <jsp-file>/jsp/home.jsp</jsp-file>
+        <jsp-file>/index.jsp</jsp-file>
     </servlet>
 
     <servlet-mapping>

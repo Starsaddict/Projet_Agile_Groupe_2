@@ -155,6 +155,12 @@
     </h1>
     <p class="subtitle">Tableau de bord – aperçu des prochains évènements et des groupes existants.</p>
 
+	<div class="btn-row">
+        <form action="CtrlLogout" method="get">
+            <button type="submit" class="btn-primary">Déconnection</button>
+        </form>
+    </div>
+    
     <!-- Section Évènements -->
     <div class="section-header">
         <h2>Évènements à venir</h2>

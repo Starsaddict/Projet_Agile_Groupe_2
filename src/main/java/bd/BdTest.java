@@ -24,11 +24,6 @@ public class BdTest {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
 
-            Utilisateur conducteur = buildUtilisateur("conducteur@example.com", "pwd1", "Driver", "One", LocalDate.of(1990, 1, 1));
-            Utilisateur passager = buildUtilisateur("passager@example.com", "pwd2", "Passenger", "Two", LocalDate.of(1992, 2, 2));
-            session.save(conducteur);
-            session.save(passager);
-
             Parent parent = new Parent();
             parent.setEmailUtilisateur("parent@example.com");
             parent.setNomUtilisateur("Parent");
@@ -130,13 +125,7 @@ public class BdTest {
                         + " | " + e.getLieuEvenement()
                         + " | " + e.getDateEvenement());
             }
-
-
-            
-            
-            
-            
-            
+         
 /*
             Covoiturage covoiturage = new Covoiturage();
             covoiturage.setDateCovoiturage(LocalDateTime.of(2024, 2, 1, 8, 30));
@@ -171,14 +160,6 @@ public class BdTest {
             session.save(etrePresent);
 */         
             
-            
-            
-            
-            
-            
-            
-            
-
             tx.commit();
             System.out.println("C'est tout bon");
         } catch (Exception e) {

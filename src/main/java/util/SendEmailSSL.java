@@ -14,8 +14,6 @@ public class SendEmailSSL {
 
     public void sendEmail(String toRecipients, String subject, String body) throws MessagingException {
 
-        String from = username;
-
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "465");
@@ -31,7 +29,7 @@ public class SendEmailSSL {
         });
 
         Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(from));
+        message.setFrom(new InternetAddress(username));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toRecipients));
         message.setSubject(subject);
         message.setContent(body, "text/html; charset=UTF-8");

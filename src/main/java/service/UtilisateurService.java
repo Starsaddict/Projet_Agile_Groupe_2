@@ -117,7 +117,7 @@ public class UtilisateurService {
 
     public void modifierUtilisateurMdp(Utilisateur u, String mdp) {
         String password = mdpUtil.mdpString(mdp);
-        u.setMdpUtilisateur(password);
+        u.setMdpUtilisateur(mdp);
         utilisateurRepo.updateUtilisateur(u);
     }
 
@@ -320,4 +320,17 @@ public class UtilisateurService {
         return true;
     }
 
+    public Utilisateur loadUtilisateur(Long id) {
+        return utilisateurRepo.loadUtilisateur(id);
+    }
+
+    public boolean resetPassword(long id) {
+        Utilisateur u = utilisateurRepo.loadUtilisateur(id);
+        if (u == null) {
+            return false;
+        }
+        String mdp = u.getEmailUtilisateur().substring(0,5);
+        u.setMdpUtilisateur(mdp);
+        return utilisateurRepo.updateUtilisateur(u);
+    }
 }

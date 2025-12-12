@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="beautufie">
+    <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="send reset Password request email">
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/jsp/requestPasswordSuccess.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/controller/ControllerLoginTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/controller/ControllerLoginTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/ResetPasswordCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/ResetPasswordCtrl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/resetPassword.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/resetPassword.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +27,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="ouss" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -71,6 +73,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.BdTest.executor": "Run",
+    "Application.SendEmailSSL.executor": "Run",
+    "Application.util.SendEmailSSL.executor": "Run",
+    "Maven.projetAgile [clean,package].executor": "Run",
     "Maven.projetAgile [clean].executor": "Run",
     "Maven.projetAgile [package].executor": "Run",
     "Maven.projetAgile [verify].executor": "Run",
@@ -81,7 +86,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Smart Tomcat.Unnamed.executor": "Run",
     "Smart Tomcat.projetAgile.executor": "Run",
-    "git-widget-placeholder": "beautyfie-creerfamile-import",
+    "git-widget-placeholder": "send-email-util",
     "last_opened_file_path": "/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -121,6 +126,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SendEmailSSL" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="UNNAMED_CLASS_CONFIGURATION" value="true" />
+      <option name="MAIN_CLASS_NAME" value="SendEmailSSL" />
+      <module name="Projet_Agile_Groupe_2" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="util.SendEmailSSL" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="util.SendEmailSSL" />
+      <module name="Projet_Agile_Groupe_2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="projetAgile" type="com.poratu.idea.plugins.tomcat">
       <predefined_log_file enabled="true" id="Tomcat Localhost Log" />
       <predefined_log_file enabled="true" id="Tomcat Access Log" />
@@ -145,11 +171,15 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.SendEmailSSL" />
+      <item itemvalue="Application.util.SendEmailSSL" />
       <item itemvalue="Application.BdTest" />
       <item itemvalue="Smart Tomcat.projetAgile" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.util.SendEmailSSL" />
+        <item itemvalue="Application.SendEmailSSL" />
         <item itemvalue="Application.BdTest" />
       </list>
     </recent_temporary>
@@ -177,6 +207,7 @@
       <workItem from="1765448572043" duration="20000" />
       <workItem from="1765448601629" duration="19000" />
       <workItem from="1765448630056" duration="6874000" />
+      <workItem from="1765539368519" duration="94000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -290,13 +321,13 @@
       <option name="project" value="LOCAL" />
       <updated>1765465832360</updated>
     </task>
-    <task id="LOCAL-00015" summary="beautufie">
+    <task id="LOCAL-00015" summary="send reset Password request email">
       <option name="closed" value="true" />
-      <created>1765543949236</created>
+      <created>1765555885736</created>
       <option name="number" value="00015" />
       <option name="presentableId" value="LOCAL-00015" />
       <option name="project" value="LOCAL" />
-      <updated>1765543949236</updated>
+      <updated>1765555885736</updated>
     </task>
     <option name="localTasksCounter" value="16" />
     <servers />
@@ -335,9 +366,8 @@
     <MESSAGE value="servlet" />
     <MESSAGE value="US11" />
     <MESSAGE value="Coach" />
-    <MESSAGE value="last version - dont use" />
-    <MESSAGE value="beautufie" />
-    <option name="LAST_COMMIT_MESSAGE" value="beautufie" />
+    <MESSAGE value="send reset Password request email" />
+    <option name="LAST_COMMIT_MESSAGE" value="send reset Password request email" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

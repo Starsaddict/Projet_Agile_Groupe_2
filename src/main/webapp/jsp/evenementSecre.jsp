@@ -59,30 +59,30 @@
             opacity: 0.9;
         }
     </style>
-    
+
     <style>
-    .footer-actions {
-        margin-top: 30px;
-        display: flex;
-        justify-content: center;
-    }
+        .footer-actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
 
-    .btn-retour {
-        background-color: #6c757d;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 500;
-    }
+        .btn-retour {
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+        }
 
-    .btn-retour:hover {
-        background-color: #5a6268;
-        color: white;
-        text-decoration: none;
-    }
-</style>
-    
+        .btn-retour:hover {
+            background-color: #5a6268;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+
 </head>
 
 <body class="container mt-4">

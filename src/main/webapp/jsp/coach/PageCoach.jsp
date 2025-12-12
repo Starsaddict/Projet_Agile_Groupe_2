@@ -157,7 +157,7 @@
 
 	<div class="btn-row">
         <form action="CtrlLogout" method="get">
-            <button type="submit" class="btn-primary">Déconnection</button>
+            <button type="submit" class="btn-primary">Déconnexion</button>
         </form>
     </div>
     

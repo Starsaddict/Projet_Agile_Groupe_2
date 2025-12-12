@@ -80,7 +80,7 @@
 </header>
     <div>
         <form action="CtrlLogout" method="get">
-            <button type="submit">Déconnection</button>
+            <button type="submit">Déconnexion</button>
         </form>
     </div>
 <div class="container">

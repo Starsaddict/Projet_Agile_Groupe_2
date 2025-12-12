@@ -12,6 +12,14 @@
 
 <body class="container mt-4">
 
+<!-- 🔙 RETOUR ACCUEIL SECRETAIRE -->
+<div class="mb-3">
+    <a href="${pageContext.request.contextPath}/jsp/secretaire.jsp"
+       class="btn btn-secondary">
+        ⬅ Retour à l’accueil secrétaire
+    </a>
+</div>
+
 <h2>Créer un événement</h2>
 
 <form method="post" action="/ProjetAgile/evenementSecre" class="row g-3">

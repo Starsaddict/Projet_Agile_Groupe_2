@@ -77,19 +77,6 @@ public class secretaireProfilEditCtrl extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            HttpSession session = request.getSession();
-            Utilisateur loginUser = (Utilisateur) session.getAttribute("user");
-
-            if (loginUser == null) {
-                response.sendRedirect(request.getContextPath() + "/secretaire/profil?error=Vous devez être connecté");
-                return;
-            }
-
-            if (!(loginUser instanceof Secretaire)) {
-                response.sendRedirect(request.getContextPath() + "/secretaire/profil?error=Accès refusé");
-                return;
-            }
-
             Long id = Long.parseLong(request.getParameter("id"));
             Utilisateur utilisateur = utilisateurRepo.loadUtilisateur(id);
 
@@ -127,7 +114,14 @@ public class secretaireProfilEditCtrl extends HttpServlet {
             }
 
             // 通过 repository 保存
-            utilisateurRepo.updateUtilisateur(utilisateur);
+            Boolean updateSuccess = utilisateurRepo.updateUtilisateur(utilisateur);
+
+            if (!updateSuccess) {
+                request.setAttribute("error", "Erreur lors de la mise à jour du profil");
+                request.setAttribute("utilisateur", utilisateur);
+                request.getRequestDispatcher("/jsp/secretaire/profilEdit.jsp").forward(request, response);
+                return;
+            }
 
             // 同步该邮箱的所有其他用户的信息
             String currentEmail = utilisateur.getEmailUtilisateur();

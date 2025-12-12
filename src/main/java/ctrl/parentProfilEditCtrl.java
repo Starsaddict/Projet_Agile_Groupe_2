@@ -132,7 +132,13 @@ public class parentProfilEditCtrl extends HttpServlet {
 
             // Mettre à jour la description
             utilisateur.setDescription(description);
-            utilisateurRepo.updateUtilisateur(utilisateur);
+            Boolean updateSuccess = utilisateurRepo.updateUtilisateur(utilisateur);
+
+            if (!updateSuccess) {
+                response.sendRedirect(
+                        request.getContextPath() + "/parent/profil?error=Erreur lors de la mise à jour du profil");
+                return;
+            }
 
             // Rediriger vers la page de profil avec succès
             response.sendRedirect(request.getContextPath() + "/parent/profil?success=1");

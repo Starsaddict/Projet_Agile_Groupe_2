@@ -5,6 +5,7 @@ import model.Joueur;
 import model.Parent;
 import model.Utilisateur;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import util.mdpUtil;
 
@@ -15,12 +16,13 @@ public class utilisateurRepo {
         System.out.println("DEBUG: loadUtilisateur called with id=" + id);
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
+        Utilisateur u = null;
         try {
             transaction = session.beginTransaction();
             System.out.println("DEBUG: Transaction started");
             String hql = "FROM Utilisateur WHERE idUtilisateur = :id";
             System.out.println("DEBUG: Executing HQL query: " + hql);
-            Utilisateur u = session.createQuery(hql, Utilisateur.class)
+            u = session.createQuery(hql, Utilisateur.class)
                     .setParameter("id", id)
                     .uniqueResult();
 
@@ -57,7 +59,6 @@ public class utilisateurRepo {
             return null;
         } finally {
             session.close();
-            return u;
         }
     }
 

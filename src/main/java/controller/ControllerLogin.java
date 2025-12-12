@@ -1,9 +1,7 @@
 package controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashSet;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.ServletException;
@@ -49,7 +47,7 @@ public class ControllerLogin extends HttpServlet {
 			switch(url) {
 			case"Coach":
 				 try (Session sessionH = HibernateUtil.getSessionFactory().openSession()) {
-				        Date now = new Date();
+					 LocalDateTime now = LocalDateTime.now();
 				        List<Evenement> evenements = sessionH
 				                .createQuery(
 				                        "from Evenement e where e.dateEvenement >= :now order by e.dateEvenement",

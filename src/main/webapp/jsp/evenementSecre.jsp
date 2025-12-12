@@ -136,6 +136,7 @@
 
     <table class="table table-bordered table-hover mt-3">
         <thead class="table-light">
+
         <tr>
             <th>ID</th>
             <th>Nom</th>

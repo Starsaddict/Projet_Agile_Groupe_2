@@ -1,22 +1,59 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String contextPath = request.getContextPath();
+    String success = request.getParameter("success");
+    String error = (String) request.getAttribute("error");
+    String batchSuccess = (String) request.getAttribute("batchSuccess");
+%>
 <html>
 <head>
-    <title>Profil Secretaire</title>
+    <title>Profil Secrétaire</title>
+    <link rel="stylesheet" href="<%= contextPath %>/css/secretaire-profil.css">
 </head>
 <body>
-    <h1>Profil secrétaire</h1>
-    <% String success = request.getParameter("success"); %>
-    <% String batchSuccess = (String) request.getAttribute("batchSuccess"); %>
+<div class="container">
+    <h1>Secrétariat - Gestion des Comptes</h1>
+    
+    <% if (error != null) { %>
+        <div class="alert alert-error"><%= error %></div>
+    <% } %>
+    
     <% if ("1".equals(success)) { %>
-        <div style="color:green;">Compte famille créé avec succès</div>
+        <div class="alert alert-success">Opération complétée avec succès</div>
     <% } %>
+    
     <% if (batchSuccess != null) { %>
-        <div style="color:green;"><%= batchSuccess %></div>
+        <div class="alert alert-success"><%= batchSuccess %></div>
     <% } %>
-    <ul>
-        <li><a href="<%=request.getContextPath()%>/secretaire/profil/creerCompteFamile">Créer une famille</a></li>
-        <li><a href="<%=request.getContextPath()%>/secretaire/profil/modifier">Modifier un compte</a></li>
-        <li><a href="<%=request.getContextPath()%>/secretaire/profil/batchCreate">batch create ( avec Excel )</a></li>
-    </ul>
+    
+    <div class="info-box">
+        <strong>Bienvenue dans l'interface de gestion du secrétariat.</strong><br/>
+        Vous pouvez créer des comptes, importer des données ou gérer les utilisateurs existants.
+    </div>
+    
+    <div class="menu-section">
+        <h2>👥 Gestion des utilisateurs</h2>
+        <ul>
+            <li>
+                <a href="<%= contextPath %>/secretaire/profil/modifier">👁️ Voir tous les utilisateurs</a>
+                <p class="description">Consulter et modifier les profils existants</p>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="menu-section">
+        <h2>➕ Création de comptes</h2>
+        <ul>
+            <li>
+                <a href="<%= contextPath %>/secretaire/profil/creerCompteFamile">👨‍👩‍👧 Créer une famille</a>
+                <p class="description">Ajouter un parent et ses enfants</p>
+            </li>
+            <li>
+                <a href="<%= contextPath %>/secretaire/profil/batchCreate">📊 Import en masse (Excel)</a>
+                <p class="description">Importer plusieurs comptes via fichier Excel</p>
+            </li>
+        </ul>
+    </div>
+</div>
 </body>
 </html>

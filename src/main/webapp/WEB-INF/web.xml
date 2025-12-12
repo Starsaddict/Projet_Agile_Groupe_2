@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
   <display-name>Projet_Agile_Groupe_2</display-name>
   <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
+    
     <welcome-file>index.jsp</welcome-file>
     <welcome-file>index.htm</welcome-file>
     <welcome-file>index.xhtml</welcome-file>
@@ -12,6 +12,16 @@
     <welcome-file>default.xhtml</welcome-file>
   </welcome-file-list>
 
+	<servlet>
+        <servlet-name>Parent</servlet-name>
+        <jsp-file>/jsp/parent.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Parent</servlet-name>
+        <url-pattern>/Parent</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>Coach</servlet-name>
         <jsp-file>/jsp/coach/PageCoach.jsp</jsp-file>
@@ -44,7 +54,7 @@
 
     <servlet>
         <servlet-name>Home</servlet-name>
-        <jsp-file>/jsp/home.jsp</jsp-file>
+        <jsp-file>/index.jsp</jsp-file>
     </servlet>
 
     <servlet-mapping>
@@ -80,6 +90,18 @@
         <url-pattern>/secretaire/profil/creerCompteFamile</url-pattern>
     </servlet-mapping>
 
+
+    <!-- "/secretaire/profil/edit" => ctrl.secretaireProfilEditCtrl -->
+    <servlet>
+    <servlet-name>SecretaireProfilEdit</servlet-name>
+    <servlet-class>ctrl.secretaireProfilEditCtrl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+    <servlet-name>SecretaireProfilEdit</servlet-name>
+    <url-pattern>/secretaire/profil/edit</url-pattern>
+    </servlet-mapping>
+
     <!-- "/secretaire/profil/modifier" => ctrl.secretaireModifierCompte -->
     <servlet>
         <servlet-name>ProfilModifier</servlet-name>
@@ -102,17 +124,27 @@
         <url-pattern>/secretaire/profil/batchCreate</url-pattern>
     </servlet-mapping>
 
-    <!-- "/secretaire/profil/resetMdp" => ctrl.secretaireResetMdpCtrl -->
-    <servlet>
-        <servlet-name>ProfilResetMdp</servlet-name>
-        <servlet-class>ctrl.secretaireResetMdpCtrl</servlet-class>
-    </servlet>
+  <!--  "/parent/profil" => ctrl.parentProfilCtrl -->
 
-    <servlet-mapping>
-        <servlet-name>ProfilResetMdp</servlet-name>
-        <url-pattern>/secretaire/profil/resetMdp</url-pattern>
-    </servlet-mapping>
+  <servlet>
+    <servlet-name>ParentProfil</servlet-name>
+    <servlet-class>ctrl.parentProfilCtrl</servlet-class>
+  </servlet>
 
+  <servlet-mapping>
+    <servlet-name>ParentProfil</servlet-name>
+    <url-pattern>/parent/profil</url-pattern>
+  </servlet-mapping>
 
+<!-- "/parent/profil/edit" => ctrl.parentProfilEditCtrl -->
+<servlet>
+  <servlet-name>ParentProfilEdit</servlet-name>
+  <servlet-class>ctrl.parentProfilEditCtrl</servlet-class>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>ParentProfilEdit</servlet-name>
+  <url-pattern>/parent/profil/edit</url-pattern>
+</servlet-mapping>
 
 </web-app>

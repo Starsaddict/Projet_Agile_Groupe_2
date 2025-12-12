@@ -76,8 +76,13 @@
 
 <header>
     🧑‍💼 Espace Secrétaire
+    
 </header>
-
+    <div>
+        <form action="CtrlLogout" method="get">
+            <button type="submit">Déconnexion</button>
+        </form>
+    </div>
 <div class="container">
 
     <div class="card">
@@ -91,7 +96,8 @@
         <p>Créer et modifier les comptes des membres.</p>
         <a href="<%=request.getContextPath()%>/jsp/secretaire/profil.jsp">Accéder</a>
     </div>
-
+    
+    
 </div>
 
 <footer>

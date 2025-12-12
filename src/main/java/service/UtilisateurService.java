@@ -22,9 +22,6 @@ public class UtilisateurService {
         this.repo = new UtilisateurRepositoryImpl();
     }
 
-    public Utilisateur loadUtilisateur(Long id){
-        return utilisateurRepo.loadUtilisateur(id);
-    }
     /**
      * Authentifie un utilisateur par email, mot de passe et rôle.
      * - Cherche l'utilisateur via le repository.
@@ -325,5 +322,15 @@ public class UtilisateurService {
 
     public Utilisateur loadUtilisateur(Long id) {
         return utilisateurRepo.loadUtilisateur(id);
+    }
+
+    public boolean resetPassword(long id) {
+        Utilisateur u = utilisateurRepo.loadUtilisateur(id);
+        if (u == null) {
+            return false;
+        }
+        String mdp = u.getEmailUtilisateur().substring(0,5);
+        u.setMdpUtilisateur(mdp);
+        return utilisateurRepo.updateUtilisateur(u);
     }
 }

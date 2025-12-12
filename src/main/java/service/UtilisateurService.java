@@ -320,4 +320,7 @@ public class UtilisateurService {
         return true;
     }
 
+    public Utilisateur loadUtilisateur(Long id) {
+        return utilisateurRepo.loadUtilisateur(id);
+    }
 }

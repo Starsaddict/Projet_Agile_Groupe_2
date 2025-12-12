@@ -52,7 +52,7 @@ public class EvenementController extends HttpServlet {
     }
 
     private void update(HttpServletRequest r) {
-        int id = Integer.parseInt(r.getParameter("id"));
+        Long id = Long.parseLong(r.getParameter("id"));
         Evenement e = repo.findById(id);
         e.setNomEvenement(r.getParameter("nom"));
         e.setLieuEvenement(r.getParameter("lieu"));

@@ -21,6 +21,16 @@
         <servlet-name>Coach</servlet-name>
         <url-pattern>/Coach</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Secretaire</servlet-name>
+        <jsp-file>/jsp/secretaire.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Secretaire</servlet-name>
+        <url-pattern>/Secretaire</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>Login</servlet-name>

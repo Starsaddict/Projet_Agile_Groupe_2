@@ -49,12 +49,13 @@ public class ControllerLogin extends HttpServlet {
 			case"Coach":
 				 try (Session sessionH = HibernateUtil.getSessionFactory().openSession()) {
 					 LocalDateTime now = LocalDateTime.now();
-				        List<Evenement> evenements = sessionH
-				                .createQuery(
-				                        "from Evenement e where e.dateEvenement >= :now order by e.dateEvenement",
-				                        Evenement.class)
-				                .setParameter("now", now)
-				                .list();
+					 List<Evenement> evenements = sessionH
+	                	        .createQuery(
+	                	                "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
+	                	                Evenement.class)
+	                	        .setParameter("now", now)
+	                	        .setParameter("typeEvt", "Match-officiel")
+	                	        .list();
 
                         List<Groupe> groupes = sessionH.createQuery("from Groupe", Groupe.class).list();
                         for (Groupe g : groupes) {

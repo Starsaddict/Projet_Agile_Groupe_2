@@ -14,7 +14,7 @@
 
 	<servlet>
         <servlet-name>Parent</servlet-name>
-        <jsp-file>/jsp/secretaire/parent.jsp</jsp-file>
+        <jsp-file>/jsp/parent.jsp</jsp-file>
     </servlet>
 
     <servlet-mapping>

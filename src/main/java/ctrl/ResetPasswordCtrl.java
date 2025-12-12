@@ -48,9 +48,7 @@ public class ResetPasswordCtrl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uidParam = request.getParameter("uid");
         String newPassword = request.getParameter("newPassword");
-        newPassword = mdpUtil.mdpString(newPassword);
         String error = null;
-        String success = null;
         Utilisateur utilisateur = null;
 
         if (uidParam == null || uidParam.trim().isEmpty()) {
@@ -75,7 +73,8 @@ public class ResetPasswordCtrl extends HttpServlet {
                 utilisateur.setMdpUtilisateur(hashedPassword);
                 boolean updated = utilisateurRepo.updateUtilisateur(utilisateur);
                 if (updated) {
-                    success = "Mot de passe mis à jour.";
+                    response.sendRedirect(request.getContextPath() + "/jsp/requestPasswordSuccess.jsp");
+                    return;
                 } else {
                     error = "Impossible de mettre à jour le mot de passe.";
                 }
@@ -85,7 +84,6 @@ public class ResetPasswordCtrl extends HttpServlet {
         request.setAttribute("uid", uidParam);
         request.setAttribute("utilisateur", utilisateur);
         request.setAttribute("error", error);
-        request.setAttribute("success", success);
         request.getRequestDispatcher("/jsp/resetPassword.jsp").forward(request, response);
     }
 }

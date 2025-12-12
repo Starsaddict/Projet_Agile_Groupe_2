@@ -1,6 +1,10 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,6 +12,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.hibernate.Session;
+
+import bd.HibernateUtil;
+import model.Evenement;
+import model.Groupe;
 import model.Utilisateur;
 import repository.UtilisateurRepositoryImpl;
 import service.UtilisateurService;
@@ -36,6 +46,27 @@ public class ControllerLogin extends HttpServlet {
 			session.setAttribute("user", opt.get());				
 			String url = "";
 			url = role;
+			switch(url) {
+			case"Coach":
+				 try (Session sessionH = HibernateUtil.getSessionFactory().openSession()) {
+				        Date now = new Date();
+				        List<Evenement> evenements = sessionH
+				                .createQuery(
+				                        "from Evenement e where e.dateEvenement >= :now order by e.dateEvenement",
+				                        Evenement.class)
+				                .setParameter("now", now)
+				                .list();
+
+				        List<Groupe> groupes = sessionH.createQuery("from Groupe", Groupe.class).list();
+				        for (Groupe g : groupes) {
+				            g.getJoueurs().size();
+				        }
+				        
+				        request.setAttribute("evenements", evenements);
+				        request.setAttribute("groupes", groupes);
+				    }
+				break;
+			}
 			request.getRequestDispatcher(url).forward(request, response);
 		} else {
 			request.setAttribute("msg_connection", "Connexion échouée : identifiants invalides");

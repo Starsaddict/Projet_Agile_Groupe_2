@@ -1,9 +1,7 @@
 package controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashSet;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,22 +39,22 @@ public class ControllerLogin extends HttpServlet {
         String password = request.getParameter("password");
         String role = request.getParameter("role_connexion");
 
-        Optional<Utilisateur> opt = utilisateurService.authenticate(email, password, role);
-        if (opt.isPresent()) {
-            HttpSession session = request.getSession(true);
-            session.setAttribute("user", opt.get());
-            String url = "";
-            url = role;
-            switch (url) {
-                case "Coach":
-                    try (Session sessionH = HibernateUtil.getSessionFactory().openSession()) {
-                        Date now = new Date();
-                        List<Evenement> evenements = sessionH
-                                .createQuery(
-                                        "from Evenement e where e.dateEvenement >= :now order by e.dateEvenement",
-                                        Evenement.class)
-                                .setParameter("now", now)
-                                .list();
+		Optional<Utilisateur> opt = utilisateurService.authenticate(email, password, role);
+		if (opt.isPresent()) {
+			HttpSession session = request.getSession(true);
+			session.setAttribute("user", opt.get());				
+			String url = "";
+			url = role;
+			switch(url) {
+			case"Coach":
+				 try (Session sessionH = HibernateUtil.getSessionFactory().openSession()) {
+					 LocalDateTime now = LocalDateTime.now();
+				        List<Evenement> evenements = sessionH
+				                .createQuery(
+				                        "from Evenement e where e.dateEvenement >= :now order by e.dateEvenement",
+				                        Evenement.class)
+				                .setParameter("now", now)
+				                .list();
 
                         List<Groupe> groupes = sessionH.createQuery("from Groupe", Groupe.class).list();
                         for (Groupe g : groupes) {

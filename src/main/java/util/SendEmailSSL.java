@@ -56,6 +56,7 @@ public class SendEmailSSL {
 
         sendEmail(toRecipients, subject, body);
     }
+}
 
     public static void main(String[] args) throws MessagingException {
         SendEmailSSL sendEmailSSL = new SendEmailSSL();

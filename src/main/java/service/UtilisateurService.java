@@ -26,7 +26,8 @@ public class UtilisateurService {
      * Authentifie un utilisateur par email, mot de passe et rôle.
      * - Cherche l'utilisateur via le repository.
      * - Si le hash stocké ressemble à un hash BCrypt, utilise BCrypt.checkpw.
-     * - Sinon, tente une comparaison avec le hash SHA-256 via util.mdpUtil (fallback).
+     * - Sinon, tente une comparaison avec le hash SHA-256 via util.mdpUtil
+     * (fallback).
      */
     public Optional<Utilisateur> authenticate(String email, String password, String role) {
         if (email == null || password == null) {
@@ -45,7 +46,7 @@ public class UtilisateurService {
         }
 
         try {
-            //String hashedInput = mdpUtil.mdpString(password);
+            // String hashedInput = mdpUtil.mdpString(password);
             String hashedInput = password;
             if (hashedInput != null && hashedInput.equals(storedHash)) {
                 return Optional.of(u);
@@ -59,7 +60,6 @@ public class UtilisateurService {
 
     public static utilisateurRepo utilisateurRepo = new utilisateurRepo();
 
-    
     public Joueur loadJoueur(Long id) {
         Utilisateur u = utilisateurRepo.loadUtilisateur(id);
         if (u instanceof Joueur) {
@@ -74,6 +74,30 @@ public class UtilisateurService {
             return (Parent) u;
         }
         return null;
+    }
+
+    /**
+     * 加载 Parent 并初始化其所有集合，避免 LazyInitializationException
+     * 用于在 detached 对象上访问集合时使用
+     */
+    public Parent loadParentWithCollections(Long id) {
+        Parent parent = loadParent(id);
+        if (parent != null && parent.getJoueurs() != null) {
+            parent.getJoueurs().size(); // Force initialization
+        }
+        return parent;
+    }
+
+    /**
+     * 获取所有用户
+     */
+    public List<Utilisateur> loadAllUtilisateurs() {
+        try {
+            return utilisateurRepo.loadAllUtilisateurs();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public void modifierUtilisateurNom(Utilisateur u, String nom) {
@@ -98,11 +122,11 @@ public class UtilisateurService {
     }
 
     public Utilisateur creerCompteUtilisateur(String email, String type) {
-        if(!type.equals("Coach") && !type.equals("Joueur") && !type.equals("Parent") && !type.equals("Secretaire")) {
+        if (!type.equals("Coach") && !type.equals("Joueur") && !type.equals("Parent") && !type.equals("Secretaire")) {
             return null;
         }
 
-        if(!emailUtil.isValidEmail(email)) {
+        if (!emailUtil.isValidEmail(email)) {
             return null;
         }
 
@@ -115,13 +139,13 @@ public class UtilisateurService {
 
         switch (type) {
             case "Coach":
-                return creerCompteCoach(email,mdp);
+                return creerCompteCoach(email, mdp);
             case "Joueur":
-                return creerCompteJoueur(email,mdp);
+                return creerCompteJoueur(email, mdp);
             case "Parent":
-                return creerCompteParent(email,mdp);
+                return creerCompteParent(email, mdp);
             case "Secretaire":
-                return creerCompteSecretaire(email,mdp);
+                return creerCompteSecretaire(email, mdp);
         }
 
         return null;
@@ -296,5 +320,4 @@ public class UtilisateurService {
         return true;
     }
 
-    
 }

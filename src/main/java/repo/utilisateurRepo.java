@@ -13,25 +13,52 @@ import java.util.List;
 
 public class utilisateurRepo {
     public Utilisateur loadUtilisateur(Long id) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            Utilisateur u = (Utilisateur) session.get(Utilisateur.class, id);
-            if (u instanceof Joueur) {
-                Joueur joueur = (Joueur) u;
-                List<Parent> parents = joueur.getParents();
-                if (parents != null) {
-                    parents.size(); // force initialization
+        System.out.println("DEBUG: loadUtilisateur called with id=" + id);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            System.out.println("DEBUG: Transaction started");
+            String hql = "FROM Utilisateur WHERE idUtilisateur = :id";
+            System.out.println("DEBUG: Executing HQL query: " + hql);
+            Utilisateur u = session.createQuery(hql, Utilisateur.class)
+                    .setParameter("id", id)
+                    .uniqueResult();
+
+            System.out.println("DEBUG: loadUtilisateur - id=" + id + ", u=" + u);
+
+            if (u != null) {
+                System.out.println("DEBUG: User found, initializing collections");
+                if (u instanceof Joueur) {
+                    Joueur joueur = (Joueur) u;
+                    List<Parent> parents = joueur.getParents();
+                    if (parents != null) {
+                        parents.size(); // force initialization
+                    }
+                }
+                if (u instanceof Parent) {
+                    Parent parent = (Parent) u;
+                    List<Joueur> joueurs = parent.getJoueurs();
+                    if (joueurs != null) {
+                        joueurs.size(); // force initialization
+                    }
                 }
             }
-            if (u instanceof Parent) {
-                Parent parent = (Parent) u;
-                List<Joueur> joueurs = parent.getJoueurs();
-                if (joueurs != null) {
-                    joueurs.size(); // force initialization
-                }
-            }
-            session.close();
+
+            transaction.commit();
+            System.out.println("DEBUG: Transaction committed, returning u=" + u);
             return u;
+        } catch (Exception e) {
+            System.out.println("DEBUG: Exception in loadUtilisateur: " + e.getMessage());
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.err.println("DEBUG: Exception in loadUtilisateur: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+            System.out.println("DEBUG: Session closed");
         }
     }
 

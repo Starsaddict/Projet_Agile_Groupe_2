@@ -3,6 +3,8 @@ package ctrl;
 import model.Parent;
 import model.Utilisateur;
 import repo.utilisateurRepo;
+import service.UtilisateurService;
+import repository.UtilisateurRepositoryImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +15,7 @@ import java.io.IOException;
 
 public class parentProfilEditCtrl extends HttpServlet {
 
+    private UtilisateurService utilisateurService = new UtilisateurService(new UtilisateurRepositoryImpl());
     private utilisateurRepo utilisateurRepo = new utilisateurRepo();
 
     @Override
@@ -37,7 +40,13 @@ public class parentProfilEditCtrl extends HttpServlet {
                 return;
             }
 
-            Parent parent = (Parent) loginUser;
+            // Recharger le parent avec ses collections initialisées
+            Parent parent = utilisateurService.loadParentWithCollections(loginUser.getIdUtilisateur());
+            if (parent == null) {
+                request.setAttribute("error", "Parent non trouvé");
+                request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
+                return;
+            }
 
             Long id = Long.parseLong(idStr);
             Utilisateur utilisateur = utilisateurRepo.loadUtilisateur(id);
@@ -66,7 +75,11 @@ public class parentProfilEditCtrl extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Erreur: " + e.getMessage());
-            request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
+            try {
+                request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
         }
     }
 
@@ -88,8 +101,6 @@ public class parentProfilEditCtrl extends HttpServlet {
                 return;
             }
 
-            Parent parent = (Parent) loginUser;
-
             Long id = Long.parseLong(request.getParameter("id"));
             String description = request.getParameter("description");
 
@@ -97,6 +108,14 @@ public class parentProfilEditCtrl extends HttpServlet {
 
             if (utilisateur == null) {
                 response.sendRedirect(request.getContextPath() + "/parent/profil?error=Utilisateur non trouvé");
+                return;
+            }
+
+            // Recharger le parent avec ses collections initialisées pour la vérification
+            // d'accès
+            Parent parent = utilisateurService.loadParentWithCollections(loginUser.getIdUtilisateur());
+            if (parent == null) {
+                response.sendRedirect(request.getContextPath() + "/parent/profil?error=Parent non trouvé");
                 return;
             }
 

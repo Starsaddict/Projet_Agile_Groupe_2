@@ -92,17 +92,6 @@
         <url-pattern>/secretaire/profil/batchCreate</url-pattern>
     </servlet-mapping>
 
-<!-- "/secretaire/profil/pageModifier" => ctrl.modifierPageProfiCtrl -->
-  <servlet>
-    <servlet-name>PageModifier</servlet-name>
-    <servlet-class>ctrl.modifierPageProfiCtrl</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>PageModifier</servlet-name>
-    <url-pattern>/secretaire/profil/pageModifier</url-pattern>
-  </servlet-mapping>
-
   <!--  "/parent/profil" => ctrl.parentProfilCtrl -->
 
   <servlet>
@@ -124,5 +113,16 @@
 <servlet-mapping>
   <servlet-name>ParentProfilEdit</servlet-name>
   <url-pattern>/parent/profil/edit</url-pattern>
+</servlet-mapping>
+
+<!-- "/secretaire/profil/edit" => ctrl.secretaireProfilEditCtrl -->
+<servlet>
+  <servlet-name>SecretaireProfilEdit</servlet-name>
+  <servlet-class>ctrl.secretaireProfilEditCtrl</servlet-class>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>SecretaireProfilEdit</servlet-name>
+  <url-pattern>/secretaire/profil/edit</url-pattern>
 </servlet-mapping>
 </web-app>

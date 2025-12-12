@@ -4,6 +4,8 @@ import model.Joueur;
 import model.Parent;
 import model.Utilisateur;
 import repo.utilisateurRepo;
+import service.UtilisateurService;
+import repository.UtilisateurRepositoryImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +18,7 @@ import java.util.List;
 
 public class parentProfilCtrl extends HttpServlet {
 
-    private utilisateurRepo utilisateurRepo = new utilisateurRepo();
+    private UtilisateurService utilisateurService = new UtilisateurService(new UtilisateurRepositoryImpl());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,7 +40,14 @@ public class parentProfilCtrl extends HttpServlet {
                 return;
             }
 
-            Parent parent = (Parent) utilisateur;
+            // Recharger le parent avec ses collections initialisées
+            Parent parent = utilisateurService.loadParentWithCollections(utilisateur.getIdUtilisateur());
+
+            if (parent == null) {
+                request.setAttribute("error", "Parent non trouvé");
+                request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
+                return;
+            }
 
             // Créer une liste contenant le parent et ses enfants
             List<Utilisateur> profiles = new ArrayList<>();

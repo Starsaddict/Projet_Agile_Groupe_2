@@ -53,7 +53,11 @@ public class EvenementRepo {
 
     public List<Evenement> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Evenement", Evenement.class).list();
+            return session.createQuery(
+                "FROM Evenement e ORDER BY e.dateEvenement ASC",
+                Evenement.class
+            ).list();
         }
     }
+
 }

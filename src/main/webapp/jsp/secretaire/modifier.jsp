@@ -56,10 +56,11 @@
             <td><%= prenom %></td>
             <td><%= email %></td>
             <td class="actions">
-                <form method="post" action="<%= contextPath %>/secretaire/profil/resetMdp">
+                <form method="get" action="<%= contextPath %>/secretaire/profil/resetMdp">
                     <input type="hidden" name="idUtilisateur" value="<%= utilisateur.getIdUtilisateur() %>"/>
                     <button type="submit">reset password</button>
                 </form>
+                <a href="<%= contextPath %>/secretaire/profil/sendResetPasswordRequest?id=<%= utilisateur.getIdUtilisateur() %>">send Reset Request</a>
                 <a href="<%= contextPath %>/secretaire/profil/modifier?id=<%= utilisateur.getIdUtilisateur() %>">Modifier</a>
             </td>
         </tr>

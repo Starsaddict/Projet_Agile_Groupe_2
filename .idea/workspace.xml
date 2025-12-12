@@ -4,11 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="Coach">
-      <change afterPath="$PROJECT_DIR$/src/main/java/util/SendEmailSSL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+    <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="send email util">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ctrl/ResetPasswordCtrl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ctrl/secretaireResetMdpCtrl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ctrl/sendResetPasswordRequestCtrl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/UtilisateurService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/UtilisateurService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/SendEmailSSL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/SendEmailSSL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/modifier.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/modifier.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,8 +113,11 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/webapp/jsp/coach" />
     </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="ctrl" />
+    </key>
   </component>
-  <component name="RunManager" selected="Application.SendEmailSSL">
+  <component name="RunManager" selected="Smart Tomcat.projetAgile">
     <configuration name="BdTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="bd.BdTest" />
       <module name="Projet_Agile_Groupe_2" />
@@ -198,7 +205,7 @@
       <workItem from="1765448601629" duration="19000" />
       <workItem from="1765448630056" duration="6874000" />
       <workItem from="1765475529562" duration="223000" />
-      <workItem from="1765530037469" duration="3111000" />
+      <workItem from="1765530037469" duration="6408000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -312,7 +319,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765465832360</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="send email util">
+      <option name="closed" value="true" />
+      <created>1765534439464</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1765534439464</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -349,7 +364,8 @@
     <MESSAGE value="servlet" />
     <MESSAGE value="US11" />
     <MESSAGE value="Coach" />
-    <option name="LAST_COMMIT_MESSAGE" value="Coach" />
+    <MESSAGE value="send email util" />
+    <option name="LAST_COMMIT_MESSAGE" value="send email util" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

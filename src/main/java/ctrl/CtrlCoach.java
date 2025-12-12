@@ -11,10 +11,9 @@ import bd.HibernateUtil;
 import model.Evenement;
 import model.Groupe;
 import model.Joueur;
-
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class CtrlCoach extends HttpServlet {
 
             case "PageCoach":
             	try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			        Date now = new Date();
+            		LocalDateTime now = LocalDateTime.now();
 			        List<Evenement> evenements = session
 			                .createQuery(
 			                        "from Evenement e where e.dateEvenement >= :now order by e.dateEvenement",
@@ -54,7 +53,7 @@ public class CtrlCoach extends HttpServlet {
 
             case "ConvocationGroupe":
                 try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-                    Date now = new Date();
+                	LocalDateTime now = LocalDateTime.now();
                     List<Evenement> evenements = session
                             .createQuery("from Evenement e where e.dateEvenement >= :now order by e.dateEvenement",
                                     Evenement.class)

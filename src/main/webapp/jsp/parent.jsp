@@ -89,7 +89,7 @@
     <div class="card">
         <h2>👤 Modifier le profil</h2>
         <p>Modifier vos informations personnelles.</p>
-        <a href="<%=request.getContextPath()%>/jsp/modifierProfil.jsp">Accéder</a>
+        <a href="<%=request.getContextPath()%>/parent/profil">Accéder</a>
     </div>
 
     <div class="card">

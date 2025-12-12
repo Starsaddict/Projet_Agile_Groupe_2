@@ -12,6 +12,16 @@
     <welcome-file>default.xhtml</welcome-file>
   </welcome-file-list>
 
+	<servlet>
+        <servlet-name>Parent</servlet-name>
+        <jsp-file>/jsp/secretaire/parent.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Parent</servlet-name>
+        <url-pattern>/Parent</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>Coach</servlet-name>
         <jsp-file>/jsp/coach/PageCoach.jsp</jsp-file>

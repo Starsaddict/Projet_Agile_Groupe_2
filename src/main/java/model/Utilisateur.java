@@ -8,8 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Utilisateur")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="TypeU",
-        discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "TypeU", discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("Utilisateur")
 public class Utilisateur {
 
@@ -32,6 +31,9 @@ public class Utilisateur {
 
     @Column(name = "DateNaissanceUtilisateur")
     private LocalDate dateNaissanceUtilisateur;
+
+    @Column(name = "Description", length = 1000)
+    private String description;
 
     @Column(name = "TypeU", insertable = false, updatable = false)
     private String typeU;
@@ -94,7 +96,6 @@ public class Utilisateur {
         this.typeU = typeU;
     }
 
-
     public LocalDate getDateNaissanceUtilisateur() {
         return dateNaissanceUtilisateur;
     }
@@ -117,6 +118,27 @@ public class Utilisateur {
 
     public void setConduits(List<Covoiturage> conduits) {
         this.conduits = conduits;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRoleLabel() {
+        if (this instanceof Joueur) {
+            return "Joueur";
+        } else if (this instanceof Parent) {
+            return "Parent";
+        } else if (this.getClass().getSimpleName().equals("Secretaire")) {
+            return "Secrétaire";
+        } else if (this.getClass().getSimpleName().equals("Admin")) {
+            return "Administrateur";
+        }
+        return this.getClass().getSimpleName();
     }
 
     @Override

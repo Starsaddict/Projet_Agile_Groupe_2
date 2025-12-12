@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,20 +24,20 @@ import service.UtilisateurService;
 @WebServlet("/CtrlLogin")
 public class ControllerLogin extends HttpServlet {
 
-	private UtilisateurService utilisateurService;
+    private UtilisateurService utilisateurService;
 
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		utilisateurService = new UtilisateurService(new UtilisateurRepositoryImpl());
-	}
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        utilisateurService = new UtilisateurService(new UtilisateurRepositoryImpl());
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		String role = request.getParameter("role_connexion");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String role = request.getParameter("role_connexion");
 
 		Optional<Utilisateur> opt = utilisateurService.authenticate(email, password, role);
 		if (opt.isPresent()) {
@@ -55,28 +56,28 @@ public class ControllerLogin extends HttpServlet {
 				                .setParameter("now", now)
 				                .list();
 
-				        List<Groupe> groupes = sessionH.createQuery("from Groupe", Groupe.class).list();
-				        for (Groupe g : groupes) {
-				            g.getJoueurs().size();
-				        }
-				        
-				        request.setAttribute("evenements", evenements);
-				        request.setAttribute("groupes", groupes);
-				    }
-				break;
-			}
-			request.getRequestDispatcher(url).forward(request, response);
-		} else {
-			request.setAttribute("msg_connection", "Connexion échouée : identifiants invalides");
-			request.setAttribute("role_connexion", role);
-			request.getRequestDispatcher("Login").forward(request, response);
-		}
-	}
+                        List<Groupe> groupes = sessionH.createQuery("from Groupe", Groupe.class).list();
+                        for (Groupe g : groupes) {
+                            g.getJoueurs().size();
+                        }
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doPost(request, response);
-	}
+                        request.setAttribute("evenements", evenements);
+                        request.setAttribute("groupes", groupes);
+                    }
+                    break;
+            }
+            request.getRequestDispatcher(url).forward(request, response);
+        } else {
+            request.setAttribute("msg_connection", "Connexion échouée : identifiants invalides");
+            request.setAttribute("role_connexion", role);
+            request.getRequestDispatcher("Login").forward(request, response);
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        doPost(request, response);
+    }
 }

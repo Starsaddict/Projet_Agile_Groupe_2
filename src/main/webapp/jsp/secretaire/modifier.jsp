@@ -64,7 +64,9 @@
                         <td><%= prenom %></td>
                         <td><%= email %></td>
                         <td><%= typeU %></td>
+
                         <td class="actions">
+                            <a href="<%= contextPath %>/secretaire/profil/sendResetPasswordRequest?id=<%= userId %>" class="btn">Send Modification Request</a>
                             <a href="<%= contextPath %>/secretaire/profil/edit?id=<%= userId %>" class="btn">Modifier</a>
                         </td>
                     </tr>

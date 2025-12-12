@@ -3,16 +3,17 @@ package util;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import model.Joueur;
 import model.Utilisateur;
 
 import java.util.Properties;
 
 public class SendEmailSSL {
 
-    private final String username = "chikaluchesi@gmail.com";
-    private final String password = "wjuhoftlmantrydu";
+    private static final String username = "chikaluchesi@gmail.com";
+    private static final String password = "wjuhoftlmantrydu";
 
-    public void sendEmail(String toRecipients, String subject, String body) throws MessagingException {
+    public static void sendEmail(String toRecipients, String subject, String body) throws MessagingException {
 
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
@@ -57,24 +58,11 @@ public class SendEmailSSL {
         sendEmail(toRecipients, subject, body);
     }
 
-    public static void main(String[] args) throws MessagingException {
-        SendEmailSSL sendEmailSSL = new SendEmailSSL();
-        sendEmailSSL.sendEmail(
-                "18201122059zky@gmail.com",
-                "test",
-                "ok"
-
-        );
-    }
-}
-
-    public static void main(String[] args) throws MessagingException {
-        SendEmailSSL sendEmailSSL = new SendEmailSSL();
-        sendEmailSSL.sendEmail(
-                "18201122059zky@gmail.com",
-                "test",
-                "ok"
-
-        );
-    }
+//    public static void main(String[] args) throws MessagingException {
+//        SendEmailSSL.sendEmail(
+//                "18201122059zky@gmail.com",
+//                "test",
+//                "ok"
+//        );
+//    }
 }

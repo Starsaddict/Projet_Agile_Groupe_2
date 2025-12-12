@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="send email util">
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/jsp/resetPassword.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/controller/ControllerLoginTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/controller/ControllerLoginTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/service/UtilisateurServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/service/UtilisateurServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/SendEmailSSL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/SendEmailSSL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/evenementSecre.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/evenementSecre.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/modifier.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/modifier.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,35 +71,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.BdTest.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projetAgile [clean,package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projetAgile [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projetAgile [package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projetAgile [verify].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;OpenRewrite.JavaxAuthorizationMigrationToJakartaAuthorization.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Smart Tomcat.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Smart Tomcat.projetAgile.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;应用程序.BdTest.executor&quot;: &quot;Run&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.BdTest.executor": "Run",
+    "Application.SendEmailSSL.executor": "Run",
+    "Application.util.SendEmailSSL.executor": "Run",
+    "Maven.projetAgile [clean,package].executor": "Run",
+    "Maven.projetAgile [clean].executor": "Run",
+    "Maven.projetAgile [package].executor": "Run",
+    "Maven.projetAgile [verify].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "OpenRewrite.JavaxAuthorizationMigrationToJakartaAuthorization.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Smart Tomcat.Unnamed.executor": "Run",
+    "Smart Tomcat.projetAgile.executor": "Run",
+    "git-widget-placeholder": "send-email-util",
+    "last_opened_file_path": "/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "模块",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true",
+    "应用程序.BdTest.executor": "Run"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/java" />
@@ -109,13 +113,34 @@
       <recent name="$PROJECT_DIR$/src/main/webapp/jsp/coach" />
     </key>
   </component>
-  <component name="RunManager" selected="Smart Tomcat.projetAgile">
+  <component name="RunManager" selected="Application.util.SendEmailSSL">
     <configuration name="BdTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="bd.BdTest" />
       <module name="Projet_Agile_Groupe_2" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="bd.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SendEmailSSL" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="UNNAMED_CLASS_CONFIGURATION" value="true" />
+      <option name="MAIN_CLASS_NAME" value="SendEmailSSL" />
+      <module name="Projet_Agile_Groupe_2" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="util.SendEmailSSL" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="util.SendEmailSSL" />
+      <module name="Projet_Agile_Groupe_2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="util.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -147,11 +172,15 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.SendEmailSSL" />
+      <item itemvalue="Application.util.SendEmailSSL" />
       <item itemvalue="Application.BdTest" />
       <item itemvalue="Smart Tomcat.projetAgile" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.util.SendEmailSSL" />
+        <item itemvalue="Application.SendEmailSSL" />
         <item itemvalue="Application.BdTest" />
       </list>
     </recent_temporary>

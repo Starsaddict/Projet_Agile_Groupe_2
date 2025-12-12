@@ -27,17 +27,18 @@ public class Covoiturage {
     @JoinColumn(name = "IdConducteur", nullable = false)
     private Utilisateur conducteur;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "Reserver",
         joinColumns = @JoinColumn(name = "IdCovoiturage"),
         inverseJoinColumns = @JoinColumn(name = "IdUtilisateur")
     )
-    private List<Utilisateur> reservers;
+    private List<Utilisateur> reservers = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "IdEvenement", nullable = false)
-    private Evenement evenement ;
+    private Evenement evenement;
+
 
     public Covoiturage() {
     }
@@ -98,35 +99,5 @@ public class Covoiturage {
         this.reservers = utilisateurs;
     }
 
-    public void addUtilisateur(Utilisateur utilisateur) {
-        if (utilisateur == null) {
-            return;
-        }
-        if (reservers == null) {
-            reservers = new ArrayList<>();
-        }
-        if (!reservers.contains(utilisateur)) {
-            reservers.add(utilisateur);
-        }
-        List<Covoiturage> covoituragesUtilisateur = utilisateur.getCovoiturages();
-        if (covoituragesUtilisateur == null) {
-            covoituragesUtilisateur = new ArrayList<>();
-            utilisateur.setCovoiturages(covoituragesUtilisateur);
-        }
-        if (!covoituragesUtilisateur.contains(this)) {
-            covoituragesUtilisateur.add(this);
-        }
-    }
-
-    public void removeUtilisateur(Utilisateur utilisateur) {
-        if (utilisateur == null || reservers == null) {
-            return;
-        }
-        reservers.remove(utilisateur);
-        List<Covoiturage> covoituragesUtilisateur = utilisateur.getCovoiturages();
-        if (covoituragesUtilisateur != null) {
-            covoituragesUtilisateur.remove(this);
-        }
-    }
 
 }

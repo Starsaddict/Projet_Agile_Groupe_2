@@ -7,15 +7,12 @@
 		<property name="hibernate.connection.password">hwd8293a</property>
 		<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
 
-		<!-- Parseur HQL -->
-		<property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
-		<property name="hibernate.show_sql">true</property>
+        <!-- Sessions -->
+        <property name="hibernate.current_session_context_class">thread</property>
 
-		<!-- Gestion des sessions par Hibernate lui-même - Pour getCurrentSession() -->
-		<property name="hibernate.current_session_context_class">thread</property>
-		
-		<!-- Mode de mise à jour de la base de données - create, validate, update, none -->
-		<property name="hibernate.hbm2ddl.auto">update</property>
+        <!-- Mise à jour automatique -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
 
-	</session-factory>
+        <!-- PAS DE MAPPING ICI — HibernateUtil le fait déjà -->
+    </session-factory>
 </hibernate-configuration>

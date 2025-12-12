@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>PageCoach</title>
+<title>Espace Coach</title>
 
 <style>
     body {

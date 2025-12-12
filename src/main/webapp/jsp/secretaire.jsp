@@ -79,7 +79,9 @@
     
 </header>
     <div>
-        <a href="CtrlLogout">Déconnection</a>
+        <form action="CtrlLogout" method="get">
+            <button type="submit">Déconnection</button>
+        </form>
     </div>
 <div class="container">
 

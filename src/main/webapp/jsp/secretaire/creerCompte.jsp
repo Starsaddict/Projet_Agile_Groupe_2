@@ -1,96 +1,97 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: kaiyangzhang
-  Date: 2025/12/10
-  Time: 13:16
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-    <title>Creer Compte</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Créer Compte Famille</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
 </head>
 <body>
+  <div class="container">
+    <div class="card">
+      <h1>Création du compte famille</h1>
 
-    <h1>Création du compte famille</h1>
+      <% String error = request.getParameter("error"); %>
+      <% if (error != null && !error.isEmpty()) { %>
+          <div class="alert error"><%= error %></div>
+      <% } %>
 
-    <% String error = request.getParameter("error"); %>
-    <% if (error != null && !error.isEmpty()) { %>
-        <div style="color:red;"><%= error %></div>
-    <% } %>
+      <form method="post" action="<%=request.getContextPath()%>/secretaire/profil/creerCompteFamile">
+          <table class="form-table">
+              <tr>
+                  <th>Joueur(s)</th>
+                  <th>Parent(s)</th>
+              </tr>
+              <tr>
+                  <td id="joueur-col">
+                      <div class="form-row joueur-row">
+                          <label>Nom :</label>
+                          <input type="text" name="joueur_nom[]" required /><br/>
+                          <label>Prénom :</label>
+                          <input type="text" name="joueur_prenom[]" required /><br/>
+                          <label>Email :</label>
+                          <input type="email" name="joueur_email[]" required />
+                      </div>
+                  </td>
+                  <td id="parent-col">
+                      <div class="form-row parent-row">
+                          <label>Nom :</label>
+                          <input type="text" name="parent_nom[]" required /><br/>
+                          <label>Prénom :</label>
+                          <input type="text" name="parent_prenom[]" required /><br/>
+                          <label>Email :</label>
+                          <input type="email" name="parent_email[]" required />
+                      </div>
+                  </td>
+              </tr>
+          </table>
 
-    <form method="post" action="<%=request.getContextPath()%>/secretaire/profil/creerCompteFamile">
+          <div class="action-buttons">
+              <button type="button" onclick="addJoueur()" class="btn">+ Ajouter un joueur</button>
+              <button type="button" onclick="addParent()" class="btn secondary">+ Ajouter un parent</button>
+          </div>
 
-        <table border="1" cellpadding="10" cellspacing="0">
-            <tr>
-                <th>Joueur</th>
-                <th>Parent</th>
-            </tr>
+          <div class="action-buttons" style="margin-top: 2rem;">
+              <button type="submit" class="btn">Créer la famille</button>
+              <button type="button" class="btn secondary" onclick="window.history.back();">Annuler</button>
+          </div>
+      </form>
+    </div>
+  </div>
 
-            <tr>
-                <td id="joueur-col">
-                    <div class="joueur-row">
-                        Nom: <input type="text" name="joueur_nom[]" /><br/>
-                        Prénom: <input type="text" name="joueur_prenom[]" /><br/>
-                        Email: <input type="email" name="joueur_email[]" /><br/>
-                    </div>
-                </td>
+  <script>
+      function addJoueur() {
+          var col = document.getElementById("joueur-col");
+          if (col.querySelectorAll('.joueur-row').length) {
+              var separator = document.createElement("hr");
+              separator.className = "row-separator";
+              col.appendChild(separator);
+          }
+          var div = document.createElement("div");
+          div.className = "form-row joueur-row";
+          div.innerHTML =
+              '<label>Nom :</label><input type="text" name="joueur_nom[]" required /><br/>' +
+              '<label>Prénom :</label><input type="text" name="joueur_prenom[]" required /><br/>' +
+              '<label>Email :</label><input type="email" name="joueur_email[]" required />';
+          col.appendChild(div);
+      }
 
-                <td id="parent-col">
-                    <div class="parent-row">
-                        Nom: <input type="text" name="parent_nom[]" /><br/>
-                        Prénom: <input type="text" name="parent_prenom[]" /><br/>
-                        Email: <input type="email" name="parent_email[]" /><br/>
-                    </div>
-                </td>
-            </tr>
-        </table>
-
-        <br/>
-
-        <button type="button" onclick="addJoueur()">Ajouter un joueur</button>
-        <button type="button" onclick="addParent()">Ajouter un parent</button>
-
-        <br/><br/>
-
-        <input type="submit" value="Submit" />
-        <input type="button" value="Cancel" onclick="window.history.back();" />
-
-    </form>
-
-    <script>
-        function addJoueur() {
-            var col = document.getElementById("joueur-col");
-            var div = document.createElement("div");
-            div.className = "joueur-row";
-            div.innerHTML =
-                'Nom: <input type="text" name="joueur_nom[]" /><br/>' +
-                'Prénom: <input type="text" name="joueur_prenom[]" /><br/>' +
-                'Email: <input type="email" name="joueur_email[]" /><br/>';
-            if (col.children.length) {
-                var separator = document.createElement("hr");
-                separator.className = "row-separator";
-                col.appendChild(separator);
-            }
-            col.appendChild(div);
-        }
-
-        function addParent() {
-            var col = document.getElementById("parent-col");
-            var div = document.createElement("div");
-            div.className = "parent-row";
-            div.innerHTML =
-                'Nom: <input type="text" name="parent_nom[]" /><br/>' +
-                'Prénom: <input type="text" name="parent_prenom[]" /><br/>' +
-                'Email: <input type="email" name="parent_email[]" /><br/>';
-            if (col.children.length) {
-                var separator = document.createElement("hr");
-                separator.className = "row-separator";
-                col.appendChild(separator);
-            }
-            col.appendChild(div);
-        }
-    </script>
-
+      function addParent() {
+          var col = document.getElementById("parent-col");
+          if (col.querySelectorAll('.parent-row').length) {
+              var separator = document.createElement("hr");
+              separator.className = "row-separator";
+              col.appendChild(separator);
+          }
+          var div = document.createElement("div");
+          div.className = "form-row parent-row";
+          div.innerHTML =
+              '<label>Nom :</label><input type="text" name="parent_nom[]" required /><br/>' +
+              '<label>Prénom :</label><input type="text" name="parent_prenom[]" required /><br/>' +
+              '<label>Email :</label><input type="email" name="parent_email[]" required />';
+          col.appendChild(div);
+      }
+  </script>
 </body>
 </html>

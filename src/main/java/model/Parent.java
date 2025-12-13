@@ -1,42 +1,20 @@
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "Parent")
+@DiscriminatorValue("Parent")
 public class Parent extends Utilisateur {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdUtilisateur")
-    private Long idUtilisateur;
-
-    @ManyToMany(mappedBy = "parents")
+    @ManyToMany(mappedBy = "parents", fetch = FetchType.LAZY)
     private List<Joueur> joueurs;
 
     @OneToMany(mappedBy = "conducteur")
     private List<Covoiturage> covoiturages;
 
-    @ManyToMany(mappedBy = "reservers")
-    private List<Covoiturage> covoituragesReserves;
 
     public Parent() {
-    }
-
-    public Long getIdUtilisateur() {
-        return idUtilisateur;
-    }
-
-    public void setIdUtilisateur(Long idUtilisateur) {
-        this.idUtilisateur = idUtilisateur;
     }
 
     public List<Joueur> getJoueurs() {
@@ -55,11 +33,4 @@ public class Parent extends Utilisateur {
         this.covoiturages = covoiturages;
     }
 
-    public List<Covoiturage> getCovoituragesReserves() {
-        return covoituragesReserves;
-    }
-
-    public void setCovoituragesReserves(List<Covoiturage> covoituragesReserves) {
-        this.covoituragesReserves = covoituragesReserves;
-    }
 }

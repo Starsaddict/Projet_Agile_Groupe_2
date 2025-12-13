@@ -1,34 +1,13 @@
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "EtrePresent")
 public class EtrePresent {
 
     @EmbeddedId
-    private EtrePresent_id etrePresent_id;
-
-    @MapsId("idJoueur")
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "IdJoueur", referencedColumnName = "IdUtilisateur", nullable = false)
-    private Joueur joueur;
-
-    @MapsId("idGroupe")
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "IdGroupe", referencedColumnName = "IdGroupe", nullable = false)
-    private Groupe groupe;
-
-    @MapsId("idEvenement")
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "IdEvenement", referencedColumnName = "IdEvenement", nullable = false)
-    private Evenement evenement;
+    private EtrePresentId etrePresentId;
 
     @Column(name = "ConfirmerPresenceJoueur")
     private String confirmerPresenceJoueur;
@@ -42,21 +21,40 @@ public class EtrePresent {
     @Column(name = "PresenceReelle")
     private Boolean presenceReelle;
 
+    @MapsId("idJoueur")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "IdJoueur", referencedColumnName = "IdUtilisateur", nullable = false)
+    private Joueur joueur;
+
+    @MapsId("idGroupe")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "IdGroupe", referencedColumnName = "IdGroupe", nullable = false)
+    private Groupe groupe;
+
+    @MapsId("idEvenement")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "IdEvenement", referencedColumnName = "IdEvenement", nullable = false)
+    private Evenement evenement;
+
     public EtrePresent() {}
 
-    public EtrePresent(EtrePresent_id etrePresent_id, Joueur joueur, Groupe groupe, Evenement evenement) {
-        this.etrePresent_id = etrePresent_id;
+    public EtrePresent(Joueur joueur, Groupe groupe, Evenement evenement) {
         this.joueur = joueur;
         this.groupe = groupe;
         this.evenement = evenement;
+        this.etrePresentId = new EtrePresentId(
+                joueur != null ? joueur.getIdUtilisateur() : null,
+                groupe != null ? groupe.getIdGroupe() : null,
+                evenement != null ? evenement.getIdEvenement() : null
+        );
     }
 
-    public EtrePresent_id getEtrePresent_id() {
-        return etrePresent_id;
+    public EtrePresentId getEtrePresentId() {
+        return etrePresentId;
     }
 
-    public void setEtrePresent_id(EtrePresent_id etrePresent_id) {
-        this.etrePresent_id = etrePresent_id;
+    public void setEtrePresentId(EtrePresentId etrePresent_id) {
+        this.etrePresentId = etrePresent_id;
     }
 
     public Joueur getJoueur() {
@@ -116,9 +114,22 @@ public class EtrePresent {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof EtrePresent)) return false;
+        EtrePresent that = (EtrePresent) o;
+        return etrePresentId != null && etrePresentId.equals(that.etrePresentId);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hashCode(etrePresentId);
+    }
+
+    @Override
     public String toString() {
         return "EtrePresent{" +
-                "id=" + etrePresent_id +
+                "id=" + etrePresentId +
                 ", joueur=" + (joueur != null ? joueur.getIdUtilisateur() : null) +
                 ", groupe=" + (groupe != null ? groupe.getIdGroupe() : null) +
                 ", evenement=" + (evenement != null ? evenement.getIdEvenement() : null) +

@@ -18,10 +18,10 @@ public class Covoiturage {
     private LocalDateTime dateCovoiturage;
 
     @Column(name = "NbPlacesMax")
-    private String nbPlacesMax;
+    private String nbPlacesMaxCovoiturage;
 
     @Column(name = "LieuDepart")
-    private String lieuDepart;
+    private String lieuDepartCovoiturage;
 
     @ManyToOne
     @JoinColumn(name = "IdConducteur", nullable = false)
@@ -29,11 +29,11 @@ public class Covoiturage {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "Reserver",
-        joinColumns = @JoinColumn(name = "IdCovoiturage"),
-        inverseJoinColumns = @JoinColumn(name = "IdUtilisateur")
+            name = "Reserver",
+            joinColumns = @JoinColumn(name = "IdCovoiturage"),
+            inverseJoinColumns = @JoinColumn(name = "IdUtilisateur")
     )
-    private List<Utilisateur> reservers = new ArrayList<>();
+    private List<Utilisateur> reservations = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "IdEvenement", nullable = false)
@@ -59,20 +59,20 @@ public class Covoiturage {
         this.dateCovoiturage = dateCovoiturage;
     }
 
-    public String getNbPlacesMax() {
-        return nbPlacesMax;
+    public String getNbPlacesMaxCovoiturage() {
+        return nbPlacesMaxCovoiturage;
     }
 
-    public void setNbPlacesMax(String nbPlacesMax) {
-        this.nbPlacesMax = nbPlacesMax;
+    public void setNbPlacesMaxCovoiturage(String nbPlacesMax) {
+        this.nbPlacesMaxCovoiturage = nbPlacesMax;
     }
 
-    public String getLieuDepart() {
-        return lieuDepart;
+    public String getLieuDepartCovoiturage() {
+        return lieuDepartCovoiturage;
     }
 
-    public void setLieuDepart(String lieuDepart) {
-        this.lieuDepart = lieuDepart;
+    public void setLieuDepartCovoiturage(String lieuDepart) {
+        this.lieuDepartCovoiturage = lieuDepart;
     }
 
     public Evenement getEvenement() {
@@ -91,13 +91,32 @@ public class Covoiturage {
         this.conducteur = conducteur;
     }
 
-    public List<Utilisateur> getReservers() {
-        return reservers;
+    public List<Utilisateur> getReservations() {
+        return reservations;
     }
 
-    public void setReservers(List<Utilisateur> utilisateurs) {
-        this.reservers = utilisateurs;
+    public void setReservations(List<Utilisateur> utilisateurs) {
+        this.reservations = utilisateurs;
     }
 
+    public void addReservation(Utilisateur utilisateur) {
+        if (utilisateur == null) return;
+        if (!reservations.contains(utilisateur)) {
+            reservations.add(utilisateur);
+            // Mettre à jour la collection inverse si présente
+            if (utilisateur.getCovoiturages() != null && !utilisateur.getCovoiturages().contains(this)) {
+                utilisateur.getCovoiturages().add(this);
+            }
+        }
+    }
 
+    public void removeReservation(Utilisateur utilisateur) {
+        if (utilisateur == null) return;
+        if (reservations.remove(utilisateur)) {
+            // mettre à jour la collection inverse si présente
+            if (utilisateur.getCovoiturages() != null) {
+                utilisateur.getCovoiturages().remove(this);
+            }
+        }
+    }
 }

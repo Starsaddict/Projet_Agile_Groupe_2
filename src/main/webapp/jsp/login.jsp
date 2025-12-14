@@ -9,9 +9,9 @@
   <title>Connexion</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
 </head>
-<body class="page login">
+<body class="page index">
   <div class="container card">
-    <h2>Se connecter en tant que ${role_connexion}</h2>
+    <h2>Se connecter</h2>
 
     <c:if test="${not empty requestScope.error or not empty param.error}">
       <div class="alert error">
@@ -30,12 +30,12 @@
         <input id="password" name="password" type="password" required  />
       </div>
 
-      <input type="hidden" name="role_connexion" value="${role_connexion}" />
-
       <button type="submit" class="btn">Connexion</button>
     </form>
 
-    ${msg_connection != null ? msg_connection : ""}
+    <c:if test="${not empty msg_connection}">
+      <div class="alert error">${msg_connection}</div>
+    </c:if>
 
   </div>
 </body>

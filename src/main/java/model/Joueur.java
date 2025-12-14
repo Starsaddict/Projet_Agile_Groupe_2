@@ -54,6 +54,16 @@ public class Joueur extends Utilisateur {
         return null;
     }
 
+    public void setParent1(Parent p) {
+        parents.add(0, p);
+        p.getJoueurs().add(this);
+    }
+
+    public void setParent2(Parent p) {
+        parents.add(1, p);
+        p.getJoueurs().add(this);
+    }
+
     public List<Parent> getParents() {
         return parents;
     }
@@ -86,7 +96,6 @@ public class Joueur extends Utilisateur {
         this.presences = presences;
     }
 
-    // Helpers pour maintenir la cohérence bidirectionnelle
     public void addPresence(EtrePresent p) {
         if (p != null && !presences.contains(p)) {
             presences.add(p);

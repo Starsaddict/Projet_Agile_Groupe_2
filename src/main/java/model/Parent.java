@@ -1,6 +1,7 @@
 package model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -8,10 +9,10 @@ import java.util.List;
 public class Parent extends Utilisateur {
 
     @ManyToMany(mappedBy = "parents", fetch = FetchType.LAZY)
-    private List<Joueur> joueurs;
+    private List<Joueur> joueurs = new ArrayList<>();
 
     @OneToMany(mappedBy = "conducteur")
-    private List<Covoiturage> covoiturages;
+    private List<Covoiturage> covoiturages = new ArrayList<>();
 
 
     public Parent() {

@@ -159,7 +159,7 @@
 
 <div class="container">
 
-    <div class="page-header">
+  <div class="page-header">
         <div>
             <h1>
                 Bienvenue, Coach
@@ -181,7 +181,7 @@
                 <button type="submit" class="btn-primary">Déconnexion</button>
             </form>
         </div>
-    </div>
+    </div>  
     
     <!-- Section Évènements -->
     <div class="section-header">

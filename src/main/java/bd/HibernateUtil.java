@@ -41,7 +41,7 @@ public class HibernateUtil
 			 * Entité.
 			 */
 
-			
+			configuration.addAnnotatedClass(Utilisateur.class);
 			configuration.addAnnotatedClass(Coach.class);
 			configuration.addAnnotatedClass(Covoiturage.class);
 			configuration.addAnnotatedClass(EtreAbsent.class);
@@ -52,7 +52,6 @@ public class HibernateUtil
 			configuration.addAnnotatedClass(Joueur.class);
 			configuration.addAnnotatedClass(Parent.class);
 			configuration.addAnnotatedClass(Secretaire.class);
-			configuration.addAnnotatedClass(Utilisateur.class);
 
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();

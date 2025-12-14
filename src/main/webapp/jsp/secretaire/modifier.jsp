@@ -7,12 +7,14 @@
     String error = (String) request.getAttribute("error");
     
     // Grouper par email - garder seulement le premier utilisateur pour chaque email
+    // mais conserver tous les comptes sans email (joueur peut en être dépourvu)
     Map<String, Utilisateur> emailGroupMap = new LinkedHashMap<>();
     if (utilisateurs != null && !utilisateurs.isEmpty()) {
         for (Utilisateur u : utilisateurs) {
-            String email = u.getEmailUtilisateur() != null ? u.getEmailUtilisateur() : "";
-            if (!emailGroupMap.containsKey(email)) {
-                emailGroupMap.put(email, u);
+            String email = u.getEmailUtilisateur() != null ? u.getEmailUtilisateur().trim() : "";
+            String key = (!email.isEmpty()) ? email : "NO_EMAIL_" + u.getIdUtilisateur();
+            if (!emailGroupMap.containsKey(key)) {
+                emailGroupMap.put(key, u);
             }
         }
     }

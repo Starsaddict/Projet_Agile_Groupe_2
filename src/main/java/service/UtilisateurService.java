@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class UtilisateurService {
 
     private final UtilisateurRepositoryImpl repo;
-    private static final String DEFAULT_PROFILE_PIC_ROUTE = "src/main/resources/pic_joueur/default.png";
+    private static final String DEFAULT_PROFILE_PIC_ROUTE = "/img/joueur_avatar/default.png";
     private static final int NUMERO_JOUEUR_ATTEMPTS = 20;
 
     public UtilisateurService(UtilisateurRepositoryImpl repo) {
@@ -151,26 +151,29 @@ public class UtilisateurService {
             return null;
         }
 
-        if (!emailUtil.isValidEmail(email)) {
+        boolean emailValide = emailUtil.isValidEmail(email);
+        if (!emailValide && !type.equals("Joueur")) {
             return null;
         }
 
-        String mdp;
-        if (email.length() >= 6) {
-            mdp = email.substring(0, 6);
-        } else {
-            mdp = email;
+        String mdp = "";
+        if (emailValide) {
+            if (email.length() >= 6) {
+                mdp = email.substring(0, 6);
+            } else {
+                mdp = email;
+            }
         }
 
         switch (type) {
             case "Coach":
-                return creerCompteCoach(email, mdp);
+                return emailValide ? creerCompteCoach(email, mdp) : null;
             case "Joueur":
-                return creerCompteJoueur(email, mdp);
+                return creerCompteJoueur(emailValide ? email : null, mdp);
             case "Parent":
-                return creerCompteParent(email, mdp);
+                return emailValide ? creerCompteParent(email, mdp) : null;
             case "Secretaire":
-                return creerCompteSecretaire(email, mdp);
+                return emailValide ? creerCompteSecretaire(email, mdp) : null;
         }
 
         return null;
@@ -220,13 +223,15 @@ public class UtilisateurService {
         if (emailUtil.isValidEmail(email)) {
             joueur.setEmailUtilisateur(email);
             joueur.setMdpUtilisateur(mdp);
-            joueur.setProfilePicRoute(DEFAULT_PROFILE_PIC_ROUTE);
-            assignNumeroJoueurIfMissing(joueur);
-            // 前端调用：从用户详情接口获取 profilePicRoute 字段，直接作为 <img src={profilePicRoute}> 即可显示默认头像
-            joueur = (Joueur) utilisateurRepo.saveUtilisateur(joueur);
-            return joueur;
+        } else {
+            joueur.setEmailUtilisateur(null);
+            joueur.setMdpUtilisateur(mdp == null ? "" : mdp);
         }
-        return null;
+        joueur.setProfilePicRoute(DEFAULT_PROFILE_PIC_ROUTE);
+        assignNumeroJoueurIfMissing(joueur);
+        // 前端调用：从用户详情接口获取 profilePicRoute 字段，直接作为 <img src={profilePicRoute}> 即可显示默认头像
+        joueur = (Joueur) utilisateurRepo.saveUtilisateur(joueur);
+        return joueur;
     }
 
     public void setFamily(List<Parent> parents, List<Joueur> joueurs) {

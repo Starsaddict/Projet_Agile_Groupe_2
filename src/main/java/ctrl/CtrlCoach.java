@@ -29,7 +29,27 @@ public class CtrlCoach extends HttpServlet {
         if (action == null) action = "";
 
         switch (action) {
+        	case"Home":
+        		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                    LocalDateTime now = LocalDateTime.now();
+                    List<Evenement> evenements = session
+                            .createQuery(
+                                    "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
+                                    Evenement.class)
+                            .setParameter("now", now)
+                            .setParameter("typeEvt", "Match-officiel")
+                            .list();
 
+                    List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
+                    for (Groupe g : groupes) {
+                        g.getJoueurs().size();
+                    }
+
+                    request.setAttribute("evenements", evenements);
+                    request.setAttribute("groupes", groupes);
+                }
+        		 request.getRequestDispatcher("/jsp/home.jsp").forward(request, response);
+        		 break;
             case "PageCoach":
             	try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             		LocalDateTime now = LocalDateTime.now();
@@ -91,7 +111,7 @@ public class CtrlCoach extends HttpServlet {
                 break;
 
             default:
-                response.sendRedirect("CtrlCoach?action=GestionGroupe");
+                response.sendRedirect("CtrlCoach?action=Home");
         }
     }
 

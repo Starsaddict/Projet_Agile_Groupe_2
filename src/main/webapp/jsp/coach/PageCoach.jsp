@@ -73,7 +73,19 @@
     table tbody tr:hover {
         background-color: #eef2ff;
     }
+    
+    .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
 
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+    
     .btn-row {
         margin-top: 20px;
         display: flex;
@@ -147,18 +159,28 @@
 
 <div class="container">
 
-    <!-- Titre & info coach -->
-    <h1>
-        Bienvenue, Coach
-        <%= user.getPrenomUtilisateur() %>
-        <%= user.getNomUtilisateur() %> !
-    </h1>
-    <p class="subtitle">Tableau de bord – aperçu des prochains évènements et des groupes existants.</p>
+    <div class="page-header">
+        <div>
+            <h1>
+                Bienvenue, Coach
+                <%= user.getPrenomUtilisateur() %>
+                <%= user.getNomUtilisateur() %> !
+            </h1>
+            <p class="subtitle">
+                Tableau de bord – aperçu des prochains évènements et des groupes existants.
+            </p>
+        </div>
 
-	<div class="btn-row">
-        <form action="CtrlLogout" method="get">
-            <button type="submit" class="btn-primary">Déconnexion</button>
-        </form>
+        <div class="header-actions">
+            <form action="CtrlCoach" method="get">
+                <input type="hidden" name="action" value="Home">
+                <button type="submit" class="btn-primary">Home</button>
+            </form>
+
+            <form action="CtrlLogout" method="get">
+                <button type="submit" class="btn-primary">Déconnexion</button>
+            </form>
+        </div>
     </div>
     
     <!-- Section Évènements -->

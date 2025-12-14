@@ -84,8 +84,7 @@
                 </tbody>
             </table>
             <div class="links">
-                <a class="btn" href="${pageContext.request.contextPath}/jsp/coach/PageCoach.jsp">Ouvrir l'espace Coach</a>
-                <a class="btn" href="${pageContext.request.contextPath}/evenementSecre">Gérer les événements</a>
+                <a class="btn" href="CtrlCoach?action=PageCoach">Espace Coach</a>
             </div>
         </div>
     </c:if>

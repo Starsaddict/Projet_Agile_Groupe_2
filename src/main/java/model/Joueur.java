@@ -84,4 +84,17 @@ public class Joueur extends Utilisateur {
     public void setGroupes(List<Groupe> groupes) {
         this.groupes = groupes;
     }
+
+    public String getNumeroJoueur() {
+        return numeroJoueur;
+    }
+    public void setNumeroJoueur(String numeroJoueur) {
+        this.numeroJoueur = numeroJoueur;
+    }
+    public String getProfilePicRoute() {
+        return profilePicRoute;
+    }
+    public void setProfilePicRoute(String profilePicRoute) {
+        this.profilePicRoute = profilePicRoute;
+    }
 }

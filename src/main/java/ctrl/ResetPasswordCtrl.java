@@ -3,7 +3,6 @@ package ctrl;
 import model.Utilisateur;
 import repo.utilisateurRepo;
 import service.UtilisateurService;
-import util.mdpUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -69,8 +68,7 @@ public class ResetPasswordCtrl extends HttpServlet {
             if (newPassword == null || newPassword.trim().isEmpty()) {
                 error = "Nouveau mot de passe requis.";
             } else {
-                String hashedPassword = mdpUtil.mdpString(newPassword);
-                utilisateur.setMdpUtilisateur(hashedPassword);
+                utilisateur.setMdpUtilisateur(newPassword);
                 boolean updated = utilisateurRepo.updateUtilisateur(utilisateur);
                 if (updated) {
                     response.sendRedirect(request.getContextPath() + "/jsp/requestPasswordSuccess.jsp");

@@ -4,15 +4,18 @@ import model.*;
 import repo.utilisateurRepo;
 import repository.UtilisateurRepositoryImpl;
 import util.emailUtil;
-import util.mdpUtil;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class UtilisateurService {
 
     private final UtilisateurRepositoryImpl repo;
+    private static final String DEFAULT_PROFILE_PIC_ROUTE = "src/main/resources/pic_joueur/default.png";
+    private static final int NUMERO_JOUEUR_ATTEMPTS = 20;
 
     public UtilisateurService(UtilisateurRepositoryImpl repo) {
         this.repo = repo;
@@ -20,6 +23,30 @@ public class UtilisateurService {
 
     public UtilisateurService() {
         this.repo = new UtilisateurRepositoryImpl();
+    }
+
+    /**
+     * Génère un NumeroJoueur unique pour l'année courante avec la règle :
+     * J<yyyy>-<00000>. Vérifie en base pour éviter les collisions.
+     */
+    public String generateNumeroJoueur() {
+        String yearPart = String.valueOf(Year.now().getValue());
+
+        for (int attempt = 0; attempt < NUMERO_JOUEUR_ATTEMPTS; attempt++) {
+            String candidate = "J" + yearPart + "-" + String.format("%05d",
+                    ThreadLocalRandom.current().nextInt(0, 100_000));
+            if (!utilisateurRepo.numeroJoueurExists(candidate)) {
+                return candidate;
+            }
+        }
+
+        throw new IllegalStateException("Impossible de generer un NumeroJoueur unique apres plusieurs essais");
+    }
+
+    private void assignNumeroJoueurIfMissing(Joueur joueur) {
+        if (joueur != null && (joueur.getNumeroJoueur() == null || joueur.getNumeroJoueur().isEmpty())) {
+            joueur.setNumeroJoueur(generateNumeroJoueur());
+        }
     }
 
     /**
@@ -46,7 +73,6 @@ public class UtilisateurService {
         }
 
         try {
-            // String hashedInput = mdpUtil.mdpString(password);
             String hashedInput = password;
             if (hashedInput != null && hashedInput.equals(storedHash)) {
                 return Optional.of(u);
@@ -116,7 +142,6 @@ public class UtilisateurService {
     }
 
     public void modifierUtilisateurMdp(Utilisateur u, String mdp) {
-        String password = mdpUtil.mdpString(mdp);
         u.setMdpUtilisateur(mdp);
         utilisateurRepo.updateUtilisateur(u);
     }
@@ -156,8 +181,7 @@ public class UtilisateurService {
         Secretaire secretaire = new Secretaire();
         if (emailUtil.isValidEmail(email)) {
             secretaire.setEmailUtilisateur(email);
-            String password = mdpUtil.mdpString(mdp);
-            secretaire.setMdpUtilisateur(password);
+            secretaire.setMdpUtilisateur(mdp);
 
             secretaire = (Secretaire) utilisateurRepo.saveUtilisateur(secretaire);
             return secretaire;
@@ -170,9 +194,7 @@ public class UtilisateurService {
         Coach coach = new Coach();
         if (emailUtil.isValidEmail(email)) {
             coach.setEmailUtilisateur(email);
-
-            String password = mdpUtil.mdpString(mdp);
-            coach.setMdpUtilisateur(password);
+            coach.setMdpUtilisateur(mdp);
 
             coach = (Coach) utilisateurRepo.saveUtilisateur(coach);
             return coach;
@@ -185,8 +207,7 @@ public class UtilisateurService {
         if (emailUtil.isValidEmail(email)) {
             parent.setEmailUtilisateur(email);
 
-            String password = mdpUtil.mdpString(mdp);
-            parent.setMdpUtilisateur(password);
+            parent.setMdpUtilisateur(mdp);
 
             parent = (Parent) utilisateurRepo.saveUtilisateur(parent);
             return parent;
@@ -198,9 +219,10 @@ public class UtilisateurService {
         Joueur joueur = new Joueur();
         if (emailUtil.isValidEmail(email)) {
             joueur.setEmailUtilisateur(email);
-            String password = mdpUtil.mdpString(mdp);
-            joueur.setMdpUtilisateur(password);
-
+            joueur.setMdpUtilisateur(mdp);
+            joueur.setProfilePicRoute(DEFAULT_PROFILE_PIC_ROUTE);
+            assignNumeroJoueurIfMissing(joueur);
+            // 前端调用：从用户详情接口获取 profilePicRoute 字段，直接作为 <img src={profilePicRoute}> 即可显示默认头像
             joueur = (Joueur) utilisateurRepo.saveUtilisateur(joueur);
             return joueur;
         }
@@ -283,6 +305,7 @@ public class UtilisateurService {
                 return loadedJoueur;
             }
         } else {
+            assignNumeroJoueurIfMissing(joueur);
             joueur = (Joueur) utilisateurRepo.saveUtilisateur(joueur);
         }
         return joueur;

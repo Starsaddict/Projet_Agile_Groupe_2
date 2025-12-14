@@ -7,7 +7,6 @@ import model.Utilisateur;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import util.mdpUtil;
 
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class utilisateurRepo {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             Utilisateur u = loadUtilisateur(id);
-            u.setMdpUtilisateur(mdpUtil.mdpString(password));
+            u.setMdpUtilisateur(password);
             return updateUtilisateur(u);
         } catch (Exception ex) {
             return false;
@@ -74,12 +73,25 @@ public class utilisateurRepo {
     }
 
     public Utilisateur saveUtilisateur(Utilisateur u) {
+        Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
+            transaction = session.beginTransaction();
+
+            if (u instanceof Joueur) {
+                Joueur joueur = (Joueur) u;
+                if (joueur.getNumeroJoueur() == null || joueur.getNumeroJoueur().isEmpty()) {
+                    throw new IllegalArgumentException("NumeroJoueur manquant : utilisez le service pour le generer avant la sauvegarde");
+                }
+            }
+
             session.save(u);
-            session.getTransaction().commit();
-            session.close();
+            transaction.commit();
             return u;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw e;
         }
     }
 
@@ -148,6 +160,21 @@ public class utilisateurRepo {
             Query<Utilisateur> query = session.createQuery("from Utilisateur", Utilisateur.class);
             return query.list();
         }
+    }
+
+    public boolean numeroJoueurExists(String numeroJoueur) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return numeroJoueurExists(session, numeroJoueur);
+        }
+    }
+
+    private boolean numeroJoueurExists(Session session, String numeroJoueur) {
+        Query<Long> query = session.createQuery(
+                "select count(j.idUtilisateur) from Joueur j where j.numeroJoueur = :numero",
+                Long.class);
+        query.setParameter("numero", numeroJoueur);
+        Long count = query.uniqueResult();
+        return count != null && count > 0;
     }
 
 }

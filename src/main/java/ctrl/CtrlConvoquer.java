@@ -1,6 +1,7 @@
 package ctrl;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.*;
@@ -68,39 +69,89 @@ public class CtrlConvoquer extends HttpServlet {
 	}
 
 	private void validerConvocation(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	        throws ServletException, IOException {
 
-		String idEvtStr = request.getParameter("idEvenement");
-		String idGroupeStr = request.getParameter("idGroupe");
+	    String idEvtStr = request.getParameter("idEvenement");
+	    String idGroupeStr = request.getParameter("idGroupe");
 
-		if (idEvtStr == null || idGroupeStr == null) {
-			request.setAttribute("messageErreur", "Veuillez sélectionner un groupe.");
-			afficherSelection(request, response);
-			return;
-		}
+	    if (idEvtStr == null || idGroupeStr == null || idEvtStr.isBlank() || idGroupeStr.isBlank()) {
+	        request.setAttribute("messageErreur", "Veuillez sélectionner un groupe.");
+	        afficherSelection(request, response);
+	        return;
+	    }
 
-		 Long idEvenement = Long.parseLong(idEvtStr);
-		Long idGroupe = Long.parseLong(idGroupeStr);
+	    Long idEvenement;
+	    Long idGroupe;
 
-		Evenement evt = null;
+	    try {
+	        idEvenement = Long.parseLong(idEvtStr);
+	        idGroupe = Long.parseLong(idGroupeStr);
+	    } catch (NumberFormatException ex) {
+	        request.setAttribute("messageErreur", "Id invalide.");
+	        afficherSelection(request, response);
+	        return;
+	    }
 
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			Transaction tx = session.beginTransaction();
+	    Evenement evt;
 
-			evt = session.get(Evenement.class, idEvenement);
-			Groupe g = session.get(Groupe.class, idGroupe);
+	    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+	        Transaction tx = session.beginTransaction();
 
-			evt.setGroupe(g);
-			session.update(evt);
-			tx.commit();
+	        // 1) Charger l'évènement et le groupe
+	        evt = session.get(Evenement.class, idEvenement);
+	        Groupe g = session.get(Groupe.class, idGroupe);
 
-			List<Groupe> tousGroupes = session.createQuery("from Groupe", Groupe.class).list();
-			request.setAttribute("groupesCoach", tousGroupes);
-		}
+	        if (evt == null || g == null) {
+	            tx.rollback();
+	            request.setAttribute("messageErreur", "Évènement ou groupe introuvable.");
+	            afficherSelection(request, response);
+	            return;
+	        }
 
-		request.setAttribute("evenementSelectionne", evt);
-		request.setAttribute("messageSucces", "Le groupe est marqué pour convocation");
-		request.getRequestDispatcher("/jsp/coach/PageSelection.jsp").forward(request, response);
+	        if (evt.getDateEvenement() == null) {
+	            tx.rollback();
+	            request.setAttribute("messageErreur", "La date de l'évènement est vide.");
+	            afficherSelection(request, response);
+	            return;
+	        }
+
+	        // 2) Définir la journée : [00:00, lendemain 00:00[
+	        LocalDateTime start = evt.getDateEvenement().toLocalDate().atStartOfDay();
+	        LocalDateTime end = start.plusDays(1);
+
+	        // 3) 🔒 Vérifier conflit: même groupe + même jour + match officiel
+	        Long nb = session.createQuery(
+	                "select count(e) from Evenement e " +
+	                "where e.groupe.idGroupe = :gid " +
+	                "and e.typeEvenement = 'Match-officiel' " +
+	                "and e.dateEvenement >= :start " +
+	                "and e.dateEvenement < :end " +
+	                "and e.idEvenement <> :eid",
+	                Long.class)
+	            .setParameter("gid", idGroupe)
+	            .setParameter("start", start)
+	            .setParameter("end", end)
+	            .setParameter("eid", idEvenement)
+	            .uniqueResult();
+
+	        if (nb != null && nb > 0) {
+	            tx.rollback();
+	            request.setAttribute("messageErreur",
+	                    "Impossible : ce groupe est déjà convoqué pour un match officiel ce jour-là.");
+	            afficherSelection(request, response);
+	            return;
+	        }
+
+	        // 4) Sauvegarde
+	        evt.setGroupe(g);
+	        session.update(evt);
+	        tx.commit();
+
+	    }
+
+	    request.setAttribute("evenementSelectionne", evt);
+	    request.setAttribute("messageSucces", "Le groupe est marqué pour convocation");
+	    request.getRequestDispatcher("/jsp/coach/PageSelection.jsp").forward(request, response);
 	}
 
 }

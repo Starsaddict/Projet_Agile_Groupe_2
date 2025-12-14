@@ -7,6 +7,7 @@ import util.emailUtil;
 import util.mdpUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,19 +23,33 @@ public class UtilisateurService {
         this.repo = new UtilisateurRepositoryImpl();
     }
 
+    public static class AuthenticatedUser {
+        private final Utilisateur user;
+        private final List<String> roles;
+
+        public AuthenticatedUser(Utilisateur user, List<String> roles) {
+            this.user = user;
+            this.roles = roles;
+        }
+
+        public Utilisateur getUser() {
+            return user;
+        }
+
+        public List<String> getRoles() {
+            return roles;
+        }
+    }
+
     /**
-     * Authentifie un utilisateur par email, mot de passe et rôle.
-     * - Cherche l'utilisateur via le repository.
-     * - Si le hash stocké ressemble à un hash BCrypt, utilise BCrypt.checkpw.
-     * - Sinon, tente une comparaison avec le hash SHA-256 via util.mdpUtil
-     * (fallback).
+     * Authentifie un utilisateur par email / mot de passe, et renvoie ses rôles disponibles.
      */
-    public Optional<Utilisateur> authenticate(String email, String password, String role) {
+    public Optional<AuthenticatedUser> authenticate(String email, String password) {
         if (email == null || password == null) {
             return Optional.empty();
         }
 
-        Optional<Utilisateur> opt = repo.findByEmailUtilisateur(email, role);
+        Optional<Utilisateur> opt = repo.findFirstByEmail(email);
         if (!opt.isPresent()) {
             return Optional.empty();
         }
@@ -49,7 +64,13 @@ public class UtilisateurService {
             // String hashedInput = mdpUtil.mdpString(password);
             String hashedInput = password;
             if (hashedInput != null && hashedInput.equals(storedHash)) {
-                return Optional.of(u);
+                List<String> roles = repo.findRolesByEmail(email);
+                if (roles == null || roles.isEmpty()) {
+                    roles = u.getTypeU() != null
+                            ? Collections.singletonList(u.getTypeU())
+                            : Collections.emptyList();
+                }
+                return Optional.of(new AuthenticatedUser(u, roles));
             }
         } catch (Exception e) {
             // A gérer
@@ -86,6 +107,26 @@ public class UtilisateurService {
             parent.getJoueurs().size(); // Force initialization
         }
         return parent;
+    }
+
+    /**
+     * Charge un parent par email (utile si l'utilisateur courant est connecté
+     * sous un autre rôle mais possède aussi le rôle Parent).
+     */
+    public Parent loadParentByEmail(String email) {
+        if (email == null) {
+            return null;
+        }
+        Optional<Utilisateur> opt = repo.findByEmailUtilisateur(email, "Parent");
+        if (opt.isPresent() && opt.get() instanceof Parent) {
+            Parent parent = (Parent) opt.get();
+            // Recharge via utilisateurRepo pour initialiser les collections
+            if (parent.getIdUtilisateur() != null) {
+                return utilisateurRepo.loadParent(parent.getIdUtilisateur());
+            }
+            return parent;
+        }
+        return null;
     }
 
     /**

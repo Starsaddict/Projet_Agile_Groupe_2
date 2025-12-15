@@ -35,10 +35,12 @@ public class secretaireSendInvitationCtrl extends HttpServlet {
         Code c = new Code(code, "Inscription");
         codeRepo.save(c);
 
-        String link = request.getRequestURL().toString().replace(request.getServletPath(), request.getContextPath() + "/inscription?code=" + code);
+        String link = request.getRequestURL().toString().replace(request.getServletPath(),
+                request.getContextPath() + "/inscription?code=" + code);
         String subject = "Invitation à créer un compte - Club";
         String body = "<html><body>Bonjour,<br/><p>Vous pouvez créer votre compte et celui de votre enfant en cliquant sur le lien suivant :</p>"
-                + "<a href='" + link + "'>Créer mon compte</a><br/><p>Code d'invitation : <b>" + code + "</b></p></body></html>";
+                + "<a href='" + link + "'>Créer mon compte</a><br/><p>Code d'invitation : <b>" + code
+                + "</b></p></body></html>";
 
         try {
             SendEmailSSL.sendEmail(email, subject, body);

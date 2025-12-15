@@ -1,4 +1,3 @@
-// java
 package bd;
 
 import java.time.LocalDate;
@@ -150,24 +149,37 @@ public class BdTest {
      * Evite d'instancier la classe abstraite Utilisateur.
      */
     private static Utilisateur buildUtilisateur(String role, String email, String nom, String prenom, LocalDate dateNaissance) {
+        Utilisateur u;
+
         UtilisateurService us = new UtilisateurService();
-        Utilisateur u = us.creerCompteUtilisateur(email, role);
+
+
+        switch (role) {
+            case "Joueur":
+                Joueur joueur = new Joueur();
+                joueur.setNumeroJoueur(us.generateNumeroJoueur());
+                u = joueur;
+                break;
+            case "Parent":
+                u = new Parent();
+                break;
+            case "Coach":
+                u = new Coach();
+                break;
+            case "Secretaire":
+                u = new Secretaire();
+                break;
+            default:
+                throw new IllegalArgumentException("Rôle inconnu : " + role);
+        }
+
+
+        u.setEmailUtilisateur(email);
+        u.setMdpUtilisateur("pwd");
         u.setNomUtilisateur(nom);
         u.setPrenomUtilisateur(prenom);
         u.setDateNaissanceUtilisateur(dateNaissance);
-        switch (role) {
-            case "Joueur":
-                Joueur j = (Joueur) u;
-                j.setNumeroJoueur(us.generateNumeroJoueur());
-                return j;
-            case "Parent":
-                return (Parent) u;
-            case "Coach":
-                return (Coach) u;
-            case "Secretaire":
-                return (Secretaire) u;
-            default:
-                return u;
-        }
+
+        return u;
     }
 }

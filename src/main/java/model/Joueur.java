@@ -24,13 +24,13 @@ public class Joueur extends Utilisateur {
     private List<Parent> parents;
 
     @OneToMany(mappedBy = "joueur", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<EtreAbsent> absences = new ArrayList<>();
+    private List<EtreAbsent> absences;
 
     @ManyToMany(mappedBy = "joueurs")
     private List<Groupe> groupes = new ArrayList<>();
 
     @OneToMany(mappedBy = "joueur", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<EtrePresent> presences = new ArrayList<>();
+    private List<EtrePresent> presences;
 
     public Joueur() {
     }
@@ -95,6 +95,9 @@ public void removePresence(EtrePresent p) {
 }
 
     public void addAbsence(EtreAbsent a) {
+        if (absences == null) {
+            absences = new ArrayList<>();
+        }
         if (a != null && !absences.contains(a)) {
             absences.add(a);
             a.setJoueur(this);

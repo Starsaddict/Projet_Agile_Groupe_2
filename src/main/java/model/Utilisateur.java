@@ -44,7 +44,7 @@ public abstract class Utilisateur {
 
 
     @OneToMany(mappedBy = "conducteur", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Covoiturage> conduits = new ArrayList<>();
+    private List<Covoiturage> conduits;
 
     public Utilisateur() {
     }

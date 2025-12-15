@@ -26,7 +26,7 @@ public class Groupe {
 
     // ⭐ OneToMany avec Evenement
     @OneToMany(mappedBy = "groupe", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.LAZY)
-    private List<Evenement> evenements = new ArrayList<>();
+    private List<Evenement> evenements;
 
     public Groupe() {}
 

@@ -182,9 +182,18 @@ public class UtilisateurService {
         utilisateurRepo.updateUtilisateur(u);
     }
 
-    public void modifierUtilisateurMdp(Utilisateur u, String mdp) {
-        u.setMdpUtilisateur(mdp);
-        utilisateurRepo.updateUtilisateur(u);
+    public boolean modifierUtilisateurMdp(Utilisateur u, String mdp) {
+        String email = u.getEmailUtilisateur();
+        List<Utilisateur> utilisateurs = utilisateurRepo.findByEmail(email);
+        if (utilisateurs == null){
+            return false;
+        }
+        for(Utilisateur utilisateur : utilisateurs) {
+            System.out.println(utilisateur);
+            utilisateur.setMdpUtilisateur(mdp);
+            utilisateurRepo.updateUtilisateur(utilisateur);
+        }
+        return true;
     }
 
     public Utilisateur creerCompteUtilisateur(String email, String type) {
@@ -399,7 +408,7 @@ public class UtilisateurService {
             return false;
         }
         String mdp = u.getEmailUtilisateur().substring(0,5);
-        u.setMdpUtilisateur(mdp);
+        modifierUtilisateurMdp(u,mdp);
         return utilisateurRepo.updateUtilisateur(u);
     }
 }

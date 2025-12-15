@@ -36,7 +36,6 @@ public class Evenement {
     @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<EtrePresent> etresPresents = new ArrayList<>();
 
-    // Constructors
     public Evenement() {}
 
     public Evenement(String nom, String lieu, LocalDateTime date, String type, Groupe groupe) {
@@ -54,7 +53,6 @@ public class Evenement {
         this.typeEvenement = type;
     }
 
-    // Getters and setters
     public Long getIdEvenement() { return idEvenement; }
     public void setIdEvenement(Long idEvenement) { this.idEvenement = idEvenement; }
 
@@ -78,4 +76,30 @@ public class Evenement {
 
     public List<EtrePresent> getEtresPresents() { return etresPresents; }
     public void setEtresPresents(List<EtrePresent> etresPresents) { this.etresPresents = etresPresents; }
+
+    public void addCovoiturage(Covoiturage c) {
+        if (c != null && !covoiturages.contains(c)) {
+            covoiturages.add(c);
+            c.setEvenement(this);
+        }
+    }
+
+    public void removeCovoiturage(Covoiturage c) {
+        if (c != null && covoiturages.remove(c)) {
+            c.setEvenement(null);
+        }
+    }
+
+    public void addEtrePresent(EtrePresent p) {
+        if (p != null && !etresPresents.contains(p)) {
+            etresPresents.add(p);
+            p.setEvenement(this);
+        }
+    }
+
+    public void removeEtrePresent(EtrePresent p) {
+        if (p != null && etresPresents.remove(p)) {
+            p.setEvenement(null);
+        }
+    }
 }

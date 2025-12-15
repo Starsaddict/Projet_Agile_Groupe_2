@@ -1,7 +1,9 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -9,8 +11,7 @@ import javax.persistence.*;
 @Table(name = "Utilisateur")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TypeU", discriminatorType = DiscriminatorType.STRING)
-@DiscriminatorValue("Utilisateur")
-public class Utilisateur {
+public abstract class Utilisateur {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,12 +39,12 @@ public class Utilisateur {
     @Column(name = "TypeU", insertable = false, updatable = false)
     private String typeU;
 
-    @ManyToMany(mappedBy = "reservers", fetch = FetchType.LAZY)
-    private List<Covoiturage> covoiturages;
+    @ManyToMany(mappedBy = "reservations", fetch = FetchType.LAZY)
+    private List<Covoiturage> covoiturages = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "conducteur", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Covoiturage> conduits;
+    private List<Covoiturage> conduits = new ArrayList<>();
 
     public Utilisateur() {
     }
@@ -92,10 +93,6 @@ public class Utilisateur {
         return typeU;
     }
 
-    public void setTypeU(String typeU) {
-        this.typeU = typeU;
-    }
-
     public LocalDate getDateNaissanceUtilisateur() {
         return dateNaissanceUtilisateur;
     }
@@ -133,12 +130,25 @@ public class Utilisateur {
             return "Joueur";
         } else if (this instanceof Parent) {
             return "Parent";
-        } else if (this.getClass().getSimpleName().equals("Secretaire")) {
+        } else if (this instanceof Secretaire) {
             return "Secrétaire";
         } else if (this.getClass().getSimpleName().equals("Admin")) {
             return "Administrateur";
         }
         return this.getClass().getSimpleName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Utilisateur)) return false;
+        Utilisateur that = (Utilisateur) o;
+        return idUtilisateur != null && idUtilisateur.equals(that.idUtilisateur);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(idUtilisateur);
     }
 
     @Override

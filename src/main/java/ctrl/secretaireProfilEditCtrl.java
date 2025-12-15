@@ -1,20 +1,28 @@
 package ctrl;
 
 import model.Utilisateur;
-import model.Secretaire;
+import model.Joueur;
 import repo.utilisateurRepo;
 import service.UtilisateurService;
 import repository.UtilisateurRepositoryImpl;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+@MultipartConfig
 public class secretaireProfilEditCtrl extends HttpServlet {
 
     private UtilisateurService utilisateurService = new UtilisateurService(new UtilisateurRepositoryImpl());
@@ -110,6 +118,46 @@ public class secretaireProfilEditCtrl extends HttpServlet {
                     utilisateur.setDateNaissanceUtilisateur(date);
                 } catch (Exception e) {
                     // 忽略无效的日期转换
+                }
+            }
+
+            // 处理 Joueur 头像上传
+            if (utilisateur instanceof Joueur) {
+                Joueur joueur = (Joueur) utilisateur;
+                Part profilePicPart = null;
+                try {
+                    profilePicPart = request.getPart("profilePic");
+                } catch (Exception ignore) {
+                    // 如果未上传文件或请求不是 multipart，忽略头像更新
+                }
+
+                if (profilePicPart != null && profilePicPart.getSize() > 0) {
+                    String originalName = Paths.get(profilePicPart.getSubmittedFileName()).getFileName().toString();
+                    String extension = "";
+                    int dotIndex = originalName.lastIndexOf('.');
+                    if (dotIndex >= 0) {
+                        extension = originalName.substring(dotIndex);
+                    }
+
+                    String numero = joueur.getNumeroJoueur();
+                    String baseName = (numero != null && !numero.isEmpty()) ? numero : "joueur-" + joueur.getIdUtilisateur();
+                    String fileName = baseName + "-" + System.currentTimeMillis() + extension;
+
+                    String realDir = getServletContext().getRealPath("/img/joueur_avatar");
+                    Path targetDir;
+                    if (realDir != null) {
+                        targetDir = Paths.get(realDir);
+                    } else {
+                        targetDir = Paths.get("src/main/webapp/img/joueur_avatar");
+                    }
+                    Files.createDirectories(targetDir);
+                    Path targetFile = targetDir.resolve(fileName);
+
+                    try (InputStream input = profilePicPart.getInputStream()) {
+                        Files.copy(input, targetFile, StandardCopyOption.REPLACE_EXISTING);
+                    }
+
+                    joueur.setProfilePicRoute("/img/joueur_avatar/" + fileName);
                 }
             }
 

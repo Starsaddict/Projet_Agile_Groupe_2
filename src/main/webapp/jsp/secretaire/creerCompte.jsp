@@ -39,7 +39,7 @@
                         </div>
                         <div class="field">
                             <label>Email</label>
-                            <input type="email" name="joueur_email[]" required />
+                            <input type="email" name="joueur_email[]" />
                         </div>
                     </div>
                 </div>
@@ -89,6 +89,7 @@
 
         var row = document.createElement("div");
         row.className = "dynamic-row " + type + "-row";
+        var emailRequired = type === "parent" ? " required" : "";
         row.innerHTML =
             '<div class="field">' +
                 '<label>Nom</label>' +
@@ -100,7 +101,7 @@
             '</div>' +
             '<div class="field">' +
                 '<label>Email</label>' +
-                '<input type="email" name="' + type + '_email[]" required />' +
+                '<input type="email" name="' + type + '_email[]"' + emailRequired + ' />' +
             '</div>';
 
         container.appendChild(row);

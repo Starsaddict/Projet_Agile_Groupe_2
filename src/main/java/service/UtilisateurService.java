@@ -4,16 +4,19 @@ import model.*;
 import repo.utilisateurRepo;
 import repository.UtilisateurRepositoryImpl;
 import util.emailUtil;
-import util.mdpUtil;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class UtilisateurService {
 
     private final UtilisateurRepositoryImpl repo;
+    private static final String DEFAULT_PROFILE_PIC_ROUTE = "/img/joueur_avatar/default.png";
+    private static final int NUMERO_JOUEUR_ATTEMPTS = 20;
 
     public UtilisateurService(UtilisateurRepositoryImpl repo) {
         this.repo = repo;
@@ -42,6 +45,30 @@ public class UtilisateurService {
     }
 
     /**
+     * Génère un NumeroJoueur unique pour l'année courante avec la règle :
+     * J<yyyy>-<00000>. Vérifie en base pour éviter les collisions.
+     */
+    public String generateNumeroJoueur() {
+        String yearPart = String.valueOf(Year.now().getValue());
+
+        for (int attempt = 0; attempt < NUMERO_JOUEUR_ATTEMPTS; attempt++) {
+            String candidate = "J" + yearPart + "-" + String.format("%05d",
+                    ThreadLocalRandom.current().nextInt(0, 100_000));
+            if (!utilisateurRepo.numeroJoueurExists(candidate)) {
+                return candidate;
+            }
+        }
+
+        throw new IllegalStateException("Impossible de generer un NumeroJoueur unique apres plusieurs essais");
+    }
+
+    private void assignNumeroJoueurIfMissing(Joueur joueur) {
+        if (joueur != null && (joueur.getNumeroJoueur() == null || joueur.getNumeroJoueur().isEmpty())) {
+            joueur.setNumeroJoueur(generateNumeroJoueur());
+        }
+    }
+
+    /**
      * Authentifie un utilisateur par email / mot de passe, et renvoie ses rôles disponibles.
      */
     public Optional<AuthenticatedUser> authenticate(String email, String password) {
@@ -61,7 +88,6 @@ public class UtilisateurService {
         }
 
         try {
-            // String hashedInput = mdpUtil.mdpString(password);
             String hashedInput = password;
             if (hashedInput != null && hashedInput.equals(storedHash)) {
                 List<String> roles = repo.findRolesByEmail(email);
@@ -167,26 +193,29 @@ public class UtilisateurService {
             return null;
         }
 
-        if (!emailUtil.isValidEmail(email)) {
+        boolean emailValide = emailUtil.isValidEmail(email);
+        if (!emailValide && !type.equals("Joueur")) {
             return null;
         }
 
-        String mdp;
-        if (email.length() >= 6) {
-            mdp = email.substring(0, 6);
-        } else {
-            mdp = email;
+        String mdp = "";
+        if (emailValide) {
+            if (email.length() >= 6) {
+                mdp = email.substring(0, 6);
+            } else {
+                mdp = email;
+            }
         }
 
         switch (type) {
             case "Coach":
-                return creerCompteCoach(email, mdp);
+                return emailValide ? creerCompteCoach(email, mdp) : null;
             case "Joueur":
-                return creerCompteJoueur(email, mdp);
+                return creerCompteJoueur(emailValide ? email : null, mdp);
             case "Parent":
-                return creerCompteParent(email, mdp);
+                return emailValide ? creerCompteParent(email, mdp) : null;
             case "Secretaire":
-                return creerCompteSecretaire(email, mdp);
+                return emailValide ? creerCompteSecretaire(email, mdp) : null;
         }
 
         return null;
@@ -197,8 +226,7 @@ public class UtilisateurService {
         Secretaire secretaire = new Secretaire();
         if (emailUtil.isValidEmail(email)) {
             secretaire.setEmailUtilisateur(email);
-            String password = mdpUtil.mdpString(mdp);
-            secretaire.setMdpUtilisateur(password);
+            secretaire.setMdpUtilisateur(mdp);
 
             secretaire = (Secretaire) utilisateurRepo.saveUtilisateur(secretaire);
             return secretaire;
@@ -211,9 +239,7 @@ public class UtilisateurService {
         Coach coach = new Coach();
         if (emailUtil.isValidEmail(email)) {
             coach.setEmailUtilisateur(email);
-
-            String password = mdpUtil.mdpString(mdp);
-            coach.setMdpUtilisateur(password);
+            coach.setMdpUtilisateur(mdp);
 
             coach = (Coach) utilisateurRepo.saveUtilisateur(coach);
             return coach;
@@ -226,8 +252,7 @@ public class UtilisateurService {
         if (emailUtil.isValidEmail(email)) {
             parent.setEmailUtilisateur(email);
 
-            String password = mdpUtil.mdpString(mdp);
-            parent.setMdpUtilisateur(password);
+            parent.setMdpUtilisateur(mdp);
 
             parent = (Parent) utilisateurRepo.saveUtilisateur(parent);
             return parent;
@@ -239,13 +264,16 @@ public class UtilisateurService {
         Joueur joueur = new Joueur();
         if (emailUtil.isValidEmail(email)) {
             joueur.setEmailUtilisateur(email);
-            String password = mdpUtil.mdpString(mdp);
-            joueur.setMdpUtilisateur(password);
-
-            joueur = (Joueur) utilisateurRepo.saveUtilisateur(joueur);
-            return joueur;
+            joueur.setMdpUtilisateur(mdp);
+        } else {
+            joueur.setEmailUtilisateur(null);
+            joueur.setMdpUtilisateur(mdp == null ? "" : mdp);
         }
-        return null;
+        joueur.setProfilePicRoute(DEFAULT_PROFILE_PIC_ROUTE);
+        assignNumeroJoueurIfMissing(joueur);
+        // 前端调用：从用户详情接口获取 profilePicRoute 字段，直接作为 <img src={profilePicRoute}> 即可显示默认头像
+        joueur = (Joueur) utilisateurRepo.saveUtilisateur(joueur);
+        return joueur;
     }
 
     public void setFamily(List<Parent> parents, List<Joueur> joueurs) {
@@ -324,6 +352,7 @@ public class UtilisateurService {
                 return loadedJoueur;
             }
         } else {
+            assignNumeroJoueurIfMissing(joueur);
             joueur = (Joueur) utilisateurRepo.saveUtilisateur(joueur);
         }
         return joueur;

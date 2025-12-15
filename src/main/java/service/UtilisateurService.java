@@ -183,7 +183,6 @@ public class UtilisateurService {
     }
 
     public void modifierUtilisateurMdp(Utilisateur u, String mdp) {
-        String password = mdpUtil.mdpString(mdp);
         u.setMdpUtilisateur(mdp);
         utilisateurRepo.updateUtilisateur(u);
     }

@@ -71,7 +71,7 @@ public class Joueur extends Utilisateur {
     public void setProfilePicRoute(String profilePicRoute) {
         this.profilePicRoute = profilePicRoute;
     }
-}
+
 
 
 public List<EtrePresent> getPresences() {

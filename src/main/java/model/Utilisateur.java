@@ -42,10 +42,6 @@ public abstract class Utilisateur {
     @ManyToMany(mappedBy = "reservations", fetch = FetchType.LAZY)
     private List<Covoiturage> covoiturages = new ArrayList<>();
 
-
-    @OneToMany(mappedBy = "conducteur", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Covoiturage> conduits = new ArrayList<>();
-
     public Utilisateur() {
     }
 
@@ -107,14 +103,6 @@ public abstract class Utilisateur {
 
     public void setCovoiturages(List<Covoiturage> covoiturages) {
         this.covoiturages = covoiturages;
-    }
-
-    public List<Covoiturage> getConduits() {
-        return conduits;
-    }
-
-    public void setConduits(List<Covoiturage> conduits) {
-        this.conduits = conduits;
     }
 
     public String getDescription() {

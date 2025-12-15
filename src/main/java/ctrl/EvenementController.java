@@ -5,9 +5,7 @@ import repo.EvenementRepo;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
@@ -16,34 +14,25 @@ public class EvenementController extends HttpServlet {
 
     private final EvenementRepo repo = new EvenementRepo();
 
-    /* ================= AFFICHAGE ================= */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        // Les événements sont déjà triés par date dans le Repo
-        request.setAttribute("evenements", repo.findAll());
-        request.getRequestDispatcher("/jsp/evenementSecre.jsp")
-               .forward(request, response);
+        req.setAttribute("evenements", repo.findAll());
+        req.getRequestDispatcher("/jsp/evenementSecre.jsp").forward(req, resp);
     }
 
-    /* ================= ACTIONS ================= */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
 
-        String action = request.getParameter("action");
+        String action = req.getParameter("action");
 
-        if ("create".equals(action)) {
-            create(request);
-        } else if ("update".equals(action)) {
-            update(request);
-        } else if ("delete".equals(action)) {
-            delete(request);
-        }
+        if ("create".equals(action)) create(req);
+        else if ("update".equals(action)) update(req);
+        else if ("delete".equals(action)) delete(req);
 
-        // Redirection PRG (Post/Redirect/Get)
-        response.sendRedirect(request.getContextPath() + "/evenementSecre");
+        resp.sendRedirect(req.getContextPath() + "/evenementSecre");
     }
 
     /* ================= CREATE ================= */
@@ -52,13 +41,7 @@ public class EvenementController extends HttpServlet {
         e.setNomEvenement(r.getParameter("nom"));
         e.setLieuEvenement(r.getParameter("lieu"));
         e.setTypeEvenement(r.getParameter("type"));
-
-        // Conversion HTML datetime-local → LocalDateTime
         e.setDateEvenement(LocalDateTime.parse(r.getParameter("date")));
-
-        // Groupe optionnel (non utilisé ici)
-        e.setGroupe(null);
-
         repo.create(e);
     }
 
@@ -66,22 +49,31 @@ public class EvenementController extends HttpServlet {
     private void update(HttpServletRequest r) {
         Long id = Long.parseLong(r.getParameter("id"));
         Evenement e = repo.findById(id);
-
-        e.setNomEvenement(r.getParameter("nom"));
-        e.setLieuEvenement(r.getParameter("lieu"));
-        e.setTypeEvenement(r.getParameter("type"));
-        e.setDateEvenement(LocalDateTime.parse(r.getParameter("date")));
-
-        // Groupe optionnel
-        e.setGroupe(null);
-
-        repo.update(e);
+        if (e != null) {
+            e.setNomEvenement(r.getParameter("nom"));
+            e.setLieuEvenement(r.getParameter("lieu"));
+            e.setTypeEvenement(r.getParameter("type"));
+            e.setDateEvenement(LocalDateTime.parse(r.getParameter("date")));
+            repo.update(e);
+        }
     }
 
-    /* ================= DELETE ================= */
+    /* ================= DELETE (SECURISÉE) ================= */
     private void delete(HttpServletRequest r) {
-        Long id = Long.parseLong(r.getParameter("id"));
-        Evenement e = repo.findById(id);
-        repo.delete(e);
+        try {
+            String idParam = r.getParameter("id");
+
+            if (idParam != null) {
+                Long id = Long.parseLong(idParam);
+                Evenement e = repo.findById(id);
+
+                // Suppression seulement si l'événement existe
+                if (e != null) {
+                    repo.delete(e);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

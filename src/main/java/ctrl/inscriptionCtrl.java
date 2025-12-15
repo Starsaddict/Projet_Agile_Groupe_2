@@ -17,14 +17,14 @@ public class inscriptionCtrl extends HttpServlet {
             throws ServletException, IOException {
         String code = request.getParameter("code");
         if (code == null || code.isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/login?error=Code+manquant");
+            response.sendRedirect(request.getContextPath() + "/Login?error=Code+manquant");
             return;
         }
 
         codeRepo codeRepo = new codeRepo();
         Code c = codeRepo.findByCode(code);
         if (c == null || !"Inscription".equals(c.getRole())) {
-            response.sendRedirect(request.getContextPath() + "/login?error=Code+invalide");
+            response.sendRedirect(request.getContextPath() + "/Login?error=Code+invalide");
             return;
         }
 

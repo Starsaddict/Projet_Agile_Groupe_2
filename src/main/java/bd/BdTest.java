@@ -158,6 +158,7 @@ public class BdTest {
             case "Joueur":
                 Joueur joueur = new Joueur();
                 joueur.setNumeroJoueur(us.generateNumeroJoueur());
+                joueur.setProfilePicRoute("/img/joueur_avatar/default.png");
                 u = joueur;
                 break;
             case "Parent":

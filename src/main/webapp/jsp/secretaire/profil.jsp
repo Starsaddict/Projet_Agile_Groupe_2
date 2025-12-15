@@ -20,6 +20,8 @@
     
     <% if ("1".equals(success)) { %>
         <div class="alert alert-success">Opération complétée avec succès</div>
+    <% } else if ("invitation".equals(success)) { %>
+        <div class="alert alert-success">Invitation envoyée avec succès</div>
     <% } %>
     
     <% if (batchSuccess != null) { %>
@@ -51,6 +53,13 @@
             <li>
                 <a href="<%= contextPath %>/secretaire/profil/batchCreate">📊 Import en masse (Excel)</a>
                 <p class="description">Importer plusieurs comptes via fichier Excel</p>
+            </li>
+            <li>
+                <form method="post" action="<%= contextPath %>/secretaire/profil/sendInvitation" style="display:flex;gap:8px;align-items:center;">
+                    <input type="email" name="email" placeholder="Email parent" required />
+                    <button type="submit" class="btn">Envoyer invitation</button>
+                </form>
+                <p class="description">Envoyer un code d'inscription au parent</p>
             </li>
         </ul>
     </div>

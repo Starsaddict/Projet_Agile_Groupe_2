@@ -89,7 +89,7 @@ public class BdTest {
             // 6) Covoiturage et réservations
             Covoiturage covoiturage = new Covoiturage();
             covoiturage.setDateCovoiturage(LocalDateTime.of(2026, 3, 12, 12, 0));
-            covoiturage.setNbPlacesMaxCovoiturage("4");
+            covoiturage.setNbPlacesMaxCovoiturage(4);
             covoiturage.setLieuDepartCovoiturage("IUT de Rodez");
             covoiturage.setEvenement(match);
             covoiturage.setConducteur(parent1);

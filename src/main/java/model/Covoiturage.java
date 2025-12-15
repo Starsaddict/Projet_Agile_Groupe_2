@@ -18,7 +18,7 @@ public class Covoiturage {
     private LocalDateTime dateCovoiturage;
 
     @Column(name = "NbPlacesMax")
-    private String nbPlacesMaxCovoiturage;
+    private int nbPlacesMaxCovoiturage;
 
     @Column(name = "LieuDepart")
     private String lieuDepartCovoiturage;
@@ -59,11 +59,11 @@ public class Covoiturage {
         this.dateCovoiturage = dateCovoiturage;
     }
 
-    public String getNbPlacesMaxCovoiturage() {
+    public int getNbPlacesMaxCovoiturage() {
         return nbPlacesMaxCovoiturage;
     }
 
-    public void setNbPlacesMaxCovoiturage(String nbPlacesMax) {
+    public void setNbPlacesMaxCovoiturage(int nbPlacesMax) {
         this.nbPlacesMaxCovoiturage = nbPlacesMax;
     }
 
@@ -99,16 +99,28 @@ public class Covoiturage {
         this.reservations = utilisateurs;
     }
 
+    public boolean hasPlacesDisponibles() {
+        return reservations.size() < nbPlacesMaxCovoiturage;
+    }
+
     public void addReservation(Utilisateur utilisateur) {
         if (utilisateur == null) return;
+
+        if (utilisateur.equals(conducteur)) {
+            throw new IllegalStateException("Le conducteur ne peut pas réserver son propre covoiturage");
+        }
+
+        if (!hasPlacesDisponibles()) {
+            throw new IllegalStateException("Plus de places disponibles");
+        }
+
         if (!reservations.contains(utilisateur)) {
             reservations.add(utilisateur);
-            // Mettre à jour la collection inverse si présente
-            if (utilisateur.getCovoiturages() != null && !utilisateur.getCovoiturages().contains(this)) {
-                utilisateur.getCovoiturages().add(this);
-            }
+            utilisateur.getCovoiturages().add(this);
         }
     }
+
+
 
     public void removeReservation(Utilisateur utilisateur) {
         if (utilisateur == null) return;

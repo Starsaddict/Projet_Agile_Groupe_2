@@ -3,6 +3,8 @@ package bd;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -19,7 +21,7 @@ import model.Parent;
 import model.Secretaire;
 import model.Utilisateur;
 import model.EnvoyerMessage;
-import util.mdpUtil;
+import service.UtilisateurService;
 
 public class BdTest {
 
@@ -28,11 +30,11 @@ public class BdTest {
             Transaction tx = session.beginTransaction();
 
             // 1) Création des utilisateurs et de leurs relations
-            Parent parent1 = (Parent) buildUtilisateur("Parent", "lucas.veslin@test.fr", "pwd1", "Veslin", "Lucas", LocalDate.of(2003, 7, 21));
-            Parent parent2 = (Parent) buildUtilisateur("Parent", "oussama.lahrach@test.fr", "pwd2", "Lahrach", "Oussama", LocalDate.of(1902, 2, 2));
-            Joueur joueur1 = (Joueur) buildUtilisateur("Joueur", "clement@test.com", "test", "Riols", "Clément", LocalDate.of(2018, 7, 15));
-            Coach coach = (Coach) buildUtilisateur("Coach", "coach@example.com", "pwd", "Berro", "Alain", LocalDate.of(1453, 5, 29));
-            Secretaire secretaire = (Secretaire) buildUtilisateur("Secretaire", "sid@example.com", "pwd", "Elandaloussi", "Sid Ahmed", LocalDate.of(1989, 11, 9));
+            Parent parent1 = (Parent) buildUtilisateur("Parent", "lucas.veslin@test.fr", "Veslin", "Lucas", LocalDate.of(2003, 7, 21));
+            Parent parent2 = (Parent) buildUtilisateur("Parent", "oussama.lahrach@test.fr", "Lahrach", "Oussama", LocalDate.of(1902, 2, 2));
+            Joueur joueur1 = (Joueur) buildUtilisateur("Joueur", "clement@test.com", "Riols", "Clément", LocalDate.of(2018, 7, 15));
+            Coach coach = (Coach) buildUtilisateur("Coach", "coach@example.com", "Berro", "Alain", LocalDate.of(1453, 5, 29));
+            Secretaire secretaire = (Secretaire) buildUtilisateur("Secretaire", "sid@example.com", "Elandaloussi", "Sid Ahmed", LocalDate.of(1989, 11, 9));
 
             session.save(parent1);
             session.save(parent2);
@@ -40,8 +42,11 @@ public class BdTest {
             session.save(coach);
             session.save(secretaire);
 
-            joueur1.setParent1(parent1);
-            joueur1.setParent2(parent2);
+            List<Parent> parents = new ArrayList<>();
+            parents.add(parent1);
+            parents.add(parent2);
+            joueur1.setParents(parents);
+
 
             // 2) Création des groupes
             Groupe groupeA = new Groupe();
@@ -144,50 +149,25 @@ public class BdTest {
      * Fabrique simple pour créer une instance concrète de Utilisateur selon le rôle demandé.
      * Evite d'instancier la classe abstraite Utilisateur.
      */
-    private static Utilisateur buildUtilisateur(String role, String email, String pwd, String nom, String prenom, LocalDate dateNaissance) {
-        String hashed = mdpUtil.mdpString(pwd);
+    private static Utilisateur buildUtilisateur(String role, String email, String nom, String prenom, LocalDate dateNaissance) {
+        UtilisateurService us = new UtilisateurService();
+        Utilisateur u = us.creerCompteUtilisateur(email, role);
+        u.setNomUtilisateur(nom);
+        u.setPrenomUtilisateur(prenom);
+        u.setDateNaissanceUtilisateur(dateNaissance);
         switch (role) {
             case "Joueur":
-                Joueur j = new Joueur();
-                j.setEmailUtilisateur(email);
-                j.setMdpUtilisateur(hashed);
-                j.setNomUtilisateur(nom);
-                j.setPrenomUtilisateur(prenom);
-                j.setDateNaissanceUtilisateur(dateNaissance);
-                j.setNumLicenceJoueur("LIC-" + (int)(Math.random() * 10000));
+                Joueur j = (Joueur) u;
+                j.setNumeroJoueur(us.generateNumeroJoueur());
                 return j;
             case "Parent":
-                Parent p = new Parent();
-                p.setEmailUtilisateur(email);
-                p.setMdpUtilisateur(hashed);
-                p.setNomUtilisateur(nom);
-                p.setPrenomUtilisateur(prenom);
-                p.setDateNaissanceUtilisateur(dateNaissance);
-                return p;
+                return (Parent) u;
             case "Coach":
-                Coach c = new Coach();
-                c.setEmailUtilisateur(email);
-                c.setMdpUtilisateur(hashed);
-                c.setNomUtilisateur(nom);
-                c.setPrenomUtilisateur(prenom);
-                c.setDateNaissanceUtilisateur(dateNaissance);
-                return c;
+                return (Coach) u;
             case "Secretaire":
-                Secretaire s = new Secretaire();
-                s.setEmailUtilisateur(email);
-                s.setMdpUtilisateur(hashed);
-                s.setNomUtilisateur(nom);
-                s.setPrenomUtilisateur(prenom);
-                s.setDateNaissanceUtilisateur(dateNaissance);
-                return s;
+                return (Secretaire) u;
             default:
-                Parent defaultP = new Parent();
-                defaultP.setEmailUtilisateur(email);
-                defaultP.setMdpUtilisateur(hashed);
-                defaultP.setNomUtilisateur(nom);
-                defaultP.setPrenomUtilisateur(prenom);
-                defaultP.setDateNaissanceUtilisateur(dateNaissance);
-                return defaultP;
+                return u;
         }
     }
 }

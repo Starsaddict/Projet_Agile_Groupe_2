@@ -1,6 +1,5 @@
 package controller;
 
-import model.Joueur;
 import model.Parent;
 import service.UtilisateurService;
 
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/CtrlFrontAbsence")
 public class CtrlPageAbsence extends HttpServlet {
@@ -20,16 +18,27 @@ public class CtrlPageAbsence extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String url = "Absence";
-
         HttpSession session = request.getSession(false);
+        if (session == null || !(session.getAttribute("user") instanceof Parent)) {
+            request.getRequestDispatcher("Login").forward(request, response);
+            return;
+        }
 
-        utilisateurService.getEnfantsAndAbsencesByParentId((Parent)session.getAttribute("user"));
+        Parent parent = (Parent) session.getAttribute("user");
+        // Rafraîchir enfants et absences
+        utilisateurService.getEnfantsAndAbsencesByParentId(parent);
+
+        // Transférer le message de la session vers la requête (flash message)
+        Object msg = session.getAttribute("msg_absence");
+        if (msg != null) {
+            request.setAttribute("msg_absence", msg);
+            session.removeAttribute("msg_absence");
+        }
 
         request.getRequestDispatcher(url).forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO Auto-generated method stub
         doGet(request, response);
     }
 }

@@ -151,10 +151,13 @@ public class BdTest {
     private static Utilisateur buildUtilisateur(String role, String email, String nom, String prenom, LocalDate dateNaissance) {
         Utilisateur u;
 
+        UtilisateurService us = new UtilisateurService();
+
+
         switch (role) {
             case "Joueur":
                 Joueur joueur = new Joueur();
-                joueur.setNumeroJoueur("J" + System.currentTimeMillis());
+                joueur.setNumeroJoueur(us.generateNumeroJoueur());
                 u = joueur;
                 break;
             case "Parent":
@@ -170,7 +173,9 @@ public class BdTest {
                 throw new IllegalArgumentException("Rôle inconnu : " + role);
         }
 
+
         u.setEmailUtilisateur(email);
+        u.setMdpUtilisateur("pwd");
         u.setNomUtilisateur(nom);
         u.setPrenomUtilisateur(prenom);
         u.setDateNaissanceUtilisateur(dateNaissance);

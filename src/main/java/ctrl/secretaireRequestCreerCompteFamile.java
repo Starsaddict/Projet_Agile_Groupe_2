@@ -40,14 +40,18 @@ public class secretaireRequestCreerCompteFamile extends HttpServlet {
         String[] parentPrenom = request.getParameterValues("parent_prenom[]");
         String[] parentEmail = request.getParameterValues("parent_email[]");
 
-        if (joueurNom == null || joueurPrenom == null || joueurEmail == null
+        if (joueurNom == null || joueurPrenom == null
                 || parentNom == null || parentPrenom == null || parentEmail == null) {
             redirectWithError(request, response, "Parametres manquants");
             return;
         }
 
-        if (joueurNom.length != joueurPrenom.length || joueurNom.length != joueurEmail.length
+        if (joueurNom.length != joueurPrenom.length
                 || parentNom.length != parentPrenom.length || parentNom.length != parentEmail.length) {
+            redirectWithError(request, response, "Parametres invalides");
+            return;
+        }
+        if (joueurEmail != null && joueurEmail.length != joueurNom.length) {
             redirectWithError(request, response, "Parametres invalides");
             return;
         }
@@ -57,11 +61,18 @@ public class secretaireRequestCreerCompteFamile extends HttpServlet {
             return;
         }
 
+        if (joueurEmail == null) {
+            joueurEmail = new String[joueurNom.length];
+        }
+
         utilisateurRepo utilisateurRepo = new utilisateurRepo();
 
         Set<String> emails = new HashSet<>();
         for (String email : joueurEmail) {
-            if (email == null || email.isEmpty() || !emails.add(email)) {
+            if (email == null || email.isEmpty()) {
+                continue;
+            }
+            if (!emails.add(email)) {
                 redirectWithError(request, response, "Email joueur invalide ou duplique");
                 return;
             }

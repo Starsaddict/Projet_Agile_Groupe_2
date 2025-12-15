@@ -1,11 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="model.Utilisateur" %>
+<%@ page import="model.Joueur" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%
     Utilisateur utilisateur = (Utilisateur) request.getAttribute("utilisateur");
     String error = (String) request.getAttribute("error");
     String contextPath = request.getContextPath();
+    boolean isJoueur = utilisateur instanceof Joueur;
+    String profilePicRoute = isJoueur ? ((Joueur) utilisateur).getProfilePicRoute() : null;
+    String resolvedProfilePic = profilePicRoute;
+    if ((resolvedProfilePic == null || resolvedProfilePic.isEmpty()) && isJoueur) {
+        resolvedProfilePic = "/img/joueur_avatar/default.png";
+    }
+    if (resolvedProfilePic != null && !resolvedProfilePic.isEmpty()) {
+        if (resolvedProfilePic.startsWith("src/main/resources/pic_joueur/")) {
+            resolvedProfilePic = "/img/joueur_avatar/" + new java.io.File(resolvedProfilePic).getName();
+        } else if (resolvedProfilePic.startsWith("/pic_joueur/")) {
+            // legacy value in DB
+            resolvedProfilePic = resolvedProfilePic.replaceFirst("/pic_joueur/", "/img/joueur_avatar/");
+        }
+        if (resolvedProfilePic.startsWith("/")) {
+            resolvedProfilePic = contextPath + resolvedProfilePic;
+        } else if (!resolvedProfilePic.startsWith("http")) {
+            resolvedProfilePic = contextPath + "/" + resolvedProfilePic;
+        }
+    }
+    String numeroJoueur = isJoueur ? ((Joueur) utilisateur).getNumeroJoueur() : null;
     
     if (utilisateur == null) {
         response.sendRedirect(contextPath + "/secretaire/profil?error=Utilisateur non trouvé");
@@ -102,8 +123,25 @@
             <div class="alert error"><%= error %></div>
         <% } %>
         
-        <form method="post" action="<%= contextPath %>/secretaire/profil/edit">
+        <form method="post" action="<%= contextPath %>/secretaire/profil/edit" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<%= utilisateur.getIdUtilisateur() %>">
+            
+            <% if (isJoueur) { %>
+            <div class="form-section">
+                <h3>Avatar du joueur</h3>
+                <% if (resolvedProfilePic != null && !resolvedProfilePic.isEmpty()) {
+                       String altText = "Avatar joueur " + (numeroJoueur != null ? numeroJoueur : "");
+                %>
+                    <div style="margin-bottom:10px;">
+                        <img src="<%= resolvedProfilePic %>" alt="<%= altText %>" style="max-width:160px; border-radius:8px; border:1px solid #ddd;">
+                    </div>
+                <% } %>
+                <div class="form-group">
+                    <label for="profilePic">Mettre à jour l'avatar :</label>
+                    <input type="file" id="profilePic" name="profilePic" accept="image/*">
+                </div>
+            </div>
+            <% } %>
             
             <div class="form-section">
                 <h3>Informations personnelles</h3>

@@ -1,5 +1,7 @@
 package service;
 
+import model.Joueur;
+import model.Parent;
 import model.Utilisateur;
 import org.apache.poi.ss.usermodel.*;
 import repo.utilisateurRepo;
@@ -54,8 +56,8 @@ public class InscriptionExcelService {
             Row headerRow = sheet.getRow(sheet.getFirstRowNum());
             Map<String, Integer> headerIndex = mapHeaderIndices(headerRow);
 
-            if (!headerIndex.containsKey("email") || !headerIndex.containsKey("role")) {
-                throw new IllegalArgumentException("Le fichier doit contenir au minimum les colonnes Email et Role");
+            if (!headerIndex.containsKey("role")) {
+                throw new IllegalArgumentException("Le fichier doit contenir au minimum la colonne Role");
             }
 
             List<Utilisateur> created = new ArrayList<>();
@@ -71,12 +73,17 @@ public class InscriptionExcelService {
                 String nom = readCell(row, headerIndex.get("nom"));
                 String prenom = readCell(row, headerIndex.get("prenom"));
 
-                if (email == null || role == null) {
+                if (role == null) {
+                    continue;
+                }
+
+                // Email obligatoire pour tous sauf Joueur (peut être null).
+                if (email == null && !"Joueur".equals(role)) {
                     continue;
                 }
 
                 // Ignore si un compte existe déjà avec cet email.
-                if (utilisateurRepo.emailExists(email)) {
+                if (email != null && utilisateurRepo.emailExists(email)) {
                     continue;
                 }
 
@@ -97,6 +104,13 @@ public class InscriptionExcelService {
                 }
                 if (updated) {
                     utilisateurRepo.updateUtilisateur(utilisateur);
+                }
+
+                if ("Joueur".equals(role)) {
+                    List<Parent> parents = collectParents(row, headerIndex);
+                    if (!parents.isEmpty()) {
+                        utilisateurService.setFamily(parents, Collections.singletonList((Joueur) utilisateur));
+                    }
                 }
                 created.add(utilisateur);
             }
@@ -140,6 +154,24 @@ public class InscriptionExcelService {
                     break;
                 case "role":
                     map.put("role", cell.getColumnIndex());
+                    break;
+                case "parent1_nom":
+                    map.put("parent1_nom", cell.getColumnIndex());
+                    break;
+                case "parent1_prenom":
+                    map.put("parent1_prenom", cell.getColumnIndex());
+                    break;
+                case "parent1_email":
+                    map.put("parent1_email", cell.getColumnIndex());
+                    break;
+                case "parent2_nom":
+                    map.put("parent2_nom", cell.getColumnIndex());
+                    break;
+                case "parent2_prenom":
+                    map.put("parent2_prenom", cell.getColumnIndex());
+                    break;
+                case "parent2_email":
+                    map.put("parent2_email", cell.getColumnIndex());
                     break;
                 default:
                     break;
@@ -188,5 +220,68 @@ public class InscriptionExcelService {
             default:
                 return null;
         }
+    }
+
+    private List<Parent> collectParents(Row row, Map<String, Integer> headerIndex) {
+        List<Parent> parents = new ArrayList<>();
+        Parent p1 = resolveParent(
+                readCell(row, headerIndex.get("parent1_nom")),
+                readCell(row, headerIndex.get("parent1_prenom")),
+                readCell(row, headerIndex.get("parent1_email"))
+        );
+        Parent p2 = resolveParent(
+                readCell(row, headerIndex.get("parent2_nom")),
+                readCell(row, headerIndex.get("parent2_prenom")),
+                readCell(row, headerIndex.get("parent2_email"))
+        );
+
+        if (p1 != null) {
+            parents.add(p1);
+        }
+        if (p2 != null && (p1 == null || !Objects.equals(p2.getIdUtilisateur(), p1.getIdUtilisateur()))) {
+            parents.add(p2);
+        }
+        return parents;
+    }
+
+    private Parent resolveParent(String nom, String prenom, String email) {
+        if (email == null) {
+            return null;
+        }
+
+        Parent parent = findExistingParentByEmail(email);
+        if (parent == null) {
+            parent = (Parent) utilisateurService.creerCompteUtilisateur(email, "Parent");
+        }
+        if (parent == null) {
+            return null;
+        }
+
+        boolean updated = false;
+        if (nom != null && (parent.getNomUtilisateur() == null || parent.getNomUtilisateur().isEmpty())) {
+            parent.setNomUtilisateur(nom);
+            updated = true;
+        }
+        if (prenom != null && (parent.getPrenomUtilisateur() == null || parent.getPrenomUtilisateur().isEmpty())) {
+            parent.setPrenomUtilisateur(prenom);
+            updated = true;
+        }
+        if (updated) {
+            utilisateurRepo.updateUtilisateur(parent);
+        }
+        return parent;
+    }
+
+    private Parent findExistingParentByEmail(String email) {
+        List<Utilisateur> utilisateurs = utilisateurRepo.findByEmail(email);
+        if (utilisateurs == null) {
+            return null;
+        }
+        for (Utilisateur u : utilisateurs) {
+            if (u instanceof Parent) {
+                return (Parent) u;
+            }
+        }
+        return null;
     }
 }

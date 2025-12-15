@@ -9,16 +9,19 @@ import javax.persistence.*;
 @DiscriminatorValue("Joueur")
 public class Joueur extends Utilisateur {
 
-    @Column(name = "NumLicenceJoueur")
-    private String numLicenceJoueur;
+    @Column(name = "NumeroJoueur")
+    private String numeroJoueur;
+
+    @Column(name = "ProfilePicRoute")
+    private String profilePicRoute;
 
     @ManyToMany
     @JoinTable(
-            name = "Parent_Joueur",
-            joinColumns = @JoinColumn(name = "IdJoueur", referencedColumnName = "IdUtilisateur"),
-            inverseJoinColumns = @JoinColumn(name = "IdParent", referencedColumnName = "IdUtilisateur")
+        name = "Parent_Joueur",
+        joinColumns = @JoinColumn(name = "IdJoueur", referencedColumnName = "IdUtilisateur"),
+        inverseJoinColumns = @JoinColumn(name = "IdParent", referencedColumnName = "IdUtilisateur")
     )
-    private List<Parent> parents = new ArrayList<>();
+    private List<Parent> parents;
 
     @OneToMany(mappedBy = "joueur", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<EtreAbsent> absences = new ArrayList<>();
@@ -30,38 +33,6 @@ public class Joueur extends Utilisateur {
     private List<EtrePresent> presences = new ArrayList<>();
 
     public Joueur() {
-    }
-
-    public String getNumLicenceJoueur() {
-        return numLicenceJoueur;
-    }
-
-    public void setNumLicenceJoueur(String numLicenceJoueur) {
-        this.numLicenceJoueur = numLicenceJoueur;
-    }
-
-    public Parent getParent1() {
-        if (parents != null && parents.size() > 0) {
-            return parents.get(0);
-        }
-        return null;
-    }
-
-    public Parent getParent2() {
-        if (parents != null && parents.size() > 1) {
-            return parents.get(1);
-        }
-        return null;
-    }
-
-    public void setParent1(Parent p) {
-        parents.add(0, p);
-        p.getJoueurs().add(this);
-    }
-
-    public void setParent2(Parent p) {
-        parents.add(1, p);
-        p.getJoueurs().add(this);
     }
 
     public List<Parent> getParents() {
@@ -88,26 +59,41 @@ public class Joueur extends Utilisateur {
         this.groupes = groupes;
     }
 
-    public List<EtrePresent> getPresences() {
-        return presences;
+    public String getNumeroJoueur() {
+        return numeroJoueur;
+    }
+    public void setNumeroJoueur(String numeroJoueur) {
+        this.numeroJoueur = numeroJoueur;
+    }
+    public String getProfilePicRoute() {
+        return profilePicRoute;
+    }
+    public void setProfilePicRoute(String profilePicRoute) {
+        this.profilePicRoute = profilePicRoute;
     }
 
-    public void setPresences(List<EtrePresent> presences) {
-        this.presences = presences;
-    }
 
-    public void addPresence(EtrePresent p) {
-        if (p != null && !presences.contains(p)) {
-            presences.add(p);
-            p.setJoueur(this);
-        }
-    }
 
-    public void removePresence(EtrePresent p) {
-        if (p != null && presences.remove(p)) {
-            p.setJoueur(null);
-        }
+public List<EtrePresent> getPresences() {
+    return presences;
+}
+
+public void setPresences(List<EtrePresent> presences) {
+    this.presences = presences;
+}
+
+public void addPresence(EtrePresent p) {
+    if (p != null && !presences.contains(p)) {
+        presences.add(p);
+        p.setJoueur(this);
     }
+}
+
+public void removePresence(EtrePresent p) {
+    if (p != null && presences.remove(p)) {
+        p.setJoueur(null);
+    }
+}
 
     public void addAbsence(EtreAbsent a) {
         if (a != null && !absences.contains(a)) {

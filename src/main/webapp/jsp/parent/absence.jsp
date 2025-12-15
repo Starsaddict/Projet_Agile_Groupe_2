@@ -1,3 +1,4 @@
+<!-- html -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
@@ -25,18 +26,27 @@
         <strong>${enfant.nomUtilisateur} ${enfant.prenomUtilisateur}</strong>
 
         <c:set var="isAbsent" value="${false}" />
+        <c:set var="openAbsenceId" value="" />
         <c:forEach var="absence" items="${enfant.absences}">
             <c:if test="${not absence.absenceTerminee}">
                 <c:set var="isAbsent" value="${true}" />
+                <c:set var="openAbsenceId" value="${absence.idEtreAbsent}" />
             </c:if>
         </c:forEach>
 
         <c:choose>
             <c:when test="${isAbsent}">
-                <span style="margin-left:15px; color: grey;">(Déjà absent)</span>
+                <span style="margin-left:15px; color: grey;">(Absence en cours)</span>
+                <form method="post" action="CtrlAbsence" enctype="multipart/form-data" style="display:inline;margin-left:15px;">
+                    <input type="hidden" name="action" value="upload" />
+                    <input type="hidden" name="id_absence" value="${openAbsenceId}" />
+                    <input type="file" name="certificat" accept="application/pdf,image/*" required />
+                    <button type="submit">Envoyer le certificat</button>
+                </form>
             </c:when>
             <c:otherwise>
                 <form method="post" action="CtrlAbsence" style="display:inline;margin-left:15px;">
+                    <input type="hidden" name="action" value="declare" />
                     <input type="hidden" name="id_enfant" value="${enfant.idUtilisateur}"/>
                     <button type="submit">Déclarer l'absence</button>
                 </form>

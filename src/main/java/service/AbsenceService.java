@@ -1,3 +1,4 @@
+// java
 package service;
 
 import model.EtreAbsent;
@@ -23,10 +24,19 @@ public class AbsenceService {
         if (joueur == null) return false;
         EtreAbsent ea = new EtreAbsent();
         ea.setJoueur(joueur);
-        ea.setAbsenceDebut(LocalDate.now().toString()); // format ISO yyyy-MM-dd
+        ea.setAbsenceDebut(LocalDate.now().toString());
         ea.setAbsenceTerminee(false);
         EtreAbsent saved = repo.saveAbsence(ea);
         return saved != null;
     }
 
+    public boolean closeAbsence(EtreAbsent absence, String fileName, String contentType, byte[] data) {
+        if (absence == null) return false;
+        absence.setCertificatName(fileName);
+        absence.setCertificatContentType(contentType);
+        absence.setCertificatData(data);
+        absence.setAbsenceTerminee(true);
+        EtreAbsent saved = repo.saveAbsence(absence);
+        return saved != null;
+    }
 }

@@ -1,11 +1,12 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class EtrePresent_id implements Serializable {
+public class EtrePresentId implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -18,10 +19,10 @@ public class EtrePresent_id implements Serializable {
     @Column(name = "IdEvenement")
     private Long idEvenement;
 
-    public EtrePresent_id() {
+    public EtrePresentId() {
     }
 
-    public EtrePresent_id(Long idJoueur, Long idGroupe, Long idEvenement) {
+    public EtrePresentId(Long idJoueur, Long idGroupe, Long idEvenement) {
         this.idJoueur = idJoueur;
         this.idGroupe = idGroupe;
         this.idEvenement = idEvenement;
@@ -53,27 +54,16 @@ public class EtrePresent_id implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        EtrePresent_id that = (EtrePresent_id) o;
-        if (idJoueur != null ? !idJoueur.equals(that.idJoueur) : that.idJoueur != null) {
-            return false;
-        }
-        if (idGroupe != null ? !idGroupe.equals(that.idGroupe) : that.idGroupe != null) {
-            return false;
-        }
-        return idEvenement != null ? idEvenement.equals(that.idEvenement) : that.idEvenement == null;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EtrePresentId that = (EtrePresentId) o;
+        return Objects.equals(idJoueur, that.idJoueur) &&
+                Objects.equals(idGroupe, that.idGroupe) &&
+                Objects.equals(idEvenement, that.idEvenement);
     }
 
     @Override
     public int hashCode() {
-        int result = idJoueur != null ? idJoueur.hashCode() : 0;
-        result = 31 * result + (idGroupe != null ? idGroupe.hashCode() : 0);
-        result = 31 * result + (idEvenement != null ? idEvenement.hashCode() : 0);
-        return result;
+        return Objects.hash(idJoueur, idGroupe, idEvenement);
     }
 }

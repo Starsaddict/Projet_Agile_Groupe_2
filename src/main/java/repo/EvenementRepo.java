@@ -9,6 +9,7 @@ import java.util.List;
 
 public class EvenementRepo {
 
+    /* ================= CREATE ================= */
     public void create(Evenement e) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -21,6 +22,7 @@ public class EvenementRepo {
         }
     }
 
+    /* ================= UPDATE ================= */
     public void update(Evenement e) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -33,6 +35,7 @@ public class EvenementRepo {
         }
     }
 
+    /* ================= DELETE ================= */
     public void delete(Evenement e) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -45,19 +48,20 @@ public class EvenementRepo {
         }
     }
 
+    /* ================= FIND BY ID ================= */
     public Evenement findById(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Evenement.class, id);
         }
     }
 
+    /* ================= FIND ALL (TRI PAR DATE) ================= */
     public List<Evenement> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                "FROM Evenement e ORDER BY e.dateEvenement ASC",
-                Evenement.class
+                    "FROM Evenement e ORDER BY e.dateEvenement ASC",
+                    Evenement.class
             ).list();
         }
     }
-
 }

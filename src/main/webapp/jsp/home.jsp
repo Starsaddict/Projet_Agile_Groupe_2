@@ -98,7 +98,6 @@
                 <a class="btn" href="${pageContext.request.contextPath}/jsp/covoiturage.jsp">Covoiturage</a>
                 <a class="btn" href="${pageContext.request.contextPath}/jsp/convocation.jsp">Convocations</a>
                 <a class="btn" href="${pageContext.request.contextPath}/parent/profil">Profil parent</a>
-                <a class="btn" href="CtrlFrontAbsence">Absences des enfants</a>
             </div>
         </div>
     </c:if>

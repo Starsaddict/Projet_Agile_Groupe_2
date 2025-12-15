@@ -78,7 +78,16 @@ public class Joueur extends Utilisateur {
 
     public void setAbsences(List<EtreAbsent> absences) {
         this.absences = absences;
+        for (EtreAbsent old : new ArrayList<>(this.absences)) {
+            removeAbsence(old);
+        }
+        if (absences != null) {
+            for (EtreAbsent a : absences) {
+                addAbsence(a);
+            }
+        }
     }
+
 
     public List<Groupe> getGroupes() {
         return groupes;

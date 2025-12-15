@@ -1,3 +1,69 @@
+/* ================= TOP ACTIONS (RETOUR + DECONNEXION) ================= */
+.top-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+/* Bouton retour accueil */
+.btn-retour {
+    background-color: #6c757d;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.btn-retour:hover {
+    background-color: #5a6268;
+    color: #ffffff;
+}
+
+/* Form déconnexion (supprimer marges par défaut) */
+.logout-form {
+    margin: 0;
+}
+
+/* Bouton déconnexion */
+.btn-logout {
+    background-color: #d9534f;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-logout:hover {
+    background-color: #c9302c;
+}
+
+/* ================= RESPONSIVE TOP ACTIONS ================= */
+@media (max-width: 600px) {
+    .top-actions {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .btn-retour,
+    .btn-logout {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+
+
+
+
+
 /* ================= GLOBAL ================= */
 body {
     font-family: Arial, Helvetica, sans-serif;

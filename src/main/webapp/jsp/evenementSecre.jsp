@@ -13,6 +13,22 @@
 
 <body>
 
+<!-- ================= ACTIONS HAUT ================= -->
+<div class="top-actions">
+    <a href="${pageContext.request.contextPath}/jsp/home.jsp"
+       class="btn btn-retour">
+        ⬅ Retour à l’accueil
+    </a>
+
+    <form method="post"
+          action="${pageContext.request.contextPath}/CtrlLogout"
+          class="logout-form">
+        <button type="submit" class="btn btn-logout">
+            🚪 Déconnexion
+        </button>
+    </form>
+</div>
+
 <h2 class="page-title">Gestion des événements</h2>
 
 <!-- ===================== CREATION EVENEMENT ===================== -->
@@ -126,15 +142,20 @@
                     </button>
 
                     <!-- FORM DELETE -->
-                    <form method="post"
-                          action="${pageContext.request.contextPath}/evenementSecre"
-                          onsubmit="return confirm('Supprimer cet événement ?');">
-                        <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="id" value="${e.idEvenement}">
-                        <button type="submit" class="btn btn-delete">
-                            Supprimer
-                        </button>
-                    </form>
+                    <!-- FORM DELETE -->
+<form method="post"
+      action="${pageContext.request.contextPath}/evenementSecre"
+      onsubmit="return confirm(
+          'Voulez-vous vraiment supprimer l’événement : ${e.nomEvenement} ?\nCette action est définitive.'
+      );">
+    <input type="hidden" name="action" value="delete">
+    <input type="hidden" name="id" value="${e.idEvenement}">
+    <button type="submit" class="btn btn-delete">
+        Supprimer
+    </button>
+</form>
+
+
 
                 </td>
             </tr>

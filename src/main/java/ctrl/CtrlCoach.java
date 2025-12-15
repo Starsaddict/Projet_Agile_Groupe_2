@@ -37,7 +37,7 @@ public class CtrlCoach extends HttpServlet {
                                     "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
                                     Evenement.class)
                             .setParameter("now", now)
-                            .setParameter("typeEvt", "Match-officiel")
+                            .setParameter("typeEvt", "MATCH_OFFICIEL")
                             .list();
 
                     List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
@@ -59,7 +59,7 @@ public class CtrlCoach extends HttpServlet {
             		                "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
             		                Evenement.class)
             		        .setParameter("now", now)
-            		        .setParameter("typeEvt", "Match-officiel")
+            		        .setParameter("typeEvt", "MATCH_OFFICIEL")
             		        .list();
 
 			        List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
@@ -82,7 +82,7 @@ public class CtrlCoach extends HttpServlet {
                 	                "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
                 	                Evenement.class)
                 	        .setParameter("now", now)
-                	        .setParameter("typeEvt", "Match-officiel")
+                	        .setParameter("typeEvt", "MATCH_OFFICIEL")
                 	        .list();
                     
 			        request.setAttribute("evenements", evenements);

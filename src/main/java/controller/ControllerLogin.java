@@ -53,7 +53,7 @@ public class ControllerLogin extends HttpServlet {
                                     "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
                                     Evenement.class)
                             .setParameter("now", now)
-                            .setParameter("typeEvt", "Match-officiel")
+                            .setParameter("typeEvt", "MATCH_OFFICIEL")
                             .list();
 
                     List<Groupe> groupes = sessionH.createQuery("from Groupe", Groupe.class).list();

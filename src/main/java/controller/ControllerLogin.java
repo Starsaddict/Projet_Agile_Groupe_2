@@ -17,7 +17,7 @@ import org.hibernate.Session;
 import bd.HibernateUtil;
 import model.Evenement;
 import model.Groupe;
-import model.Utilisateur;
+import service.UtilisateurService.AuthenticatedUser;
 import repository.UtilisateurRepositoryImpl;
 import service.UtilisateurService;
 
@@ -37,40 +37,38 @@ public class ControllerLogin extends HttpServlet {
             throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String role = request.getParameter("role_connexion");
 
-		Optional<Utilisateur> opt = utilisateurService.authenticate(email, password, role);
+		Optional<AuthenticatedUser> opt = utilisateurService.authenticate(email, password);
 		if (opt.isPresent()) {
+            AuthenticatedUser authenticatedUser = opt.get();
 			HttpSession session = request.getSession(true);
-			session.setAttribute("user", opt.get());				
-			String url = "";
-			url = role;
-			switch(url) {
-			case"Coach":
-				 try (Session sessionH = HibernateUtil.getSessionFactory().openSession()) {
-					 LocalDateTime now = LocalDateTime.now();
-					 List<Evenement> evenements = sessionH
-	                	        .createQuery(
-	                	                "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
-	                	                Evenement.class)
-	                	        .setParameter("now", now)
-	                	        .setParameter("typeEvt", "Match-officiel")
-	                	        .list();
+			session.setAttribute("user", authenticatedUser.getUser());
+            session.setAttribute("roles", authenticatedUser.getRoles());
 
-                        List<Groupe> groupes = sessionH.createQuery("from Groupe", Groupe.class).list();
-                        for (Groupe g : groupes) {
-                            g.getJoueurs().size();
-                        }
+            if (authenticatedUser.getRoles().contains("Coach")) {
+                try (Session sessionH = HibernateUtil.getSessionFactory().openSession()) {
+                    LocalDateTime now = LocalDateTime.now();
+                    List<Evenement> evenements = sessionH
+                            .createQuery(
+                                    "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
+                                    Evenement.class)
+                            .setParameter("now", now)
+                            .setParameter("typeEvt", "MATCH_OFFICIEL")
+                            .list();
 
-                        request.setAttribute("evenements", evenements);
-                        request.setAttribute("groupes", groupes);
+                    List<Groupe> groupes = sessionH.createQuery("from Groupe", Groupe.class).list();
+                    for (Groupe g : groupes) {
+                        g.getJoueurs().size();
                     }
-                    break;
+
+                    request.setAttribute("evenements", evenements);
+                    request.setAttribute("groupes", groupes);
+                }
             }
-            request.getRequestDispatcher(url).forward(request, response);
+
+            request.getRequestDispatcher("/jsp/home.jsp").forward(request, response);
         } else {
             request.setAttribute("msg_connection", "Connexion échouée : identifiants invalides");
-            request.setAttribute("role_connexion", role);
             request.getRequestDispatcher("Login").forward(request, response);
         }
     }

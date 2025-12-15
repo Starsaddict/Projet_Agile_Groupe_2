@@ -1,17 +1,13 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Joueur")
+@DiscriminatorValue("Joueur")
 public class Joueur extends Utilisateur {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdUtilisateur")
-    private Long idUtilisateur;
 
     @Column(name = "NumeroJoueur")
     private String numeroJoueur;
@@ -27,40 +23,18 @@ public class Joueur extends Utilisateur {
     )
     private List<Parent> parents;
 
+    @OneToMany(mappedBy = "joueur", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<EtreAbsent> absences = new ArrayList<>();
 
-    @OneToMany(mappedBy = "joueur", cascade = CascadeType.ALL)
-    private List<EtreAbsent> absences;
+    @ManyToMany(mappedBy = "joueurs")
+    private List<Groupe> groupes = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "joueurs", cascade = CascadeType.ALL)
-    private List<Groupe> groupes;
+    @OneToMany(mappedBy = "joueur", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<EtrePresent> presences = new ArrayList<>();
 
-    
     public Joueur() {
     }
 
-    public Long getIdUtilisateur() {
-        return idUtilisateur;
-    }
-
-    public void setIdUtilisateur(Long idUtilisateur) {
-        this.idUtilisateur = idUtilisateur;
-    }
-    
-    
-    public Parent getParent1() {
-        if (parents != null && parents.size() > 0) {
-            return parents.get(0);
-        }
-        return null;
-    }
-    
-    public Parent getParent2() {
-        if (parents != null && parents.size() > 1) {
-            return parents.get(1);
-        }
-        return null;
-    }
-    
     public List<Parent> getParents() {
         return parents;
     }
@@ -96,5 +70,60 @@ public class Joueur extends Utilisateur {
     }
     public void setProfilePicRoute(String profilePicRoute) {
         this.profilePicRoute = profilePicRoute;
+    }
+}
+
+
+public List<EtrePresent> getPresences() {
+    return presences;
+}
+
+public void setPresences(List<EtrePresent> presences) {
+    this.presences = presences;
+}
+
+public void addPresence(EtrePresent p) {
+    if (p != null && !presences.contains(p)) {
+        presences.add(p);
+        p.setJoueur(this);
+    }
+}
+
+public void removePresence(EtrePresent p) {
+    if (p != null && presences.remove(p)) {
+        p.setJoueur(null);
+    }
+}
+
+    public void addAbsence(EtreAbsent a) {
+        if (a != null && !absences.contains(a)) {
+            absences.add(a);
+            a.setJoueur(this);
+        }
+    }
+
+    public void removeAbsence(EtreAbsent a) {
+        if (a != null && absences.remove(a)) {
+            a.setJoueur(null);
+        }
+    }
+
+    public void addGroupe(Groupe g) {
+        if (g == null) return;
+        if (!groupes.contains(g)) {
+            groupes.add(g);
+            if (g.getJoueurs() != null && !g.getJoueurs().contains(this)) {
+                g.getJoueurs().add(this);
+            }
+        }
+    }
+
+    public void removeGroupe(Groupe g) {
+        if (g == null) return;
+        if (groupes.remove(g)) {
+            if (g.getJoueurs() != null) {
+                g.getJoueurs().remove(this);
+            }
+        }
     }
 }

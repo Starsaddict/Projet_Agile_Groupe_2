@@ -27,6 +27,8 @@ public class parentProfilCtrl extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             Utilisateur utilisateur = (Utilisateur) session.getAttribute("user");
+            @SuppressWarnings("unchecked")
+            List<String> roles = (List<String>) session.getAttribute("roles");
 
             if (utilisateur == null) {
                 request.setAttribute("error", "Vous devez être connecté");
@@ -34,14 +36,22 @@ public class parentProfilCtrl extends HttpServlet {
                 return;
             }
 
-            if (!(utilisateur instanceof Parent)) {
+            boolean hasParentRole = roles != null && roles.contains("Parent");
+
+            if (!(utilisateur instanceof Parent) && !hasParentRole) {
                 request.setAttribute("error", "Accès réservé aux parents");
                 request.getRequestDispatcher("/jsp/parent/profil.jsp").forward(request, response);
                 return;
             }
 
             // Recharger le parent avec ses collections initialisées
-            Parent parent = utilisateurService.loadParentWithCollections(utilisateur.getIdUtilisateur());
+            Parent parent;
+            if (utilisateur instanceof Parent) {
+                parent = utilisateurService.loadParentWithCollections(utilisateur.getIdUtilisateur());
+            } else {
+                // L'utilisateur est connecté sous un autre rôle mais possède aussi le rôle Parent
+                parent = utilisateurService.loadParentByEmail(utilisateur.getEmailUtilisateur());
+            }
 
             if (parent == null) {
                 request.setAttribute("error", "Parent non trouvé");

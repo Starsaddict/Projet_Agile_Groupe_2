@@ -43,10 +43,13 @@ public class HibernateUtil
 
 			configuration.addAnnotatedClass(Utilisateur.class);
 			configuration.addAnnotatedClass(Coach.class);
+			configuration.addAnnotatedClass(Code.class);
 			configuration.addAnnotatedClass(Covoiturage.class);
+			configuration.addAnnotatedClass(EnvoyerMessage.class);
+			configuration.addAnnotatedClass(EnvoyerMessageId.class);
 			configuration.addAnnotatedClass(EtreAbsent.class);
 			configuration.addAnnotatedClass(EtrePresent.class);
-			configuration.addAnnotatedClass(EtrePresent_id.class);
+			configuration.addAnnotatedClass(EtrePresentId.class);
 			configuration.addAnnotatedClass(Evenement.class);
 			configuration.addAnnotatedClass(Groupe.class);
 			configuration.addAnnotatedClass(Joueur.class);

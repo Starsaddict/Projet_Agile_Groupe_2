@@ -1,3 +1,4 @@
+// java
 package bd;
 
 import java.time.LocalDate;
@@ -7,16 +8,18 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import model.Coach;
+import model.Code;
 import model.Covoiturage;
 import model.EtreAbsent;
 import model.EtrePresent;
-import model.EtrePresent_id;
 import model.Evenement;
 import model.Groupe;
 import model.Joueur;
 import model.Parent;
 import model.Secretaire;
 import model.Utilisateur;
+import model.EnvoyerMessage;
+import util.mdpUtil;
 
 public class BdTest {
 
@@ -24,156 +27,167 @@ public class BdTest {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
 
-            Parent parent = new Parent();
-            parent.setEmailUtilisateur("parent@example.com");
-            parent.setNomUtilisateur("Parent");
-            parent.setPrenomUtilisateur("P");
-            session.save(parent);
+            // 1) Création des utilisateurs et de leurs relations
+            Parent parent1 = (Parent) buildUtilisateur("Parent", "lucas.veslin@test.fr", "pwd1", "Veslin", "Lucas", LocalDate.of(2003, 7, 21));
+            Parent parent2 = (Parent) buildUtilisateur("Parent", "oussama.lahrach@test.fr", "pwd2", "Lahrach", "Oussama", LocalDate.of(1902, 2, 2));
+            Joueur joueur1 = (Joueur) buildUtilisateur("Joueur", "clement@test.com", "test", "Riols", "Clément", LocalDate.of(2018, 7, 15));
+            Coach coach = (Coach) buildUtilisateur("Coach", "coach@example.com", "pwd", "Berro", "Alain", LocalDate.of(1453, 5, 29));
+            Secretaire secretaire = (Secretaire) buildUtilisateur("Secretaire", "sid@example.com", "pwd", "Elandaloussi", "Sid Ahmed", LocalDate.of(1989, 11, 9));
 
-            Joueur joueur = new Joueur();
-            joueur.setEmailUtilisateur("lucas@test.com");
-            joueur.setMdpUtilisateur("test");
-            joueur.setNomUtilisateur("Joueur");
-            joueur.setPrenomUtilisateur("J");
-            session.save(joueur);
-
-            Coach coach = new Coach();
-            coach.setNomUtilisateur("Coach");
-            coach.setPrenomUtilisateur("C");
+            session.save(parent1);
+            session.save(parent2);
+            session.save(joueur1);
             session.save(coach);
-
-            Secretaire secretaire = new Secretaire();
-            secretaire.setNomUtilisateur("Secretaire");
-            secretaire.setPrenomUtilisateur("S");
             session.save(secretaire);
 
+            joueur1.setParent1(parent1);
+            joueur1.setParent2(parent2);
+
+            // 2) Création des groupes
             Groupe groupeA = new Groupe();
-            groupeA.setNomGroupe("Groupe A");
-            session.save(groupeA);
+            groupeA.setNomGroupe("U13");
             Groupe groupeB = new Groupe();
-            groupeB.setNomGroupe("Groupe B");
+            groupeB.setNomGroupe("U21");
+            session.save(groupeA);
             session.save(groupeB);
-            Groupe groupeC = new Groupe();
-            groupeC.setNomGroupe("Groupe C");
-            session.save(groupeC);
 
-            Evenement evenement = new Evenement();
-            evenement.setNomEvenement("Match");
-            evenement.setLieuEvenement("Stadium");
-            evenement.setDateEvenement(LocalDateTime.of(2024, 1, 1, 10, 0));
-            evenement.setTypeEvenement("GAME");
-            evenement.setGroupe(groupeA);
-            session.save(evenement);
-            
-         // ================= SUPPRESSION DE L'ÉVÉNEMENT MODIFIÉ =================
-           // session.delete(evenement);
-           // System.out.println("🗑 Événement modifié supprimé");
+            joueur1.addGroupe(groupeA);
 
+            // 3) Création d'événements (match, entraînement, réunion)
+            Evenement match = new Evenement("Match de coupe", "Stadium", LocalDateTime.of(2025, 3, 15, 14, 30), "MATCH", groupeA);
+            Evenement entrainement = new Evenement("Entraînement hebdo", "Stadium", LocalDateTime.of(2026, 3, 12, 18, 0), "ENTRAINEMENT", groupeA);
+            session.save(match);
+            session.save(entrainement);
 
-            // ================= AJOUT DE 3 AUTRES ÉVÉNEMENTS =================
+            // flush pour s'assurer que les ids générés sont disponibles (nécessaire pour clés composites)
+            session.flush();
 
-            Evenement e2 = new Evenement();
-            e2.setNomEvenement("Entraînement Mardi");
-            e2.setLieuEvenement("Salle A");
-            e2.setDateEvenement(LocalDateTime.of(2024, 1, 3, 18, 0));
-            e2.setTypeEvenement("ENTRAINEMENT");
-            e2.setGroupe(groupeA);
-            session.save(e2);
+            // 4) Présences : EtrePresent (clé composite joueur/groupe/evenement)
+            EtrePresent presenceMatch = new EtrePresent(joueur1, groupeA, match);
+            presenceMatch.setConfirmerPresenceJoueur("OUI");
+            presenceMatch.setConfirmerPresenceParent1("OUI");
+            presenceMatch.setConfirmerPresenceParent2("NON");
+            presenceMatch.setPresenceReelle(true);
+            session.save(presenceMatch);
 
-            Evenement e3 = new Evenement();
-            e3.setNomEvenement("Tournoi Régional");
-            e3.setLieuEvenement("Complexe Sportif");
-            e3.setDateEvenement(LocalDateTime.of(2024, 1, 10, 9, 0));
-            e3.setTypeEvenement("TOURNOI");
-            e3.setGroupe(groupeA);
-            session.save(e3);
+            EtrePresent presenceEntrainement = new EtrePresent(joueur1, groupeA, entrainement);
+            presenceEntrainement.setConfirmerPresenceJoueur("OUI");
+            session.save(presenceEntrainement);
 
-            Evenement e4 = new Evenement();
-            e4.setNomEvenement("Réunion Parents");
-            e4.setLieuEvenement("Salle de réunion");
-            e4.setDateEvenement(LocalDateTime.of(2024, 1, 5, 20, 0));
-            e4.setTypeEvenement("REUNION");
-            e4.setGroupe(groupeA);
-            session.save(e4);
-
-            System.out.println("✅ 3 événements ajoutés");
-            
-            Evenement e5 = new Evenement();
-            e5.setNomEvenement("Yajing's birthday party");
-            e5.setLieuEvenement("l'hotêl de 5 *");
-            e5.setDateEvenement(LocalDateTime.of(2026, 10, 8, 20, 0));
-            e5.setTypeEvenement("Party");
-            session.save(e5);
-            
-            Evenement e6 = new Evenement();
-            e6.setNomEvenement("Volleyball");
-            e6.setLieuEvenement("Gym");
-            e6.setDateEvenement(LocalDateTime.of(2026, 1, 5, 20, 0));
-            e6.setTypeEvenement("Volleyball game");
-            session.save(e6);
-
-
-            // ================= AFFICHAGE FINAL =================
-            System.out.println("\n📋 LISTE FINALE DES ÉVÉNEMENTS :");
-
-            for (Evenement e : session
-                    .createQuery("FROM Evenement", Evenement.class)
-                    .getResultList()) {
-
-                System.out.println("📅 " + e.getIdEvenement()
-                        + " | " + e.getNomEvenement()
-                        + " | " + e.getLieuEvenement()
-                        + " | " + e.getDateEvenement());
-            }
-         
-/*
-            Covoiturage covoiturage = new Covoiturage();
-            covoiturage.setDateCovoiturage(LocalDateTime.of(2024, 2, 1, 8, 30));
-            covoiturage.setNbPlacesMax("4");
-            covoiturage.setLieuDepart("City Center");
-            covoiturage.setEvenement(evenement);
-            covoiturage.setConducteur(conducteur);
-            covoiturage.addUtilisateur(passager);
-            session.save(covoiturage);
-*/
-            
-/*            
+            // 5) Absence : EtreAbsent
             EtreAbsent absence = new EtreAbsent();
-            absence.setCertificat("certificat.pdf");
-            absence.setAbsenceDebut("2024-01-01");
-            absence.setAbsenceTerminee(true);
-            absence.setJoueur(joueur);
+            absence.setAbsenceDebut("2025-02-01");
+            absence.setAbsenceTerminee(false);
+            absence.setJoueur(joueur1);
+            joueur1.addAbsence(absence);
             session.save(absence);
-*/
-            session.flush(); // ensure generated IDs are available for composite keys
 
-/*            
-            EtrePresent_id epId = new EtrePresent_id(joueur.getIdUtilisateur(), groupe.getIdGroupe(), evenement.getIdEvenement());
-            EtrePresent etrePresent = new EtrePresent(epId);
-            etrePresent.setJoueur(joueur);
-            etrePresent.setGroupe(groupeA);
-            etrePresent.setEvenement(evenement);
-            etrePresent.setConfirmerPresenceJoueur("YES");
-            etrePresent.setConfirmerPresenceParent1("NO");
-            etrePresent.setConfirmerPresenceParent2("MAYBE");
-            etrePresent.setPresenceReelle(true);
-            session.save(etrePresent);
-*/         
-            
+            // 6) Covoiturage et réservations
+            Covoiturage covoiturage = new Covoiturage();
+            covoiturage.setDateCovoiturage(LocalDateTime.of(2026, 3, 12, 12, 0));
+            covoiturage.setNbPlacesMaxCovoiturage("4");
+            covoiturage.setLieuDepartCovoiturage("IUT de Rodez");
+            covoiturage.setEvenement(match);
+            covoiturage.setConducteur(parent1);
+            covoiturage.addReservation(joueur1);
+            session.save(covoiturage);
+
+            // 7) Messages entre utilisateurs (EnvoyerMessage)
+            EnvoyerMessage msg1 = new EnvoyerMessage(joueur1, parent1, LocalDateTime.now().minusDays(1), "Je serai en retard pour l'entraînement");
+            EnvoyerMessage msg2 = new EnvoyerMessage(parent1, coach, LocalDateTime.now().minusHours(4), "Fait jouer mon fils !");
+            session.save(msg1);
+            session.save(msg2);
+
+            // 8) Codes (générés manuellement par service)
+            Code registerCode = new Code("ABC12345", "Inscription");
+            Code reinitializeCode = new Code("DFG54321", "Reinitialisation");
+            session.save(registerCode);
+            session.save(reinitializeCode);
+
+            // 9) Affichages récapitulatifs (pour démonstration)
+            System.out.println("\n--- Utilisateurs enregistrés ---");
+            session.createQuery("FROM Utilisateur", Utilisateur.class).getResultList().forEach(u -> System.out.println(u));
+
+            System.out.println("\n--- Événements ---");
+            session.createQuery("FROM Evenement", Evenement.class).getResultList()
+                    .forEach(e -> System.out.println(e.getIdEvenement() + " | " + e.getNomEvenement() + " | " + e.getDateEvenement()));
+
+            System.out.println("\n--- Présences (EtrePresent) ---");
+            session.createQuery("FROM EtrePresent", EtrePresent.class).getResultList()
+                    .forEach(p -> System.out.println(p));
+
+            System.out.println("\n--- Absences (EtreAbsent) ---");
+            session.createQuery("FROM EtreAbsent", EtreAbsent.class).getResultList()
+                    .forEach(a -> System.out.println("Absence id pour joueur: " + (a.getJoueur() != null ? a.getJoueur().getIdUtilisateur() : null)));
+
+            System.out.println("\n--- Covoiturages ---");
+            session.createQuery("FROM Covoiturage", Covoiturage.class).getResultList()
+                    .forEach(c -> System.out.println("Covoiturage " + c.getIdCovoiturage() + " conducteur=" + (c.getConducteur() != null ? c.getConducteur().getIdUtilisateur() : null)));
+
+            System.out.println("\n--- Messages ---");
+            session.createQuery("FROM EnvoyerMessage", EnvoyerMessage.class).getResultList()
+                    .forEach(m -> System.out.println(m));
+
+            System.out.println("\n--- Codes ---");
+            session.createQuery("FROM Code", Code.class).getResultList()
+                    .forEach(c -> System.out.println(c));
+
+            // commit final
             tx.commit();
-            System.out.println("C'est tout bon");
+            System.out.println("\n✔ Démonstration terminée avec succès.");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static Utilisateur buildUtilisateur(String email, String pwd, String nom, String prenom, LocalDate dateNaissance) {
-        Utilisateur u = new Utilisateur();
-        u.setEmailUtilisateur(email);
-        u.setMdpUtilisateur(pwd);
-        u.setNomUtilisateur(nom);
-        u.setPrenomUtilisateur(prenom);
-        u.setDateNaissanceUtilisateur(dateNaissance);
-        return u;
+    /**
+     * Fabrique simple pour créer une instance concrète de Utilisateur selon le rôle demandé.
+     * Evite d'instancier la classe abstraite Utilisateur.
+     */
+    private static Utilisateur buildUtilisateur(String role, String email, String pwd, String nom, String prenom, LocalDate dateNaissance) {
+        String hashed = mdpUtil.mdpString(pwd);
+        switch (role) {
+            case "Joueur":
+                Joueur j = new Joueur();
+                j.setEmailUtilisateur(email);
+                j.setMdpUtilisateur(hashed);
+                j.setNomUtilisateur(nom);
+                j.setPrenomUtilisateur(prenom);
+                j.setDateNaissanceUtilisateur(dateNaissance);
+                j.setNumLicenceJoueur("LIC-" + (int)(Math.random() * 10000));
+                return j;
+            case "Parent":
+                Parent p = new Parent();
+                p.setEmailUtilisateur(email);
+                p.setMdpUtilisateur(hashed);
+                p.setNomUtilisateur(nom);
+                p.setPrenomUtilisateur(prenom);
+                p.setDateNaissanceUtilisateur(dateNaissance);
+                return p;
+            case "Coach":
+                Coach c = new Coach();
+                c.setEmailUtilisateur(email);
+                c.setMdpUtilisateur(hashed);
+                c.setNomUtilisateur(nom);
+                c.setPrenomUtilisateur(prenom);
+                c.setDateNaissanceUtilisateur(dateNaissance);
+                return c;
+            case "Secretaire":
+                Secretaire s = new Secretaire();
+                s.setEmailUtilisateur(email);
+                s.setMdpUtilisateur(hashed);
+                s.setNomUtilisateur(nom);
+                s.setPrenomUtilisateur(prenom);
+                s.setDateNaissanceUtilisateur(dateNaissance);
+                return s;
+            default:
+                Parent defaultP = new Parent();
+                defaultP.setEmailUtilisateur(email);
+                defaultP.setMdpUtilisateur(hashed);
+                defaultP.setNomUtilisateur(nom);
+                defaultP.setPrenomUtilisateur(prenom);
+                defaultP.setDateNaissanceUtilisateur(dateNaissance);
+                return defaultP;
+        }
     }
 }

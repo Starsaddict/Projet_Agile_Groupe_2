@@ -16,14 +16,18 @@ public class EvenementController extends HttpServlet {
 
     private final EvenementRepo repo = new EvenementRepo();
 
+    /* ================= AFFICHAGE ================= */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Les événements sont déjà triés par date dans le Repo
         request.setAttribute("evenements", repo.findAll());
-        request.getRequestDispatcher("/jsp/evenementSecre.jsp").forward(request, response);
+        request.getRequestDispatcher("/jsp/evenementSecre.jsp")
+               .forward(request, response);
     }
 
+    /* ================= ACTIONS ================= */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
@@ -38,33 +42,46 @@ public class EvenementController extends HttpServlet {
             delete(request);
         }
 
+        // Redirection PRG (Post/Redirect/Get)
         response.sendRedirect(request.getContextPath() + "/evenementSecre");
     }
 
+    /* ================= CREATE ================= */
     private void create(HttpServletRequest r) {
         Evenement e = new Evenement();
         e.setNomEvenement(r.getParameter("nom"));
         e.setLieuEvenement(r.getParameter("lieu"));
         e.setTypeEvenement(r.getParameter("type"));
+
+        // Conversion HTML datetime-local → LocalDateTime
         e.setDateEvenement(LocalDateTime.parse(r.getParameter("date")));
-        e.setGroupe(null); // ⭐ Groupe optionnel
+
+        // Groupe optionnel (non utilisé ici)
+        e.setGroupe(null);
+
         repo.create(e);
     }
 
+    /* ================= UPDATE ================= */
     private void update(HttpServletRequest r) {
         Long id = Long.parseLong(r.getParameter("id"));
         Evenement e = repo.findById(id);
+
         e.setNomEvenement(r.getParameter("nom"));
         e.setLieuEvenement(r.getParameter("lieu"));
         e.setTypeEvenement(r.getParameter("type"));
         e.setDateEvenement(LocalDateTime.parse(r.getParameter("date")));
-        e.setGroupe(null); // ⭐ Toujours optionnel
+
+        // Groupe optionnel
+        e.setGroupe(null);
+
         repo.update(e);
     }
 
+    /* ================= DELETE ================= */
     private void delete(HttpServletRequest r) {
-    	Long id = Long.parseLong(r.getParameter("id"));
-    	Evenement e = repo.findById(id);
+        Long id = Long.parseLong(r.getParameter("id"));
+        Evenement e = repo.findById(id);
         repo.delete(e);
     }
 }

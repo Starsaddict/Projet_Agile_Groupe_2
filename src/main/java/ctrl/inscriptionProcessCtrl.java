@@ -85,6 +85,6 @@ public class inscriptionProcessCtrl extends HttpServlet {
         // consume code
         codeRepo.delete(code);
 
-        response.sendRedirect(request.getContextPath() + "/login?success=inscription");
+        response.sendRedirect(request.getContextPath() + "/Login?success=inscription");
     }
 }

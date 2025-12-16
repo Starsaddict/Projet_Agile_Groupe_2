@@ -1,27 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
 	<session-factory>
-		<property name="hibernate.dialect">org.hibernate.dialect.MySQL55Dialect</property>
+
+		<!--		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>-->
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3307/db_hwd8293a_2</property>
+		<property name="hibernate.connection.username">hwd8293a</property>
+		<property name="hibernate.connection.password">hwd8293a</property>
 		<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
 
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3307/db_drm5337a</property>
-		<property name="hibernate.connection.username">drm5337a</property>
-		<property name="hibernate.connection.password">drm5337a</property>
-
-		<!-- Parseur HQL -->
-		<property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
-		<property name="hibernate.show_sql">true</property>
-
-		<!-- Gestion des sessions par Hibernate lui-même - Pour getCurrentSession() -->
+		<!-- Sessions -->
 		<property name="hibernate.current_session_context_class">thread</property>
 
-		<!-- Mode de mise à jour de la base de données - create, validate, update, none -->
+		<!-- Mise à jour automatique -->
 		<property name="hibernate.hbm2ddl.auto">update</property>
-
-		<!-- <property name="hibernate.show_sql">true</property>
-		<property name="hibernate.format_sql">true</property> -->
-
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.dialect">
+			org.hibernate.dialect.MySQL8Dialect
+		</property>
+		<property name="hibernate.storage_engine">innodb</property>
+		<!-- PAS DE MAPPING ICI — HibernateUtil le fait déjà -->
 	</session-factory>
 </hibernate-configuration>

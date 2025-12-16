@@ -91,7 +91,7 @@ public class BdTest {
 
             // 5) Absence : EtreAbsent
             EtreAbsent absence = new EtreAbsent();
-            absence.setAbsenceDebut("2025-02-01");
+            absence.setAbsenceDebut(LocalDateTime.of(2025, 3, 12, 14, 30));
             absence.setAbsenceTerminee(false);
             absence.setJoueur(joueur1);
             joueur1.addAbsence(absence);

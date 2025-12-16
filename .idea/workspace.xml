@@ -86,38 +86,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.BdTest.executor&quot;: &quot;Run&quot;,
-    &quot;Application.SendEmailSSL.executor&quot;: &quot;Run&quot;,
-    &quot;Application.util.SendEmailSSL.executor&quot;: &quot;Run&quot;,
-    &quot;Application.utilisateurRepo.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projetAgile [clean,package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projetAgile [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projetAgile [package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projetAgile [verify].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;OpenRewrite.JavaxAuthorizationMigrationToJakartaAuthorization.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Smart Tomcat.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Smart Tomcat.projetAgile.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Kaiyang&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;应用程序.BdTest.executor&quot;: &quot;Run&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.BdTest.executor": "Run",
+    "Application.SendEmailSSL.executor": "Run",
+    "Application.util.SendEmailSSL.executor": "Run",
+    "Maven.projetAgile [clean,package].executor": "Run",
+    "Maven.projetAgile [clean].executor": "Run",
+    "Maven.projetAgile [package].executor": "Run",
+    "Maven.projetAgile [verify].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "OpenRewrite.JavaxAuthorizationMigrationToJakartaAuthorization.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Smart Tomcat.Unnamed.executor": "Run",
+    "Smart Tomcat.projetAgile.executor": "Run",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "模块",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true",
+    "应用程序.BdTest.executor": "Run"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/java" />

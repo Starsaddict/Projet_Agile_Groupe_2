@@ -53,6 +53,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>Absence</servlet-name>
+        <jsp-file>/jsp/parent/absence.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Absence</servlet-name>
+        <url-pattern>/Absence</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>Home</servlet-name>
         <jsp-file>/index.jsp</jsp-file>
     </servlet>

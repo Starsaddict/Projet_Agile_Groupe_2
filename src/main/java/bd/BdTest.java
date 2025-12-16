@@ -3,6 +3,7 @@ package bd;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -32,20 +33,28 @@ public class BdTest {
             Parent parent1 = (Parent) buildUtilisateur("Parent", "lucas.veslin@test.fr", "Veslin", "Lucas", LocalDate.of(2003, 7, 21));
             Parent parent2 = (Parent) buildUtilisateur("Parent", "oussama.lahrach@test.fr", "Lahrach", "Oussama", LocalDate.of(1902, 2, 2));
             Joueur joueur1 = (Joueur) buildUtilisateur("Joueur", "clement@test.com", "Riols", "Clément", LocalDate.of(2018, 7, 15));
-            Coach coach = (Coach) buildUtilisateur("Coach", "coach@example.com", "Berro", "Alain", LocalDate.of(1453, 5, 29));
+            Joueur joueur2 = (Joueur) buildUtilisateur("Joueur", "zhangkaiyangfr@126.com", "Zhang", "Kaiyang", LocalDate.of(2018, 7, 15));
+            Parent parent3 = (Parent) buildUtilisateur("Parent", "18201122059zky@gmail.com","ZHANG", "KAIYANG", LocalDate.of(2018, 7, 15));
+            Coach coach = (Coach) buildUtilisateur("Coach", "coach@example.com", "Berro", "Alain", LocalDate.of(1229, 5, 29));
             Secretaire secretaire = (Secretaire) buildUtilisateur("Secretaire", "sid@example.com", "Elandaloussi", "Sid Ahmed", LocalDate.of(1989, 11, 9));
 
             session.save(parent1);
             session.save(parent2);
             session.save(joueur1);
+            session.save(joueur2);
+            session.save(parent3);
             session.save(coach);
             session.save(secretaire);
 
-            List<Parent> parents = new ArrayList<>();
-            parents.add(parent1);
-            parents.add(parent2);
-            joueur1.setParents(parents);
+            List<Parent> parents1 = new ArrayList<>();
+            parents1.add(parent1);
+            parents1.add(parent2);
+            joueur1.setParents(parents1);
 
+            List<Parent> parents2 = new ArrayList<>();
+            parents2.add(parent1);
+            parents2.add(parent3);
+            joueur2.setParents(parents2);
 
             // 2) Création des groupes
             Groupe groupeA = new Groupe();
@@ -54,11 +63,13 @@ public class BdTest {
             groupeB.setNomGroupe("U21");
             session.save(groupeA);
             session.save(groupeB);
-
             joueur1.addGroupe(groupeA);
+            joueur2.addGroupe(groupeA);
+
+
 
             // 3) Création d'événements (match, entraînement, réunion)
-            Evenement match = new Evenement("Match de coupe", "Stadium", LocalDateTime.of(2025, 3, 15, 14, 30), "MATCH", groupeA);
+            Evenement match = new Evenement("Match de coupe", "Stadium", LocalDateTime.of(2026, 3, 15, 14, 30), "MATCH", groupeA);
             Evenement entrainement = new Evenement("Entraînement hebdo", "Stadium", LocalDateTime.of(2026, 3, 12, 18, 0), "ENTRAINEMENT", groupeA);
             session.save(match);
             session.save(entrainement);
@@ -80,7 +91,7 @@ public class BdTest {
 
             // 5) Absence : EtreAbsent
             EtreAbsent absence = new EtreAbsent();
-            absence.setAbsenceDebut("2025-02-01");
+            absence.setAbsenceDebut(LocalDateTime.of(2025, 3, 12, 14, 30));
             absence.setAbsenceTerminee(false);
             absence.setJoueur(joueur1);
             joueur1.addAbsence(absence);
@@ -89,7 +100,7 @@ public class BdTest {
             // 6) Covoiturage et réservations
             Covoiturage covoiturage = new Covoiturage();
             covoiturage.setDateCovoiturage(LocalDateTime.of(2026, 3, 12, 12, 0));
-            covoiturage.setNbPlacesMaxCovoiturage("4");
+            covoiturage.setNbPlacesMaxCovoiturage(4);
             covoiturage.setLieuDepartCovoiturage("IUT de Rodez");
             covoiturage.setEvenement(match);
             covoiturage.setConducteur(parent1);
@@ -158,6 +169,7 @@ public class BdTest {
             case "Joueur":
                 Joueur joueur = new Joueur();
                 joueur.setNumeroJoueur(us.generateNumeroJoueur());
+                joueur.setProfilePicRoute("/img/joueur_avatar/default.png");
                 u = joueur;
                 break;
             case "Parent":

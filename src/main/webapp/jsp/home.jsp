@@ -98,6 +98,7 @@
                 <a class="btn" href="${pageContext.request.contextPath}/jsp/covoiturage.jsp">Covoiturage</a>
                 <a class="btn" href="${pageContext.request.contextPath}/jsp/convocation.jsp">Convocations</a>
                 <a class="btn" href="${pageContext.request.contextPath}/parent/profil">Profil parent</a>
+                <a class="btn" href="CtrlFrontAbsence">Absences des enfants</a>
             </div>
         </div>
     </c:if>
@@ -108,14 +109,9 @@
             <h2>Administration</h2>
             <p>Créer/éditer des comptes et gérer les événements.</p>
             <div class="links">
-                <a class="btn" href="${pageContext.request.contextPath}/evenementSecre"> Gérer les événements</a>
+                <a class="btn" href="${pageContext.request.contextPath}/evenementSecre">Gestion des événements</a>
                 <a class="btn" href="${pageContext.request.contextPath}/secretaire/profil">Gestion des profils</a>
-            </div>
-            <div style="margin-top:8px;">
-                <form method="post" action="${pageContext.request.contextPath}/secretaire/profil/sendInvitation" style="display:flex;gap:8px;align-items:center;">
-                    <input type="email" name="email" placeholder="Envoyer code à email parent" required />
-                    <button type="submit" class="btn">Envoyer</button>
-                </form>
+                <a class="btn" href="${pageContext.request.contextPath}/secretaire/convoquer?type=match">Convoquer les Matches</a>
             </div>
         </div>
     </c:if>

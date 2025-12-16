@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.*;
 
@@ -128,4 +129,17 @@ public void removePresence(EtrePresent p) {
             }
         }
     }
+
+    public boolean hasOpenAbsence() {
+        return absences != null && absences.stream()
+                .anyMatch(a -> Boolean.FALSE.equals(a.getAbsenceTerminee()));
+    }
+
+    public Optional<EtreAbsent> getOpenAbsence() {
+        if (absences == null) return Optional.empty();
+        return absences.stream()
+                .filter(a -> Boolean.FALSE.equals(a.getAbsenceTerminee()))
+                .findFirst();
+    }
+
 }

@@ -69,6 +69,7 @@ public class ResetPasswordCtrl extends HttpServlet {
                 error = "Nouveau mot de passe requis.";
             } else {
                 Boolean updated = utilisateurService.modifierUtilisateurMdp(utilisateur, newPassword);
+                System.out.println(updated);
                 if (updated) {
                     response.sendRedirect(request.getContextPath() + "/jsp/requestPasswordSuccess.jsp");
                     return;

@@ -106,6 +106,10 @@ public class UtilisateurService {
         return Optional.empty();
     }
 
+    public void getEnfantsAndAbsencesByParentId(Parent p) {
+        repo.findEnfantsAndAbsencesByParentId(p);
+    }
+
     public static utilisateurRepo utilisateurRepo = new utilisateurRepo();
 
     public Joueur loadJoueur(Long id) {

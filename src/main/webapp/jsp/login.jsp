@@ -22,12 +22,12 @@
     <form method="post" action="${pageContext.request.contextPath}/CtrlLogin" accept-charset="UTF-8">
       <div class="field">
         <label for="email">Adresse e-mail</label>
-        <input id="email" name="email" type="email" required maxlength="254" />
+        <input id="email" name="email" type="email" required maxlength="254" placeholder="exemple@gmail.com"/>
       </div>
 
       <div class="field">
         <label for="password">Mot de passe</label>
-        <input id="password" name="password" type="password" required  />
+        <input id="password" name="password" type="password" placeholder="Votre mot de passe" required  />
       </div>
 
       <button type="submit" class="btn">Connexion</button>

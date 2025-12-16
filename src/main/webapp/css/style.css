@@ -27,12 +27,15 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   padding: 2rem 1rem;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
-/* Layout */
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .card {
@@ -43,6 +46,7 @@ body {
   border: 1px solid var(--border);
 }
 
+/* Page de connexion */
 body.page.index {
   display: flex;
   align-items: center;
@@ -56,6 +60,31 @@ body.page.index .container {
 body.page.index .card {
   text-align: center;
   padding: 3rem 2rem;
+}
+
+body.page.index h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+body.page.index input[type="email"],
+body.page.index input[type="password"] {
+  padding: 0.875rem 1rem;
+}
+
+body.page.index input[type="email"]::placeholder,
+body.page.index input[type="password"]::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+body.page.index .btn {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
 }
 
 /* Typographie */
@@ -93,6 +122,7 @@ a:hover {
   transition: all 0.2s;
   color: white;
   margin-bottom: 0.5rem;
+  text-decoration: none;
 }
 
 .btn, .btn-primary {
@@ -102,6 +132,7 @@ a:hover {
 .btn:hover, .btn-primary:hover {
   background: var(--primary-dark);
   transform: translateY(-1px);
+  color: white;
 }
 
 .btn-secondary, .btn.secondary {
@@ -110,6 +141,7 @@ a:hover {
 
 .btn-secondary:hover, .btn.secondary:hover {
   background: #475569;
+  color: white;
 }
 
 .btn.danger {
@@ -118,6 +150,7 @@ a:hover {
 
 .btn.danger:hover {
   background: #dc2626;
+  color: white;
 }
 
 .btn-icon {
@@ -142,7 +175,6 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="password"],
-input[type="file"],
 textarea,
 select {
   width: 100%;
@@ -163,15 +195,27 @@ select:focus {
 }
 
 /* Upload de fichier */
+.file-input-container {
+  position: relative;
+  max-width: 100%;
+  overflow: visible;
+  margin-bottom: 1rem;
+}
+
 .file-input {
   position: absolute;
-  width: 0.1px;
-  height: 0.1px;
+  width: 100%;
+  height: 100%;
   opacity: 0;
-  z-index: -1;
+  cursor: pointer;
+  z-index: 1;
+  left: 0;
+  top: 0;
 }
 
 .file-label {
+  position: relative;
+  z-index: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -186,7 +230,7 @@ select:focus {
   min-height: 80px;
 }
 
-.file-label:hover {
+.file-input-container:hover .file-label {
   border-color: var(--primary);
   background: var(--bg-body);
 }
@@ -336,7 +380,7 @@ select:focus {
 }
 
 /* Tableaux */
-.table {
+.table, table {
   width: 100%;
   border-collapse: collapse;
   margin: 1.5rem 0;
@@ -346,14 +390,13 @@ select:focus {
   box-shadow: var(--shadow-sm);
 }
 
-.table th,
-.table td {
+.table th, .table td, th, td {
   padding: 0.875rem 1rem;
   text-align: left;
   border-bottom: 1px solid var(--border);
 }
 
-.table th {
+.table th, th {
   background: var(--bg-body);
   font-weight: 600;
   font-size: 0.8125rem;
@@ -361,14 +404,77 @@ select:focus {
   color: var(--text-muted);
 }
 
-.table tbody tr:hover {
+.table tbody tr:hover, tbody tr:hover {
   background: var(--bg-body);
 }
 
-.table .actions .btn {
+/* Page d'accueil - Pills et sections */
+.pill {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
   font-size: 0.8125rem;
-  padding: 0.5rem 0.875rem;
-  margin-right: 0.375rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.75rem;
+}
+
+.pill.blue { background: var(--primary); }
+.pill.green { background: var(--success); }
+.pill.pink { background: #f472b6; }
+
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.section-grid .card {
+  padding: 1.5rem;
+  transition: all 0.2s;
+}
+
+.section-grid .card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.section-grid h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.section-grid p {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  margin-bottom: 1.25rem;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--bg-body);
+  flex-wrap: wrap;
+}
+
+.top-bar h1 {
+  margin-bottom: 0.25rem;
+}
+
+.top-bar p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
 }
 
 /* Responsive */
@@ -381,12 +487,23 @@ select:focus {
     padding: 1.25rem;
   }
 
-  .btn {
+  .section-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .links .btn {
     width: 100%;
   }
 
   .table th,
-  .table td {
+  .table td,
+  th,
+  td {
     padding: 0.625rem 0.75rem;
   }
 }
@@ -416,11 +533,13 @@ select:focus {
     height: 40px;
   }
 
-  .table thead {
+  .table thead,
+  table thead {
     display: none;
   }
 
-  .table tr {
+  .table tr,
+  table tr {
     display: block;
     margin-bottom: 1rem;
     border: 1px solid var(--border);
@@ -428,14 +547,16 @@ select:focus {
     padding: 1rem;
   }
 
-  .table td {
+  .table td,
+  table td {
     display: block;
     padding: 0.5rem 0;
     padding-left: 40%;
     position: relative;
   }
 
-  .table td::before {
+  .table td::before,
+  table td::before {
     content: attr(data-label);
     position: absolute;
     left: 0;
@@ -443,6 +564,4 @@ select:focus {
     color: var(--text-muted);
     font-size: 0.75rem;
   }
-
-
 }

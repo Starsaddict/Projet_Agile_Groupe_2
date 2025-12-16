@@ -73,8 +73,7 @@ body.page.index input[type="password"] {
   padding: 0.875rem 1rem;
 }
 
-body.page.index input[type="email"]::placeholder,
-body.page.index input[type="password"]::placeholder {
+body.page.index input::placeholder {
   color: var(--text-muted);
   opacity: 0.6;
 }
@@ -132,7 +131,6 @@ a:hover {
 .btn:hover, .btn-primary:hover {
   background: var(--primary-dark);
   transform: translateY(-1px);
-  color: white;
 }
 
 .btn-secondary, .btn.secondary {
@@ -141,7 +139,6 @@ a:hover {
 
 .btn-secondary:hover, .btn.secondary:hover {
   background: #475569;
-  color: white;
 }
 
 .btn.danger {
@@ -150,6 +147,9 @@ a:hover {
 
 .btn.danger:hover {
   background: #dc2626;
+}
+
+.btn:hover {
   color: white;
 }
 
@@ -197,8 +197,6 @@ select:focus {
 /* Upload de fichier */
 .file-input-container {
   position: relative;
-  max-width: 100%;
-  overflow: visible;
   margin-bottom: 1rem;
 }
 
@@ -209,8 +207,7 @@ select:focus {
   opacity: 0;
   cursor: pointer;
   z-index: 1;
-  left: 0;
-  top: 0;
+  inset: 0;
 }
 
 .file-label {
@@ -271,12 +268,12 @@ select:focus {
 /* Icônes */
 .icon, .icon-info, .icon-check, .upload-icon {
   flex-shrink: 0;
+  color: var(--primary);
 }
 
 .icon {
   width: 20px;
   height: 20px;
-  color: var(--primary);
 }
 
 .icon-info {
@@ -294,20 +291,22 @@ select:focus {
 .upload-icon {
   width: 32px;
   height: 32px;
-  color: var(--primary);
 }
 
-/* Absences */
+/* Absences et cartes */
+.absence-card, .section-grid .card {
+  transition: all 0.2s;
+}
+
 .absence-card {
   background: white;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  transition: all 0.2s;
 }
 
-.absence-card:hover {
+.absence-card:hover, .section-grid .card:hover {
   box-shadow: var(--shadow-md);
 }
 
@@ -408,7 +407,7 @@ select:focus {
   background: var(--bg-body);
 }
 
-/* Page d'accueil - Pills et sections */
+/* Page d'accueil */
 .pill {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -431,11 +430,6 @@ select:focus {
 
 .section-grid .card {
   padding: 1.5rem;
-  transition: all 0.2s;
-}
-
-.section-grid .card:hover {
-  box-shadow: var(--shadow-md);
 }
 
 .section-grid h2 {
@@ -500,10 +494,7 @@ select:focus {
     width: 100%;
   }
 
-  .table th,
-  .table td,
-  th,
-  td {
+  .table th, .table td, th, td {
     padding: 0.625rem 0.75rem;
   }
 }
@@ -513,15 +504,12 @@ select:focus {
     padding: 1.25rem;
   }
 
-  .absence-header {
+  .absence-header, .help-box, .file-label, .absence-info.no-absence {
     flex-direction: column;
-    align-items: flex-start;
   }
 
-  .help-box,
-  .file-label,
-  .absence-info.no-absence {
-    flex-direction: column;
+  .absence-header {
+    align-items: flex-start;
   }
 
   .file-label {
@@ -533,13 +521,11 @@ select:focus {
     height: 40px;
   }
 
-  .table thead,
-  table thead {
+  .table thead, table thead {
     display: none;
   }
 
-  .table tr,
-  table tr {
+  .table tr, table tr {
     display: block;
     margin-bottom: 1rem;
     border: 1px solid var(--border);
@@ -547,16 +533,13 @@ select:focus {
     padding: 1rem;
   }
 
-  .table td,
-  table td {
+  .table td, table td {
     display: block;
-    padding: 0.5rem 0;
-    padding-left: 40%;
+    padding: 0.5rem 0 0.5rem 40%;
     position: relative;
   }
 
-  .table td::before,
-  table td::before {
+  .table td::before, table td::before {
     content: attr(data-label);
     position: absolute;
     left: 0;

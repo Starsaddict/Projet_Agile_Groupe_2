@@ -109,8 +109,10 @@
             <h2>Administration</h2>
             <p>Créer/éditer des comptes et gérer les événements.</p>
             <div class="links">
-                <a class="btn" href="${pageContext.request.contextPath}/jsp/secretaire.jsp">Espace secrétaire</a>
+                <a class="btn" href="${pageContext.request.contextPath}/evenementSecre">Gestion des événements</a>
                 <a class="btn" href="${pageContext.request.contextPath}/jsp/secretaire/profil.jsp">Gestion des profils</a>
+                <a class="btn" href="${pageContext.request.contextPath}/secretaire/convoquer?type=match">Convoquer les Matches</a>
+                <a class="btn" href="${pageContext.request.contextPath}/secretaire/convoquer?type=event">Convoquer les Matches</a>
             </div>
         </div>
     </c:if>

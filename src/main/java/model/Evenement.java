@@ -2,6 +2,7 @@ package model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,5 +102,12 @@ public class Evenement {
         if (p != null && etresPresents.remove(p)) {
             p.setEvenement(null);
         }
+    }
+    
+ // Méthode utile pour formatter la date dans le format attendu pour <input type="datetime-local">
+    public String getDateForInput() {
+        return dateEvenement.format(
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")
+        );
     }
 }

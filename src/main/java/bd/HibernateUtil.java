@@ -55,6 +55,7 @@ public class HibernateUtil
 			configuration.addAnnotatedClass(Joueur.class);
 			configuration.addAnnotatedClass(Parent.class);
 			configuration.addAnnotatedClass(Secretaire.class);
+			configuration.addAnnotatedClass(Code.class);
 
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();

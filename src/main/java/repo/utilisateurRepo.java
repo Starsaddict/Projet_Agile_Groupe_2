@@ -177,4 +177,9 @@ public class utilisateurRepo {
         return count != null && count > 0;
     }
 
+    public static void main(String[] args) {
+        utilisateurRepo utilisateurRepo = new utilisateurRepo();
+        List<Utilisateur> utilisateurs = utilisateurRepo.findByEmail("zhangkaiyangfr@126.com");
+        System.out.println(utilisateurs);
+    }
 }

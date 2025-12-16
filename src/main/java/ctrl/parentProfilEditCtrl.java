@@ -103,6 +103,8 @@ public class parentProfilEditCtrl extends HttpServlet {
 
             Long id = Long.parseLong(request.getParameter("id"));
             String description = request.getParameter("description");
+            String adresse = request.getParameter("adresse");
+            String telephone = request.getParameter("telephone");
 
             Utilisateur utilisateur = utilisateurRepo.loadUtilisateur(id);
 
@@ -132,6 +134,8 @@ public class parentProfilEditCtrl extends HttpServlet {
 
             // Mettre à jour la description
             utilisateur.setDescription(description);
+            utilisateur.setAdresseUtilisateur(adresse);
+            utilisateur.setTelephoneUtilisateur(telephone);
             Boolean updateSuccess = utilisateurRepo.updateUtilisateur(utilisateur);
 
             if (!updateSuccess) {

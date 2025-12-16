@@ -36,6 +36,12 @@ public abstract class Utilisateur {
     @Column(name = "Description", length = 1000)
     private String description;
 
+    @Column(name = "AdresseUtilisateur")
+    private String adresseUtilisateur;
+
+    @Column(name = "TelephoneUtilisateur")
+    private String telephoneUtilisateur;
+
     @Column(name = "TypeU", insertable = false, updatable = false)
     private String typeU;
 
@@ -123,6 +129,22 @@ public abstract class Utilisateur {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getAdresseUtilisateur() {
+        return adresseUtilisateur;
+    }
+
+    public void setAdresseUtilisateur(String adresseUtilisateur) {
+        this.adresseUtilisateur = adresseUtilisateur;
+    }
+
+    public String getTelephoneUtilisateur() {
+        return telephoneUtilisateur;
+    }
+
+    public void setTelephoneUtilisateur(String telephoneUtilisateur) {
+        this.telephoneUtilisateur = telephoneUtilisateur;
     }
 
     public String getRoleLabel() {

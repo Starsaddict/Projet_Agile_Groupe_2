@@ -33,9 +33,6 @@ public abstract class Utilisateur {
     @Column(name = "DateNaissanceUtilisateur")
     private LocalDate dateNaissanceUtilisateur;
 
-    @Column(name = "Description", length = 1000)
-    private String description;
-
     @Column(name = "AdresseUtilisateur")
     private String adresseUtilisateur;
 
@@ -45,9 +42,11 @@ public abstract class Utilisateur {
     @Column(name = "TypeU", insertable = false, updatable = false)
     private String typeU;
 
+    @Column(name = "profil")
+    private boolean profil;
+
     @ManyToMany(mappedBy = "reservations", fetch = FetchType.LAZY)
     private List<Covoiturage> covoiturages = new ArrayList<>();
-
 
     @OneToMany(mappedBy = "conducteur", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Covoiturage> conduits;
@@ -123,12 +122,12 @@ public abstract class Utilisateur {
         this.conduits = conduits;
     }
 
-    public String getDescription() {
-        return description;
+    public boolean getProfil() {
+        return profil;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setProfil(boolean profil) {
+        this.profil = profil;
     }
 
     public String getAdresseUtilisateur() {
@@ -162,8 +161,10 @@ public abstract class Utilisateur {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Utilisateur)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof Utilisateur))
+            return false;
         Utilisateur that = (Utilisateur) o;
         return idUtilisateur != null && idUtilisateur.equals(that.idUtilisateur);
     }

@@ -11,6 +11,23 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/secretaire-profil.css">
 </head>
 <body>
+
+<div >
+    <a href="${pageContext.request.contextPath}/jsp/home.jsp"
+       >
+        ⬅ Retour à l’accueil
+    </a>
+
+    <form 
+          action="${pageContext.request.contextPath}/CtrlLogout"
+            >
+        <button type="submit" class="btn btn-logout">
+            🚪 Déconnexion
+        </button>
+    </form>
+</div>
+
+
 <div class="container">
     <h1>Secrétariat - Gestion des Comptes</h1>
     

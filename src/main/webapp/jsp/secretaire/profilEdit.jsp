@@ -117,15 +117,6 @@
                     </div>
                 </div>
                 
-                <div class="form-section" style="background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:20px;">
-                    <h2 style="margin-top:0;">Profil / Description</h2>
-                    
-                    <div class="field">
-                        <label for="description">Profil</label>
-                        <textarea id="description" name="description" placeholder="Description ou notes..."><%= utilisateur.getDescription() != null ? utilisateur.getDescription() : "" %></textarea>
-                    </div>
-                </div>
-                
                 <div class="action-buttons">
                     <button type="submit" class="btn">Enregistrer les modifications</button>
                     <a href="<%= contextPath %>/secretaire/profil" class="btn secondary">Annuler</a>

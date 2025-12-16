@@ -43,12 +43,6 @@
                     <input type="text" id="telephone" name="telephone" value="<%= utilisateur.getTelephoneUtilisateur() != null ? utilisateur.getTelephoneUtilisateur() : "" %>">
                 </div>
                 
-                <div class="field">
-                    <label for="description">Mon profil</label>
-                    <textarea id="description" name="description" required placeholder="Décrivez-vous, votre expérience, vos attentes..."><%= utilisateur.getDescription() != null ? utilisateur.getDescription() : "" %></textarea>
-                    <small style="color: var(--text-muted);">Cet espace est pour créer votre profil en tant que parent. Décrivez votre situation, vos attentes et toute information pertinente.</small>
-                </div>
-                
                 <div class="action-buttons">
                     <button type="submit" class="btn">Enregistrer mon profil</button>
                     <a href="<%= contextPath %>/parent/profil" class="btn secondary">Annuler</a>

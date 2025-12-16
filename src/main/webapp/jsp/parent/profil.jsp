@@ -66,6 +66,22 @@
     </style>
 </head>
 <body>
+
+<div >
+    <a href="${pageContext.request.contextPath}/jsp/home.jsp"
+       >
+        ⬅ Retour à l’accueil
+    </a>
+
+    <form 
+          action="${pageContext.request.contextPath}/CtrlLogout"
+            >
+        <button type="submit" class="btn btn-logout">
+            🚪 Déconnexion
+        </button>
+    </form>
+</div>
+
 <div class="container">
     <h1>Mes Profils - <%= parent != null ? parent.getPrenomUtilisateur() + " " + parent.getNomUtilisateur() : "Parent" %></h1>
     
@@ -82,10 +98,12 @@
             String nom = user.getNomUtilisateur() != null ? user.getNomUtilisateur() : "";
             String prenom = user.getPrenomUtilisateur() != null ? user.getPrenomUtilisateur() : "";
             String email = user.getEmailUtilisateur() != null ? user.getEmailUtilisateur() : "";
-            String description = user.getDescription();
-            boolean hasProfile = description != null && !description.trim().isEmpty();
-            
+            boolean hasProfile = user.getProfil();
+            String adresse = user.getAdresseUtilisateur() != null ? user.getAdresseUtilisateur() : "-";
+            String telephone = user.getTelephoneUtilisateur() != null ? user.getTelephoneUtilisateur() : "-";
+            String numeroLicence = (user instanceof Joueur) ? ((Joueur) user).getNumeroJoueur() : null;
             String userType = (user instanceof Parent) ? "(Parent)" : "(Enfant)";
+            String actionLabel = hasProfile ? "Modifier le profil" : "Créer le profil";
     %>
         <div class="profile-card">
             <h2><%= prenom %> <%= nom %> <span style="font-size: 0.7em; color: #999;"><%= userType %></span></h2>
@@ -93,18 +111,19 @@
             
             <% if (hasProfile) { %>
                 <div class="profile-status status-complete">✓ Profil complété</div>
-                <p><strong>Profil:</strong></p>
-                <p style="background: #f0f0f0; padding: 10px; border-radius: 4px; white-space: pre-wrap;">
-                    <%= description %>
-                </p>
+                <p><strong>Adresse:</strong> <%= adresse %></p>
+                <p><strong>Téléphone:</strong> <%= telephone %></p>
+                <% if (numeroLicence != null && !numeroLicence.isEmpty()) { %>
+                    <p><strong>Numéro licence:</strong> <%= numeroLicence %></p>
+                <% } %>
             <% } else { %>
                 <div class="profile-status status-incomplete">⚠ Profil non complété</div>
-                <p style="color: #666;"><em>Aucun profil créé. Cliquez sur "Créer/Modifier" pour créer le profil.</em></p>
+                <p style="color: #666;"><em>Aucun profil créé. Cliquez sur "Créer le profil" pour compléter.</em></p>
             <% } %>
             
             <div style="margin-top: 10px;">
                 <a href="<%= contextPath %>/parent/profil/edit?id=<%= user.getIdUtilisateur() %>" class="btn btn-primary">
-                    Créer/Modifier le profil
+                    <%= actionLabel %>
                 </a>
             </div>
         </div>

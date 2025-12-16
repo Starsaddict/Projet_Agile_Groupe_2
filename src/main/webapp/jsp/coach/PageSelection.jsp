@@ -3,6 +3,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="model.Evenement"%>
 <%@ page import="model.Groupe"%>
+<%@ page import="model.Joueur"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -241,6 +242,7 @@ hr {
 						<th>Sélection</th>
 						<th>ID Groupe</th>
 						<th>Nom du groupe</th>
+						<th>Membres</th>
 					</tr>
 				</thead>
 
@@ -260,6 +262,15 @@ hr {
 						</td>
 						<td><%=g.getIdGroupe()%></td>
 						<td><%=g.getNomGroupe()%></td>
+						<td>
+							<%
+							// 方案1：直接遍历 g.getJoueurs()
+							for (Joueur j : g.getJoueurs()) {
+							%> <%=j.getNomUtilisateur()%><br /> <%
+ }
+ %>
+						</td>
+
 					</tr>
 					<%
 					}

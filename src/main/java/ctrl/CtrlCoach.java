@@ -20,169 +20,229 @@ import java.util.List;
 @WebServlet("/CtrlCoach")
 public class CtrlCoach extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        String action = request.getParameter("action");
+		String action = request.getParameter("action");
 
-        if (action == null) action = "";
+		if (action == null)
+			action = "";
 
-        switch (action) {
-        	case"Home":
-        		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-                    LocalDateTime now = LocalDateTime.now();
-                    List<Evenement> evenements = session
-                            .createQuery(
-                                    "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
-                                    Evenement.class)
-                            .setParameter("now", now)
-                            .setParameter("typeEvt", "MATCH_OFFICIEL")
-                            .list();
+		switch (action) {
+		case "EditerGroupe":
+			editerGroupe(request, response);
+			break;
+		case "Home":
+			try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+				LocalDateTime now = LocalDateTime.now();
+				List<Evenement> evenements = session.createQuery(
+						"from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
+						Evenement.class).setParameter("now", now).setParameter("typeEvt", "MATCH_OFFICIEL").list();
 
-                    List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
-                    for (Groupe g : groupes) {
-                        g.getJoueurs().size();
-                    }
+				List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
+				for (Groupe g : groupes) {
+					g.getJoueurs().size();
+				}
 
-                    request.setAttribute("evenements", evenements);
-                    request.setAttribute("groupes", groupes);
-                }
-        		 request.getRequestDispatcher("/jsp/home.jsp").forward(request, response);
-        		 break;
-            case "PageCoach":
-            	try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            		LocalDateTime now = LocalDateTime.now();
+				request.setAttribute("evenements", evenements);
+				request.setAttribute("groupes", groupes);
+			}
+			request.getRequestDispatcher("/jsp/home.jsp").forward(request, response);
+			break;
+		case "PageCoach":
+			try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+				LocalDateTime now = LocalDateTime.now();
 
-            		List<Evenement> evenements = session
-            		        .createQuery(
-            		                "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
-            		                Evenement.class)
-            		        .setParameter("now", now)
-            		        .setParameter("typeEvt", "MATCH_OFFICIEL")
-            		        .list();
+				List<Evenement> evenements = session.createQuery(
+						"from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
+						Evenement.class).setParameter("now", now).setParameter("typeEvt", "MATCH_OFFICIEL").list();
 
-			        List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
-			        for (Groupe g : groupes) {
-			            g.getJoueurs().size();
-			        }
-			        
-			        request.setAttribute("evenements", evenements);
-			        request.setAttribute("groupes", groupes);
-			    }
-                request.getRequestDispatcher("/jsp/coach/PageCoach.jsp").forward(request, response);
-                break;
+				List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
+				for (Groupe g : groupes) {
+					g.getJoueurs().size();
+				}
 
-            case "ConvocationGroupe":
-                try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-                	LocalDateTime now = LocalDateTime.now();
+				request.setAttribute("evenements", evenements);
+				request.setAttribute("groupes", groupes);
+			}
+			request.getRequestDispatcher("/jsp/coach/PageCoach.jsp").forward(request, response);
+			break;
 
-                	List<Evenement> evenements = session
-                	        .createQuery(
-                	                "from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
-                	                Evenement.class)
-                	        .setParameter("now", now)
-                	        .setParameter("typeEvt", "MATCH_OFFICIEL")
-                	        .list();
-                    
-			        request.setAttribute("evenements", evenements);
-                }
-                request.getRequestDispatcher("/jsp/coach/PageConvoquer.jsp").forward(request, response);
-                break;
+		case "ConvocationGroupe":
+			try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+				LocalDateTime now = LocalDateTime.now();
 
-            case "GestionGroupe":
-                try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+				List<Evenement> evenements = session.createQuery(
+						"from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
+						Evenement.class).setParameter("now", now).setParameter("typeEvt", "MATCH_OFFICIEL").list();
 
-                    // Charger tous les joueurs pour le formulaire
-                    List<Joueur> joueurs = session.createQuery("from Joueur", Joueur.class).list();
+				request.setAttribute("evenements", evenements);
+			}
+			request.getRequestDispatcher("/jsp/coach/PageConvoquer.jsp").forward(request, response);
+			break;
 
-                    // Charger les groupes avec leurs joueurs
-                    List<Groupe> groupes = session.createQuery(
-                        "SELECT DISTINCT g FROM Groupe g LEFT JOIN FETCH g.joueurs", Groupe.class
-                    ).list();
+		case "GestionGroupe":
+			try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-                    // Supprimer les doublons éventuels causés par le fetch join
-                    List<Groupe> groupesSansDoublons = new ArrayList<>(new LinkedHashSet<>(groupes));
+				// Charger tous les joueurs pour le formulaire
+				List<Joueur> joueurs = session.createQuery("from Joueur", Joueur.class).list();
 
-                    request.setAttribute("joueurs", joueurs);
-                    request.setAttribute("groupes", groupesSansDoublons);
-                }
-                request.getRequestDispatcher("/jsp/coach/PageGestionGroupe.jsp").forward(request, response);
-                break;
+				// Charger les groupes avec leurs joueurs
+				List<Groupe> groupes = session
+						.createQuery("SELECT DISTINCT g FROM Groupe g LEFT JOIN FETCH g.joueurs", Groupe.class).list();
 
-            default:
-                response.sendRedirect("CtrlCoach?action=Home");
-        }
-    }
+				// Supprimer les doublons éventuels causés par le fetch join
+				List<Groupe> groupesSansDoublons = new ArrayList<>(new LinkedHashSet<>(groupes));
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+				request.setAttribute("joueurs", joueurs);
+				request.setAttribute("groupes", groupesSansDoublons);
+			}
+			request.getRequestDispatcher("/jsp/coach/PageGestionGroupe.jsp").forward(request, response);
+			break;
 
-        String action = request.getParameter("action");
-        if (action == null) action = "";
+		default:
+			response.sendRedirect("CtrlCoach?action=Home");
+		}
+	}
 
-        switch (action) {
-            case "EnregistrerGroupe":
-                creerGroupe(request, response);
-                break;
-            case "SupprimerGroupe":
-                supprimerGroupe(request, response);
-                break;
-            default:
-                response.sendRedirect("CtrlCoach?action=GestionGroupe");
-        }
-    }
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-    private void creerGroupe(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+		String action = request.getParameter("action");
+		if (action == null)
+			action = "";
 
-        String nom = request.getParameter("nomGroupe");
-        String[] joueursIds = request.getParameterValues("joueursIds");
+		switch (action) {
+		case "EnregistrerGroupe":
+			creerGroupe(request, response);
+			break;
+		case "SupprimerGroupe":
+			supprimerGroupe(request, response);
+			break;
+		case "ModifierGroupe":
+			modifierGroupe(request, response);
+			break;
+		default:
+			response.sendRedirect("CtrlCoach?action=GestionGroupe");
+		}
+	}
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
+	private void creerGroupe(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-            Groupe groupe = new Groupe();
-            groupe.setNomGroupe(nom);
+		String nom = request.getParameter("nomGroupe");
+		String[] joueursIds = request.getParameterValues("joueursIds");
 
-            if (joueursIds != null) {
-                for (String idStr : joueursIds) {
-                    Joueur j = session.get(Joueur.class, Long.parseLong(idStr));
-                    groupe.getJoueurs().add(j);
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			Transaction tx = session.beginTransaction();
 
-                    if (j.getGroupes() == null) {
-                        j.setGroupes(new ArrayList<>());
-                    }
-                    j.getGroupes().add(groupe);
-                }
-            }
+			Groupe groupe = new Groupe();
+			groupe.setNomGroupe(nom);
 
-            session.save(groupe);
-            tx.commit();
-        }
+			if (joueursIds != null) {
+				for (String idStr : joueursIds) {
+					Joueur j = session.get(Joueur.class, Long.parseLong(idStr));
+					groupe.getJoueurs().add(j);
 
-        response.sendRedirect("CtrlCoach?action=GestionGroupe");
-    }
+					if (j.getGroupes() == null) {
+						j.setGroupes(new ArrayList<>());
+					}
+					j.getGroupes().add(groupe);
+				}
+			}
 
-    private void supprimerGroupe(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+			session.save(groupe);
+			tx.commit();
+		}
 
-        Long idGroupe = Long.parseLong(request.getParameter("idGroupe"));
+		response.sendRedirect("CtrlCoach?action=GestionGroupe");
+	}
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
+	private void supprimerGroupe(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-            Groupe groupe = session.get(Groupe.class, idGroupe);
-            if (groupe != null) {
-                session.delete(groupe);
-            }
+		Long idGroupe = Long.parseLong(request.getParameter("idGroupe"));
 
-            tx.commit();
-        }
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			Transaction tx = session.beginTransaction();
 
-        response.sendRedirect("CtrlCoach?action=GestionGroupe");
-    }
+			session.createQuery("update Evenement e set e.groupe = null where e.groupe.idGroupe = :gid")
+					.setParameter("gid", idGroupe).executeUpdate();
 
-    
+			session.createNativeQuery("delete from Groupe_Joueur where IdGroupe = :gid").setParameter("gid", idGroupe)
+					.executeUpdate();
+
+			Groupe groupe = session.get(Groupe.class, idGroupe);
+			if (groupe != null) {
+				session.delete(groupe);
+			}
+
+			tx.commit();
+		}
+
+		response.sendRedirect("CtrlCoach?action=GestionGroupe");
+	}
+
+	private void editerGroupe(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		Long idGroupe = Long.parseLong(request.getParameter("idGroupe"));
+
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+			// joueurs 列表（用于左侧勾选）
+			List<Joueur> joueurs = session.createQuery("from Joueur", Joueur.class).list();
+
+			// groupes 列表（用于下方 table，且要 fetch joueurs 防 lazy）
+			List<Groupe> groupes = session
+					.createQuery("select distinct g from Groupe g left join fetch g.joueurs", Groupe.class).list();
+
+			// 要编辑的 groupe（也要 fetch joueurs，否则 JSP 勾选会 lazy 失败）
+			Groupe groupeAEditer = session
+					.createQuery("select g from Groupe g left join fetch g.joueurs where g.idGroupe = :id",
+							Groupe.class)
+					.setParameter("id", idGroupe).uniqueResult();
+
+			request.setAttribute("joueurs", joueurs);
+			request.setAttribute("groupes", groupes);
+			request.setAttribute("groupeAEditer", groupeAEditer);
+		}
+
+		request.getRequestDispatcher("/jsp/coach/PageGestionGroupe.jsp").forward(request, response);
+	}
+
+	private void modifierGroupe(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		Long idGroupe = Long.parseLong(request.getParameter("idGroupe"));
+		String nomGroupe = request.getParameter("nomGroupe");
+		String[] joueursIds = request.getParameterValues("joueursIds");
+
+		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+			Transaction tx = session.beginTransaction();
+
+			Groupe g = session.get(Groupe.class, idGroupe);
+			if (g != null) {
+				g.setNomGroupe(nomGroupe);
+
+				// 关键：重建 joueurs 集合（先清空，再按新的勾选加回去）
+				g.getJoueurs().clear();
+
+				if (joueursIds != null) {
+					for (String idStr : joueursIds) {
+						Long idJ = Long.parseLong(idStr);
+						Joueur j = session.get(Joueur.class, idJ);
+						if (j != null)
+							g.getJoueurs().add(j);
+					}
+				}
+
+				session.update(g);
+			}
+
+			tx.commit();
+		}
+
+		response.sendRedirect("CtrlCoach?action=GestionGroupe");
+	}
+
 }

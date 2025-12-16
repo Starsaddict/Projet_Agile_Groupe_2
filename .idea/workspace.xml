@@ -5,15 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="bd test">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ctrl/convoquerCtrl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/service/eventService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/jsp/convocation/convoquerEvent.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bd/BdTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bd/BdTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/convoquerCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/convoquerCtrl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/repo/EvenementRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repo/EvenementRepo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/util/SendEmailSSL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/SendEmailSSL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/css/evenements.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/css/evenements.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/evenementSecre.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/evenementSecre.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/home.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/home.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -33,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="modification--joueur-attributs" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -91,6 +86,7 @@
     "Application.BdTest.executor": "Run",
     "Application.SendEmailSSL.executor": "Run",
     "Application.util.SendEmailSSL.executor": "Run",
+    "Application.utilisateurRepo.executor": "Run",
     "Maven.projetAgile [clean,package].executor": "Run",
     "Maven.projetAgile [clean].executor": "Run",
     "Maven.projetAgile [package].executor": "Run",
@@ -102,7 +98,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Smart Tomcat.Unnamed.executor": "Run",
     "Smart Tomcat.projetAgile.executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "convocation-event",
     "last_opened_file_path": "/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",

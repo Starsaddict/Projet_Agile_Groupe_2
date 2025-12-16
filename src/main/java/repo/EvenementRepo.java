@@ -13,7 +13,7 @@ import java.util.List;
 
 public class EvenementRepo {
 
-    private static final List<String> MATCH_TYPES = Arrays.asList("MATCH_AMICAL", "MATCH_OFFICIEL");
+    private static final List<String> MATCH_TYPES = Arrays.asList("MATCH_OFFICIEL");
 
     /* ================= CREATE ================= */
     public void create(Evenement e) {

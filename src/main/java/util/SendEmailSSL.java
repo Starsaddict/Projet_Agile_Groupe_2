@@ -5,8 +5,12 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import model.Parent;
 import model.Utilisateur;
+import model.Joueur;
 
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashSet;
 import java.util.Properties;
+import java.util.Set;
 
 public class SendEmailSSL {
 
@@ -144,6 +148,84 @@ public class SendEmailSSL {
         sendEmail(email, subject, body);
     }
 
+    public static void sendFamilyInvitation(Set<Parent> parents, Set<Joueur> joueurs, model.Evenement e) throws MessagingException {
+        boolean hasParents = parents != null && !parents.isEmpty();
+        boolean hasJoueurs = joueurs != null && !joueurs.isEmpty();
+        if (!hasParents && !hasJoueurs) {
+            return;
+        }
+
+        Set<String> recipients = new LinkedHashSet<>();
+        if (hasParents) {
+            for (Parent parent : parents) {
+                if (parent != null && parent.getEmailUtilisateur() != null && !parent.getEmailUtilisateur().isBlank()) {
+                    recipients.add(parent.getEmailUtilisateur());
+                }
+            }
+        }
+        if (hasJoueurs) {
+            for (Joueur joueur : joueurs) {
+                if (joueur != null && joueur.getEmailUtilisateur() != null && !joueur.getEmailUtilisateur().isBlank()) {
+                    recipients.add(joueur.getEmailUtilisateur());
+                }
+            }
+        }
+        if (recipients.isEmpty()) {
+            return;
+        }
+
+        String subject = "Invitation familiale : " + e.getNomEvenement();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        StringBuilder bodyBuilder = new StringBuilder();
+        bodyBuilder.append("<html>")
+                .append("<body>")
+                .append("<h2>Invitation familiale pour l'évènement suivant :</h2>")
+                .append("<ul>")
+                .append("<li><strong>Nom :</strong> ")
+                .append(e.getNomEvenement())
+                .append("</li>")
+                .append("<li><strong>Date :</strong> ")
+                .append(e.getDateEvenement().format(formatter))
+                .append("</li>")
+                .append("<li><strong>Lieu :</strong> ")
+                .append(e.getLieuEvenement())
+                .append("</li>")
+                .append("</ul>")
+                .append("<p>Merci d'indiquer qui sera présent ou absent parmi les membres de la famille listés ci-dessous :</p>")
+                .append("<ul>");
+
+        if (hasParents) {
+            for (Parent parent : parents) {
+                bodyBuilder.append("<li>Parent : ")
+                        .append(parent.getPrenomUtilisateur())
+                        .append(" ")
+                        .append(parent.getNomUtilisateur())
+                        .append("</li>");
+            }
+        }
+        if (hasJoueurs) {
+            for (Joueur joueur : joueurs) {
+                bodyBuilder.append("<li>Joueur : ")
+                        .append(joueur.getPrenomUtilisateur())
+                        .append(" ")
+                        .append(joueur.getNomUtilisateur())
+                        .append("</li>");
+            }
+        }
+
+        bodyBuilder.append("</ul>")
+                .append("<p>Merci de remplir la disponibilité de chacun depuis l'application ou en répondant à ce mail.</p>")
+                .append("<p>Cordialement,<br/>Le secrétariat</p>")
+                .append("</body>")
+                .append("</html>");
+
+        String body = bodyBuilder.toString();
+        for (String recipient : recipients) {
+            sendEmail(recipient, subject, body);
+        }
+    }
+
     public static void sendParentInvitation(Parent p, Utilisateur u, model.Evenement e) throws MessagingException {
         String subject = "Invitation – Participation de votre enfant à un MATCH suivant :</p>";
 
@@ -156,7 +238,7 @@ public class SendEmailSSL {
                 .append(" ")
                 .append(p.getNomUtilisateur())
                 .append(",</h2>")
-                .append("<p>Nous souhaitons vous informer que votre enfant")
+                .append("<p>Nous souhaitons vous informer que votre enfant ")
                 .append(u.getNomUtilisateur())
                 .append(" ")
                 .append(u.getPrenomUtilisateur())

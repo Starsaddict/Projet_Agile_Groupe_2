@@ -109,7 +109,7 @@
             <p>Créer/éditer des comptes et gérer les événements.</p>
             <div class="links">
                 <a class="btn" href="${pageContext.request.contextPath}/evenementSecre">Gestion des événements</a>
-                <a class="btn" href="${pageContext.request.contextPath}/jsp/secretaire/profil.jsp">Gestion des profils</a>
+                <a class="btn" href="${pageContext.request.contextPath}/secretaire/profil">Gestion des profils</a>
                 <a class="btn" href="${pageContext.request.contextPath}/secretaire/convoquer?type=match">Convoquer les Matches</a>
             </div>
             <div style="margin-top:8px;">

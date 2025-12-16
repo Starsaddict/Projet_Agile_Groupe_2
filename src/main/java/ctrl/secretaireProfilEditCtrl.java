@@ -109,7 +109,6 @@ public class secretaireProfilEditCtrl extends HttpServlet {
                 utilisateur.setAdresseUtilisateur(adresse);
             if (telephone != null)
                 utilisateur.setTelephoneUtilisateur(telephone);
-            utilisateur.setProfil(true);
 
             // Secretaire 可以修改出生日期
             if (dateNaissance != null && !dateNaissance.isEmpty()) {
@@ -141,7 +140,8 @@ public class secretaireProfilEditCtrl extends HttpServlet {
                     }
 
                     String numero = joueur.getNumeroJoueur();
-                    String baseName = (numero != null && !numero.isEmpty()) ? numero : "joueur-" + joueur.getIdUtilisateur();
+                    String baseName = (numero != null && !numero.isEmpty()) ? numero
+                            : "joueur-" + joueur.getIdUtilisateur();
                     String fileName = baseName + "-" + System.currentTimeMillis() + extension;
 
                     String realDir = getServletContext().getRealPath("/img/joueur_avatar");

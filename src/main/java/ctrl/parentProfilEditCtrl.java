@@ -134,7 +134,6 @@ public class parentProfilEditCtrl extends HttpServlet {
             // Mettre à jour le profil de base
             utilisateur.setAdresseUtilisateur(adresse);
             utilisateur.setTelephoneUtilisateur(telephone);
-            utilisateur.setProfil(true);
             Boolean updateSuccess = utilisateurRepo.updateUtilisateur(utilisateur);
 
             if (!updateSuccess) {

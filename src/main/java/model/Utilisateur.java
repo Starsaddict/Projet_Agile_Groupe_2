@@ -42,9 +42,6 @@ public abstract class Utilisateur {
     @Column(name = "TypeU", insertable = false, updatable = false)
     private String typeU;
 
-    @Column(name = "profil")
-    private boolean profil;
-
     @ManyToMany(mappedBy = "reservations", fetch = FetchType.LAZY)
     private List<Covoiturage> covoiturages = new ArrayList<>();
 
@@ -120,14 +117,6 @@ public abstract class Utilisateur {
 
     public void setConduits(List<Covoiturage> conduits) {
         this.conduits = conduits;
-    }
-
-    public boolean getProfil() {
-        return profil;
-    }
-
-    public void setProfil(boolean profil) {
-        this.profil = profil;
     }
 
     public String getAdresseUtilisateur() {

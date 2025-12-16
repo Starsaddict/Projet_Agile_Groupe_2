@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,23 @@ public class inscriptionProcessCtrl extends HttpServlet {
             return;
         }
 
+        // Au moins un joueur requis : nom/prenom non vides
+        boolean hasJoueur = false;
+        if (joueurNom != null && joueurPrenom != null) {
+            for (int i = 0; i < joueurNom.length; i++) {
+                String jNom = joueurNom[i] != null ? joueurNom[i].trim() : "";
+                String jPrenom = joueurPrenom[i] != null ? joueurPrenom[i].trim() : "";
+                if (!jNom.isEmpty() && !jPrenom.isEmpty()) {
+                    hasJoueur = true;
+                    break;
+                }
+            }
+        }
+        if (!hasJoueur) {
+            response.sendRedirect(request.getContextPath() + "/inscription?code=" + code + "&error=Au+moins+un+joueur+requis");
+            return;
+        }
+
         utilisateurRepo utilisateurRepo = new utilisateurRepo();
         if (utilisateurRepo.emailExists(parentEmail)) {
             response.sendRedirect(request.getContextPath() + "/inscription?code=" + code + "&error=Email+deja+utilise");
@@ -66,8 +84,11 @@ public class inscriptionProcessCtrl extends HttpServlet {
         List<Joueur> joueurs = new ArrayList<>();
         if (joueurNom != null && joueurPrenom != null) {
             for (int i = 0; i < joueurNom.length; i++) {
-                String jNom = joueurNom[i];
-                String jPrenom = joueurPrenom[i];
+                String jNom = joueurNom[i] != null ? joueurNom[i].trim() : "";
+                String jPrenom = joueurPrenom[i] != null ? joueurPrenom[i].trim() : "";
+                if (jNom.isEmpty() || jPrenom.isEmpty()) {
+                    continue; // ignorer lignes incomplètes
+                }
                 String jEmail = (joueurEmail != null && i < joueurEmail.length) ? joueurEmail[i] : null;
                 Joueur j = (Joueur) utilisateurService.creerCompteUtilisateur(jEmail, "Joueur");
                 if (j != null) {
@@ -85,6 +106,13 @@ public class inscriptionProcessCtrl extends HttpServlet {
         // consume code
         codeRepo.delete(code);
 
-        response.sendRedirect(request.getContextPath() + "/Login?success=inscription");
+        // Stocker les comptes créés en session pour permettre la création de mot de passe
+        List<model.Utilisateur> newAccounts = new ArrayList<>();
+        newAccounts.add(parent);
+        newAccounts.addAll(joueurs);
+        HttpSession session = request.getSession(true);
+        session.setAttribute("newAccounts", newAccounts);
+
+        response.sendRedirect(request.getContextPath() + "/creerProfil");
     }
 }

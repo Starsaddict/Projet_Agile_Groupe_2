@@ -40,7 +40,7 @@
                 <c:if test="${not empty sessionScope.user}">
                     <span class="pill blue">${sessionScope.user.emailUtilisateur}</span>
                 </c:if>
-                <form action="CtrlLogout" method="get" style="display: inline;">
+                <form action="${pageContext.request.contextPath}/CtrlLogout" method="post" style="display: inline;">
                     <button class="btn secondary" type="submit">Déconnexion</button>
                 </form>
             </div>
@@ -128,6 +128,7 @@
             <p>Consultez vos convocations et informations d'équipe.</p>
             <div class="links">
                 <a class="btn" href="${pageContext.request.contextPath}/jsp/convocation.jsp">Mes convocations</a>
+                <a class="btn" href="${pageContext.request.contextPath}/joueur/profil">Ma profil</a>
             </div>
         </div>
     </c:if>

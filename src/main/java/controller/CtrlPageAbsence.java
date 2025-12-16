@@ -19,16 +19,14 @@ public class CtrlPageAbsence extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String url = "Absence";
         HttpSession session = request.getSession(false);
-        if (session == null || !(session.getAttribute("user") instanceof Parent)) {
+        if (session == null || !(session.getAttribute("user") instanceof Parent)) { //vérifie la connexion
             request.getRequestDispatcher("Login").forward(request, response);
             return;
         }
 
         Parent parent = (Parent) session.getAttribute("user");
-        // Rafraîchir enfants et absences
         utilisateurService.getEnfantsAndAbsencesByParentId(parent);
 
-        // Transférer le message de la session vers la requête (flash message)
         Object msg = session.getAttribute("msg_absence");
         if (msg != null) {
             request.setAttribute("msg_absence", msg);

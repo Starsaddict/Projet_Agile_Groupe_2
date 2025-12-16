@@ -3,6 +3,7 @@ package model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "EtreAbsent")
@@ -12,7 +13,7 @@ public class EtreAbsent implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEtreAbsent;
 
-    private String absenceDebut;
+    private LocalDateTime absenceDebut;
 
     private Boolean absenceTerminee;
 
@@ -41,11 +42,11 @@ public class EtreAbsent implements Serializable {
         this.idEtreAbsent = idEtreAbsent;
     }
 
-    public String getAbsenceDebut() {
+    public LocalDateTime getAbsenceDebut() {
         return absenceDebut;
     }
 
-    public void setAbsenceDebut(String absenceDebut) {
+    public void setAbsenceDebut(LocalDateTime absenceDebut) {
         this.absenceDebut = absenceDebut;
     }
 

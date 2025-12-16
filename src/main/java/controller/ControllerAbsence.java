@@ -57,41 +57,37 @@ public class ControllerAbsence extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         if (idStr == null || session == null || !(session.getAttribute("user") instanceof Parent)) {
-            request.setAttribute("msg_absence", "Erreur : enfant ou parent non trouvé.");
-            request.getRequestDispatcher(url).forward(request, response);
+            forwardWithMessage(request, response, "Erreur : enfant ou parent non trouvé.", url);
             return;
         }
 
         Parent parent = (Parent) session.getAttribute("user");
         Long idEnfant = Long.parseLong(idStr);
+
         Joueur enfant = parent.getJoueurs().stream()
                 .filter(j -> j.getIdUtilisateur().equals(idEnfant))
                 .findFirst()
                 .orElse(null);
 
         if (enfant == null) {
-            request.setAttribute("msg_absence", "Enfant introuvable.");
-            request.getRequestDispatcher(url).forward(request, response);
+            forwardWithMessage(request, response, "Enfant introuvable.", url);
             return;
         }
 
-        boolean dejaAbsent = enfant.getAbsences() != null &&
-                enfant.getAbsences().stream().anyMatch(a -> !Boolean.TRUE.equals(a.getAbsenceTerminee()));
-
-        if (dejaAbsent) {
-            request.setAttribute("msg_absence", "L'enfant est déjà déclaré absent.");
-            request.getRequestDispatcher(url).forward(request, response);
+        if (enfant.hasOpenAbsence()) {
+            forwardWithMessage(request, response, "L'enfant est déjà déclaré absent.", url);
             return;
         }
 
         boolean ok = absenceService.declareAbsence(enfant);
         if (ok) {
-            utilisateurService.getEnfantsAndAbsencesByParentId(parent);
-            session.setAttribute("user", parent);
+            refreshUserSession(session, parent);
         }
 
-        request.setAttribute("msg_absence", ok ? "Absence enregistrée pour " + enfant.getPrenomUtilisateur() + "." : "Erreur lors de l'enregistrement de l'absence.");
-        request.getRequestDispatcher(url).forward(request, response);
+        forwardWithMessage(request, response,
+                ok ? "Absence enregistrée pour " + enfant.getPrenomUtilisateur() + "."
+                        : "Erreur lors de l'enregistrement de l'absence.",
+                url);
     }
 
     private void handleUpload(HttpServletRequest request, HttpServletResponse response)
@@ -100,63 +96,70 @@ public class ControllerAbsence extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         if (session == null || !(session.getAttribute("user") instanceof Parent)) {
-            request.setAttribute("msg_absence", "Erreur : parent non trouvé.");
-            request.getRequestDispatcher(url).forward(request, response);
+            forwardWithMessage(request, response, "Erreur : parent non trouvé.", url);
             return;
         }
 
         Parent parent = (Parent) session.getAttribute("user");
         String idAbsenceStr = request.getParameter("id_absence");
+
         if (idAbsenceStr == null) {
-            request.setAttribute("msg_absence", "Absence non précisée.");
-            request.getRequestDispatcher(url).forward(request, response);
+            forwardWithMessage(request, response, "Absence non précisée.", url);
             return;
         }
 
         Long idAbsence = Long.parseLong(idAbsenceStr);
-        Optional<EtreAbsent> opt = parent.getJoueurs().stream()
-                .filter(j -> j.getAbsences() != null)
-                .flatMap(j -> j.getAbsences().stream())
-                .filter(a -> a.getIdEtreAbsent() != null && a.getIdEtreAbsent().equals(idAbsence))
-                .findFirst();
+        Optional<EtreAbsent> opt = absenceService.findAbsenceById(parent, idAbsence);
 
         if (!opt.isPresent()) {
-            request.setAttribute("msg_absence", "Absence introuvable.");
-            request.getRequestDispatcher(url).forward(request, response);
+            forwardWithMessage(request, response, "Absence introuvable.", url);
             return;
         }
 
         EtreAbsent absence = opt.get();
         Part filePart = request.getPart("certificat");
+
         if (filePart == null || filePart.getSize() == 0) {
-            request.setAttribute("msg_absence", "Aucun fichier sélectionné.");
-            request.getRequestDispatcher(url).forward(request, response);
+            forwardWithMessage(request, response, "Aucun fichier sélectionné.", url);
             return;
         }
 
         String submitted = filePart.getSubmittedFileName();
         String contentType = filePart.getContentType();
         byte[] data;
+
         try (InputStream is = filePart.getInputStream()) {
             data = is.readAllBytes();
         } catch (Exception e) {
-            request.setAttribute("msg_absence", "Erreur lors de la lecture du fichier.");
-            request.getRequestDispatcher(url).forward(request, response);
+            forwardWithMessage(request, response, "Erreur lors de la lecture du fichier.", url);
             return;
         }
 
         boolean ok = absenceService.closeAbsence(absence, submitted, contentType, data);
         if (ok) {
-            utilisateurService.getEnfantsAndAbsencesByParentId(parent);
-            session.setAttribute("user", parent);
+            refreshUserSession(session, parent);
         }
 
-        request.setAttribute("msg_absence", ok ? "Certificat enregistré et absence clôturée." : "Erreur lors de l'enregistrement.");
+        forwardWithMessage(request, response,
+                ok ? "Certificat enregistré et absence clôturée."
+                        : "Erreur lors de l'enregistrement.",
+                url);
+    }
+
+    private void forwardWithMessage(HttpServletRequest request, HttpServletResponse response,
+                                    String message, String url) throws ServletException, IOException {
+        request.setAttribute("msg_absence", message);
         request.getRequestDispatcher(url).forward(request, response);
     }
 
+    private void refreshUserSession(HttpSession session, Parent parent) {
+        utilisateurService.getEnfantsAndAbsencesByParentId(parent);
+        session.setAttribute("user", parent);
+    }
+
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         doPost(request, response);
     }
 }

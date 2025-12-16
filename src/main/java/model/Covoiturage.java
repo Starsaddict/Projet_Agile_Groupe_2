@@ -116,7 +116,6 @@ public class Covoiturage {
 
         if (!reservations.contains(utilisateur)) {
             reservations.add(utilisateur);
-            utilisateur.getCovoiturages().add(this);
         }
     }
 
@@ -125,10 +124,6 @@ public class Covoiturage {
     public void removeReservation(Utilisateur utilisateur) {
         if (utilisateur == null) return;
         if (reservations.remove(utilisateur)) {
-            // mettre à jour la collection inverse si présente
-            if (utilisateur.getCovoiturages() != null) {
-                utilisateur.getCovoiturages().remove(this);
             }
         }
     }
-}

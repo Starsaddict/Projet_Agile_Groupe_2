@@ -64,4 +64,14 @@ public class EvenementRepo {
             ).list();
         }
     }
-}
+        public List<Evenement> findFuturs() {
+            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                return session.createQuery(
+                    "FROM Evenement e WHERE e.dateEvenement >= CURRENT_TIMESTAMP ORDER BY e.dateEvenement ASC",
+                    Evenement.class
+                ).list();
+            }
+        }
+
+
+    }

@@ -157,4 +157,16 @@
   <url-pattern>/parent/profil/edit</url-pattern>
 </servlet-mapping>
 
+<servlet>
+    <servlet-name>ConfirmationMatchCtrl</servlet-name>
+    <servlet-class>ctrl.ConfirmationMatchCtrl</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>ConfirmationMatchCtrl</servlet-name>
+    <url-pattern>/confirmation/match</url-pattern>
+</servlet-mapping>
+
+
+
 </web-app>

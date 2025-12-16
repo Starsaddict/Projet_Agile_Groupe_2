@@ -33,15 +33,17 @@ public abstract class Utilisateur {
     @Column(name = "DateNaissanceUtilisateur")
     private LocalDate dateNaissanceUtilisateur;
 
-    @Column(name = "Description", length = 1000)
-    private String description;
+    @Column(name = "AdresseUtilisateur")
+    private String adresseUtilisateur;
+
+    @Column(name = "TelephoneUtilisateur")
+    private String telephoneUtilisateur;
 
     @Column(name = "TypeU", insertable = false, updatable = false)
     private String typeU;
 
     @ManyToMany(mappedBy = "reservations", fetch = FetchType.LAZY)
     private List<Covoiturage> covoiturages = new ArrayList<>();
-
 
     @OneToMany(mappedBy = "conducteur", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Covoiturage> conduits;
@@ -117,12 +119,20 @@ public abstract class Utilisateur {
         this.conduits = conduits;
     }
 
-    public String getDescription() {
-        return description;
+    public String getAdresseUtilisateur() {
+        return adresseUtilisateur;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAdresseUtilisateur(String adresseUtilisateur) {
+        this.adresseUtilisateur = adresseUtilisateur;
+    }
+
+    public String getTelephoneUtilisateur() {
+        return telephoneUtilisateur;
+    }
+
+    public void setTelephoneUtilisateur(String telephoneUtilisateur) {
+        this.telephoneUtilisateur = telephoneUtilisateur;
     }
 
     public String getRoleLabel() {
@@ -140,8 +150,10 @@ public abstract class Utilisateur {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Utilisateur)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof Utilisateur))
+            return false;
         Utilisateur that = (Utilisateur) o;
         return idUtilisateur != null && idUtilisateur.equals(that.idUtilisateur);
     }

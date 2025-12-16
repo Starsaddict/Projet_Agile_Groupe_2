@@ -61,6 +61,48 @@ input[type="checkbox"] {
 	margin-right: 6px;
 }
 
+.page-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: 20px;
+}
+
+.header-actions {
+	display: flex;
+	gap: 10px;
+}
+
+.btn-primary, .btn-secondary, .btn-danger {
+	border: none;
+	padding: 8px 16px;
+	border-radius: 6px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.btn-primary {
+	background-color: #2563eb;
+	color: white;
+}
+
+.btn-secondary {
+	background-color: #e5e7eb;
+	color: #111827;
+}
+
+.btn-danger {
+	background-color: #ef4444;
+	color: white;
+}
+
+.btn-row {
+	margin-top: 15px;
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
 .players-header {
 	display: flex;
 	justify-content: space-between;
@@ -92,46 +134,7 @@ input[type="checkbox"] {
 	font-style: italic;
 }
 
-    .page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20px;
-}
-
-.header-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.btn-primary, .btn-secondary, .btn-danger {
-	border: none;
-	padding: 8px 16px;
-	border-radius: 6px;
-	font-size: 14px;
-	cursor: pointer;
-}
-
-.btn-primary {
-	background-color: #2563eb;
-	color: white;
-}
-
-.btn-secondary {
-	background-color: #e5e7eb;
-}
-
-.btn-danger {
-	background-color: #ef4444;
-	color: white;
-}
-
-.btn-row {
-	margin-top: 15px;
-	display: flex;
-	gap: 10px;
-}
-
+/* ===== Table ===== */
 table {
 	width: 100%;
 	border-collapse: collapse;
@@ -143,11 +146,48 @@ table thead th {
 	background-color: #2563eb;
 	color: white;
 	padding: 8px 10px;
+	text-align: left;
 }
 
 table tbody td {
 	border-bottom: 1px solid #e5e7eb;
-	padding: 8px 10px;
+	padding: 12px 10px;
+	vertical-align: top; /* ✅ 行高不同也不会漂 */
+}
+
+/* 给 Action 列固定宽度，保证按钮不会乱跑 */
+td.td-action {
+	width: 260px;
+}
+
+/* Action 按钮容器：不要用 btn-row（它带 margin-top） */
+.action-cell {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start; /* ✅ 顶部对齐 */
+	justify-content: flex-end; /* ✅ 右对齐：想左对齐改 flex-start */
+	margin: 0;
+	padding-top: 2px;
+}
+
+.action-cell form {
+	margin: 0;
+}
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e5e7eb;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.player-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
 }
 </style>
 </head>
@@ -158,35 +198,51 @@ table tbody td {
 	List<Joueur> joueurs = (List<Joueur>) request.getAttribute("joueurs");
 	List<Groupe> groupes = (List<Groupe>) request.getAttribute("groupes");
 	%>
+	<%
+	Groupe groupeAEditer = (Groupe) request.getAttribute("groupeAEditer");
+	Long idEdit = (groupeAEditer != null) ? groupeAEditer.getIdGroupe() : null;
+	%>
 
 	<div class="container">
 		<div class="page-header">
-        <div>
-            <h1>Gestion des groupes</h1>
-		<p class="subtitle">Créer un nouveau groupe et gérer les groupes
-			existants.</p>
-        </div>
+			<div>
+				<h1>Gestion des groupes</h1>
+				<p class="subtitle">Créer/Modifier un nouveau groupe et gérer
+					les groupes existants.</p>
+			</div>
 
-        <div class="header-actions">
-            <form action="CtrlCoach" method="get">
-                <input type="hidden" name="action" value="Home">
-                <button type="submit" class="btn-primary">Home</button>
-            </form>
+			<div class="header-actions">
+				<form action="CtrlCoach" method="get">
+					<input type="hidden" name="action" value="Home">
+					<button type="submit" class="btn-primary">Home</button>
+				</form>
 
-            <form action="CtrlLogout" method="get">
-                <button type="submit" class="btn-primary">Déconnexion</button>
-            </form>
-        </div>
-    </div> 
+				<form action="CtrlLogout" method="get">
+					<button type="submit" class="btn-primary">Déconnexion</button>
+				</form>
+			</div>
+		</div>
 		<!-- ===================== Création ===================== -->
-		<h2>Créer un groupe</h2>
+		<h2>Créer/Modifier un groupe</h2>
 
 		<form id="creerGroupeForm" action="CtrlCoach" method="post">
-			<input type="hidden" name="action" value="EnregistrerGroupe" />
+			<input type="hidden" name="action"
+				value="<%=(groupeAEditer != null) ? "ModifierGroupe" : "EnregistrerGroupe"%>" />
+
+			<%
+			if (groupeAEditer != null) {
+			%>
+			<input type="hidden" name="idGroupe"
+				value="<%=groupeAEditer.getIdGroupe()%>" />
+			<%
+			}
+			%>
 
 			<div>
 				<label>Nom du groupe :</label> <input type="text" name="nomGroupe"
-					required />
+					required
+					value="<%=(groupeAEditer != null && groupeAEditer.getNomGroupe() != null) ? groupeAEditer.getNomGroupe() : ""%>" />
+
 			</div>
 
 			<div class="players-header">
@@ -203,8 +259,27 @@ table tbody td {
 						String search = (nom + " " + prenom + " " + prenom + " " + nom).toLowerCase();
 				%>
 				<div class="player-item" data-search="<%=search%>">
-					<label> <input type="checkbox" name="joueursIds"
-						value="<%=j.getIdUtilisateur()%>" /> <%=nom%> <%=prenom%>
+					<label class="player-line">
+				<%boolean checked = false;
+					 if (groupeAEditer != null && groupeAEditer.getJoueurs() != null) {
+ 					for (Joueur jj : groupeAEditer.getJoueurs()) {
+ 					if (jj.getIdUtilisateur().equals(j.getIdUtilisateur())) {
+ 					checked = true;
+ 					break;
+ 						}
+ 					}
+				 } %> 
+				 <%String pic = j.getProfilePicRoute();
+ 					if (pic == null || pic.isBlank()) {
+ 					pic = "/img/joueur_avatar/default.png";
+ 					}
+ 					String src = request.getContextPath() + pic; %>
+ 						<input type="checkbox" name="joueursIds"
+						value="<%=j.getIdUtilisateur()%>" <%=checked ? "checked" : ""%> />
+						<%=nom%> <%=prenom%>
+						 
+ 						<img class="avatar" src="<%=src%>" alt="avatar"
+						onerror="this.onerror=null;this.src='<%=request.getContextPath()%>/img/joueur_avatar/default.png';" />				
 					</label>
 				</div>
 				<%
@@ -221,7 +296,20 @@ table tbody td {
 			</div>
 
 			<div class="btn-row">
-				<button type="submit" class="btn-primary">Créer</button>
+				<button type="submit" class="btn-primary">
+					<%=(groupeAEditer != null) ? "Valider la modification" : "Créer"%>
+				</button>
+
+				<%
+				if (groupeAEditer != null) {
+				%>
+				<form action="CtrlCoach" method="get" style="margin: 0;">
+					<input type="hidden" name="action" value="GestionGroupe" />
+					<button type="submit" class="btn-secondary">Annuler</button>
+				</form>
+				<%
+				}
+				%>
 			</div>
 		</form>
 
@@ -255,15 +343,25 @@ table tbody td {
  }
  %>
 					</td>
-					<td>
-						<form action="CtrlCoach" method="post">
-							<input type="hidden" name="action" value="SupprimerGroupe" /> <input
-								type="hidden" name="idGroupe" value="<%=g.getIdGroupe()%>" />
-							<button type="submit" class="btn-danger"
-								onclick="return confirm('Supprimer ce groupe ?');">
-								Supprimer</button>
-						</form>
+					<td class="td-action">
+						<div class="action-cell">
+							<!-- Modifier -->
+							<form action="CtrlCoach" method="get" style="margin: 0;">
+								<input type="hidden" name="action" value="EditerGroupe" /> <input
+									type="hidden" name="idGroupe" value="<%=g.getIdGroupe()%>" />
+								<button type="submit" class="btn-secondary">Modifier</button>
+							</form>
+
+							<!-- Supprimer -->
+							<form action="CtrlCoach" method="post" style="margin: 0;">
+								<input type="hidden" name="action" value="SupprimerGroupe" /> <input
+									type="hidden" name="idGroupe" value="<%=g.getIdGroupe()%>" />
+								<button type="submit" class="btn-danger"
+									onclick="return confirm('Supprimer ce groupe ?');">Supprimer</button>
+							</form>
+						</div>
 					</td>
+
 				</tr>
 				<%
 				}
@@ -277,7 +375,7 @@ table tbody td {
 				%>
 			</tbody>
 		</table>
-		
+
 		<div class="btn-row">
 			<form action="CtrlCoach" method="get">
 				<input type="hidden" name="action" value="PageCoach">

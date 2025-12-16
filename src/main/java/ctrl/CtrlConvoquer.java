@@ -14,6 +14,7 @@ import org.hibernate.Transaction;
 import bd.HibernateUtil;
 import model.Evenement;
 import model.Groupe;
+import model.Joueur;
 
 @WebServlet("/CtrlConvoquer")
 public class CtrlConvoquer extends HttpServlet {
@@ -37,16 +38,19 @@ public class CtrlConvoquer extends HttpServlet {
 		String idEvtStr = request.getParameter("idEvenement");
 		if (idEvtStr == null) {
 			request.setAttribute("messageErreur", "Mauvaise id de l'évènement.");
-			//To do: à modifier.
+			// To do: à modifier.
 			request.getRequestDispatcher("/jsp/coach/PageConvoquer.jsp").forward(request, response);
 			return;
 		}
 
-		 Long idEvenement = Long.parseLong(idEvtStr);
+		Long idEvenement = Long.parseLong(idEvtStr);
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 			Evenement evt = session.get(Evenement.class, idEvenement);
-			List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
+			List<Groupe> groupes = session.createQuery(
+				    "select distinct g from Groupe g left join fetch g.joueurs",
+				    Groupe.class
+				).list();
 
 			request.setAttribute("evenementSelectionne", evt);
 			request.setAttribute("groupesCoach", groupes);
@@ -97,61 +101,122 @@ public class CtrlConvoquer extends HttpServlet {
 	    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 	        Transaction tx = session.beginTransaction();
 
-	        // 1) Charger l'évènement et le groupe
 	        evt = session.get(Evenement.class, idEvenement);
 	        Groupe g = session.get(Groupe.class, idGroupe);
 
 	        if (evt == null || g == null) {
-	            tx.rollback();
-	            request.setAttribute("messageErreur", "Évènement ou groupe introuvable.");
-	            afficherSelection(request, response);
+	            echec(tx, request, response, "Évènement ou groupe introuvable.");
 	            return;
 	        }
 
 	        if (evt.getDateEvenement() == null) {
-	            tx.rollback();
-	            request.setAttribute("messageErreur", "La date de l'évènement est vide.");
-	            afficherSelection(request, response);
+	            echec(tx, request, response, "La date de l'évènement est vide.");
 	            return;
 	        }
 
-	        // 2) Définir la journée : [00:00, lendemain 00:00[
 	        LocalDateTime start = evt.getDateEvenement().toLocalDate().atStartOfDay();
 	        LocalDateTime end = start.plusDays(1);
 
-	        // 3) 🔒 Vérifier conflit: même groupe + même jour + match officiel
-	        Long nb = session.createQuery(
-	                "select count(e) from Evenement e " +
-	                "where e.groupe.idGroupe = :gid " +
-	                "and e.typeEvenement = 'Match-officiel' " +
-	                "and e.dateEvenement >= :start " +
-	                "and e.dateEvenement < :end " +
-	                "and e.idEvenement <> :eid",
-	                Long.class)
-	            .setParameter("gid", idGroupe)
-	            .setParameter("start", start)
-	            .setParameter("end", end)
-	            .setParameter("eid", idEvenement)
-	            .uniqueResult();
+	        // ✅ 1) 先检查：同人同天（跨组冲突）
+	        List<ConflitJoueur> conflitsJ = conflitsJoueursMemeJour(session, idGroupe, start, end, idEvenement);
+	        if (conflitsJ != null && !conflitsJ.isEmpty()) {
 
-	        if (nb != null && nb > 0) {
-	            tx.rollback();
-	            request.setAttribute("messageErreur",
-	                    "Impossible : ce groupe est déjà convoqué pour un match officiel ce jour-là.");
-	            afficherSelection(request, response);
+	            // 拼接提示：每个人显示 “人名 + 冲突组名 + 冲突活动名”
+	            String detail = conflitsJ.stream()
+	                    .map(c -> c.getJoueurNom() + " (déjà dans " + c.getGroupeNom() + " : " + c.getEvenementNom() + ")")
+	                    .distinct()
+	                    .reduce((a, b) -> a + " ; " + b)
+	                    .orElse("Conflit joueurs");
+
+	            echec(tx, request, response,
+	                    "Impossible : certains joueurs sont déjà convoqués ce jour-là. " + detail);
 	            return;
 	        }
 
-	        // 4) Sauvegarde
+	        // ✅ 2) 再检查：同组同天（同组冲突）——要显示冲突活动名称
+	        List<String> conflitsEvtNoms = conflitsMemeGroupeMemeJourNoms(session, idGroupe, start, end, idEvenement);
+	        if (conflitsEvtNoms != null && !conflitsEvtNoms.isEmpty()) {
+	            String noms = String.join(", ", conflitsEvtNoms);
+	            echec(tx, request, response,
+	                    "Impossible : ce groupe est déjà convoqué ce jour-là pour : " + noms);
+	            return;
+	        }
+
+	        // ✅ 3) Save
+	        List<Groupe> groupes = session.createQuery(
+	        	    "select distinct g from Groupe g left join fetch g.joueurs",
+	        	    Groupe.class
+	        	).list();
+	        request.setAttribute("groupesCoach", groupes);
 	        evt.setGroupe(g);
 	        session.update(evt);
 	        tx.commit();
-
 	    }
-
+	    
 	    request.setAttribute("evenementSelectionne", evt);
 	    request.setAttribute("messageSucces", "Le groupe est marqué pour convocation");
 	    request.getRequestDispatcher("/jsp/coach/PageSelection.jsp").forward(request, response);
+	}
+
+	private static class ConflitJoueur {
+		private final String joueurNom;
+		private final String groupeNom;
+		private final String evenementNom;
+
+		public ConflitJoueur(String joueurNom, String groupeNom, String evenementNom) {
+			this.joueurNom = joueurNom;
+			this.groupeNom = groupeNom;
+			this.evenementNom = evenementNom;
+		}
+
+		public String getJoueurNom() {
+			return joueurNom;
+		}
+
+		public String getGroupeNom() {
+			return groupeNom;
+		}
+
+		public String getEvenementNom() {
+			return evenementNom;
+		}
+	}
+
+	private List<ConflitJoueur> conflitsJoueursMemeJour(Session session, Long idGroupeChoisi, LocalDateTime start,
+			LocalDateTime end, Long idEvenementCourant) {
+
+// 这里返回 Object[]: [joueurNom, groupeNom, evenementNom]
+		List<Object[]> rows = session
+				.createQuery("select distinct j.nomUtilisateur, g.nomGroupe, e.nomEvenement " + "from Evenement e "
+						+ "join e.groupe g " + "join g.joueurs j " + "where e.typeEvenement = 'MATCH_OFFICIEL' "
+						+ "and e.dateEvenement >= :start and e.dateEvenement < :end " + "and e.idEvenement <> :eid "
+						+ "and g.idGroupe <> :gidChoisi " + "and j in ("
+						+ "   select j2 from Groupe g2 join g2.joueurs j2 " + "   where g2.idGroupe = :gidChoisi" + ")",
+						Object[].class)
+				.setParameter("start", start).setParameter("end", end).setParameter("eid", idEvenementCourant)
+				.setParameter("gidChoisi", idGroupeChoisi).list();
+
+		return rows.stream().map(r -> new ConflitJoueur((String) r[0], (String) r[1], (String) r[2])).toList();
+	}
+
+	private List<String> conflitsMemeGroupeMemeJourNoms(Session session, Long idGroupe, LocalDateTime start,
+			LocalDateTime end, Long idEvenementCourant) {
+
+		return session
+				.createQuery("select e.nomEvenement " + "from Evenement e " + "where e.groupe.idGroupe = :gid "
+						+ "and e.typeEvenement = 'MATCH_OFFICIEL' "
+						+ "and e.dateEvenement >= :start and e.dateEvenement < :end " + "and e.idEvenement <> :eid",
+						String.class)
+				.setParameter("gid", idGroupe).setParameter("start", start).setParameter("end", end)
+				.setParameter("eid", idEvenementCourant).list();
+	}
+
+	private void echec(Transaction tx, HttpServletRequest request, HttpServletResponse response, String msg)
+			throws ServletException, IOException {
+		if (tx != null)
+			tx.rollback();
+		request.setAttribute("messageErreur", msg);
+		afficherSelection(request, response);
 	}
 
 }

@@ -69,7 +69,8 @@ public class UtilisateurService {
     }
 
     /**
-     * Authentifie un utilisateur par email / mot de passe, et renvoie ses rôles disponibles.
+     * Authentifie un utilisateur par email / mot de passe, et renvoie ses rôles
+     * disponibles.
      */
     public Optional<AuthenticatedUser> authenticate(String email, String password) {
         if (email == null || password == null) {
@@ -156,7 +157,7 @@ public class UtilisateurService {
     }
 
     /**
-     * 获取所有用户
+     * load all utilisateurs
      */
     public List<Utilisateur> loadAllUtilisateurs() {
         try {
@@ -185,10 +186,10 @@ public class UtilisateurService {
     public boolean modifierUtilisateurMdp(Utilisateur u, String mdp) {
         String email = u.getEmailUtilisateur();
         List<Utilisateur> utilisateurs = utilisateurRepo.findByEmail(email);
-        if (utilisateurs == null){
+        if (utilisateurs == null) {
             return false;
         }
-        for(Utilisateur utilisateur : utilisateurs) {
+        for (Utilisateur utilisateur : utilisateurs) {
             System.out.println(utilisateur);
             utilisateur.setMdpUtilisateur(mdp);
             utilisateurRepo.updateUtilisateur(utilisateur);
@@ -407,8 +408,8 @@ public class UtilisateurService {
         if (u == null) {
             return false;
         }
-        String mdp = u.getEmailUtilisateur().substring(0,5);
-        modifierUtilisateurMdp(u,mdp);
+        String mdp = u.getEmailUtilisateur().substring(0, 5);
+        modifierUtilisateurMdp(u, mdp);
         return utilisateurRepo.updateUtilisateur(u);
     }
 }

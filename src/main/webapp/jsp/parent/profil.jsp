@@ -10,125 +10,56 @@
 <html>
 <head>
     <title>Mon Profil - Parent</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        h1 { color: #1976d2; border-bottom: 2px solid #1976d2; padding-bottom: 10px; }
-        .alert { padding: 10px 12px; border-radius: 4px; margin: 10px 0; }
-        .alert.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .alert.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .profile-card {
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 15px;
-            margin: 15px 0;
-            background: #f9f9f9;
-        }
-        .profile-status {
-            font-weight: bold;
-            padding: 8px;
-            border-radius: 4px;
-            margin: 10px 0;
-            display: inline-block;
-        }
-        .status-incomplete {
-            background: #fff3cd;
-            color: #856404;
-        }
-        .status-complete {
-            background: #d4edda;
-            color: #155724;
-        }
-        .btn {
-            display: inline-block;
-            padding: 8px 15px;
-            margin: 5px 5px 5px 0;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            text-decoration: none;
-        }
-        .btn-primary {
-            background: #1976d2;
-            color: white;
-        }
-        .btn-primary:hover {
-            background: #125aa0;
-        }
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-    </style>
+    <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
 </head>
 <body>
-
-<div >
-    <a href="${pageContext.request.contextPath}/jsp/home.jsp"
-       >
-        ⬅ Retour à l’accueil
-    </a>
-
-    <form 
-          action="${pageContext.request.contextPath}/CtrlLogout"
-            >
-        <button type="submit" class="btn btn-logout">
-            🚪 Déconnexion
-        </button>
-    </form>
-</div>
-
 <div class="container">
-    <h1>Mes Profils - <%= parent != null ? parent.getPrenomUtilisateur() + " " + parent.getNomUtilisateur() : "Parent" %></h1>
-    
-    <% if (error != null) { %>
-        <div class="alert alert-error"><%= error %></div>
-    <% } %>
-    
-    <% if ("1".equals(success)) { %>
-        <div class="alert alert-success">Profil mis à jour avec succès.</div>
-    <% } %>
-    
-    <% if (profiles != null && !profiles.isEmpty()) {
-        for (Utilisateur user : profiles) {
-            String nom = user.getNomUtilisateur() != null ? user.getNomUtilisateur() : "";
-            String prenom = user.getPrenomUtilisateur() != null ? user.getPrenomUtilisateur() : "";
-            String email = user.getEmailUtilisateur() != null ? user.getEmailUtilisateur() : "";
-            boolean hasProfile = user.getProfil();
-            String adresse = user.getAdresseUtilisateur() != null ? user.getAdresseUtilisateur() : "-";
-            String telephone = user.getTelephoneUtilisateur() != null ? user.getTelephoneUtilisateur() : "-";
-            String numeroLicence = (user instanceof Joueur) ? ((Joueur) user).getNumeroJoueur() : null;
-            String userType = (user instanceof Parent) ? "(Parent)" : "(Enfant)";
-            String actionLabel = hasProfile ? "Modifier le profil" : "Créer le profil";
-    %>
-        <div class="profile-card">
-            <h2><%= prenom %> <%= nom %> <span style="font-size: 0.7em; color: #999;"><%= userType %></span></h2>
-            <p><strong>Email:</strong> <%= email %></p>
-            
-            <% if (hasProfile) { %>
-                <div class="profile-status status-complete">✓ Profil complété</div>
+    <div class="card">
+        <div class="action-buttons" style="justify-content: space-between; align-items: center;">
+            <a href="<%= contextPath %>/jsp/home.jsp" class="btn secondary">⬅ Retour à l’accueil</a>
+            <form action="<%= contextPath %>/CtrlLogout" method="post" style="margin:0;">
+                <button type="submit" class="btn danger">🚪 Déconnexion</button>
+            </form>
+        </div>
+
+        <h1>Mes Profils - <%= parent != null ? parent.getPrenomUtilisateur() + " " + parent.getNomUtilisateur() : "Parent" %></h1>
+        
+        <% if (error != null) { %>
+            <div class="alert error"><%= error %></div>
+        <% } %>
+        
+        <% if ("1".equals(success)) { %>
+            <div class="alert success">Profil mis à jour avec succès.</div>
+        <% } %>
+        
+        <% if (profiles != null && !profiles.isEmpty()) {
+            for (Utilisateur user : profiles) {
+                String nom = user.getNomUtilisateur() != null ? user.getNomUtilisateur() : "";
+                String prenom = user.getPrenomUtilisateur() != null ? user.getPrenomUtilisateur() : "";
+                String email = user.getEmailUtilisateur() != null ? user.getEmailUtilisateur() : "";
+                String adresse = user.getAdresseUtilisateur() != null ? user.getAdresseUtilisateur() : "-";
+                String telephone = user.getTelephoneUtilisateur() != null ? user.getTelephoneUtilisateur() : "-";
+                String numeroLicence = (user instanceof Joueur) ? ((Joueur) user).getNumeroJoueur() : null;
+                String userType = (user instanceof Parent) ? "(Parent)" : "(Enfant)";
+                String actionLabel = "Modifier le profil";
+        %>
+            <div class="card" style="margin-top: 16px;">
+                <h2><%= prenom %> <%= nom %> <span style="font-size: 0.75em; color: var(--text-muted);"><%= userType %></span></h2>
+                <p><strong>Email:</strong> <%= email %></p>
+                
                 <p><strong>Adresse:</strong> <%= adresse %></p>
                 <p><strong>Téléphone:</strong> <%= telephone %></p>
                 <% if (numeroLicence != null && !numeroLicence.isEmpty()) { %>
                     <p><strong>Numéro licence:</strong> <%= numeroLicence %></p>
                 <% } %>
-            <% } else { %>
-                <div class="profile-status status-incomplete">⚠ Profil non complété</div>
-                <p style="color: #666;"><em>Aucun profil créé. Cliquez sur "Créer le profil" pour compléter.</em></p>
-            <% } %>
-            
-            <div style="margin-top: 10px;">
-                <a href="<%= contextPath %>/parent/profil/edit?id=<%= user.getIdUtilisateur() %>" class="btn btn-primary">
-                    <%= actionLabel %>
-                </a>
+                
+                <div class="action-buttons">
+                    <a href="<%= contextPath %>/parent/profil/edit?id=<%= user.getIdUtilisateur() %>" class="btn"><%= actionLabel %></a>
+                </div>
             </div>
-        </div>
-    <%      }
-    } %>
+        <%      }
+        } %>
+    </div>
 </div>
 </body>
 </html>

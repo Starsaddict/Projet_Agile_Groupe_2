@@ -48,6 +48,7 @@
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Type</th>
+                    <th>Profil</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -60,16 +61,19 @@
                     String typeU = utilisateur.getTypeU() != null ? utilisateur.getTypeU() : "-";
                     Long userId = utilisateur.getIdUtilisateur();
                     System.out.println("DEBUG modifier.jsp: userId=" + userId + ", nom=" + nom + ", email=" + email);
+                    boolean hasProfile = utilisateur.getProfil();
+                    String actionLabel = hasProfile ? "Modifier" : "Créer";
                 %>
                     <tr>
                         <td><%= nom %></td>
                         <td><%= prenom %></td>
                         <td><%= email %></td>
                         <td><%= typeU %></td>
+                        <td><%= hasProfile ? "Complet" : "À compléter" %></td>
 
                         <td class="actions">
                             <a href="<%= contextPath %>/secretaire/profil/sendResetPasswordRequest?id=<%= userId %>" class="btn">Send Modification Request</a>
-                            <a href="<%= contextPath %>/secretaire/profil/edit?id=<%= userId %>" class="btn">Modifier</a>
+                            <a href="<%= contextPath %>/secretaire/profil/edit?id=<%= userId %>" class="btn"><%= actionLabel %></a>
                         </td>
                     </tr>
                 <% } %>

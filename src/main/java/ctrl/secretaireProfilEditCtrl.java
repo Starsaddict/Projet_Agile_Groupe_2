@@ -97,7 +97,6 @@ public class secretaireProfilEditCtrl extends HttpServlet {
             String nom = request.getParameter("nom");
             String prenom = request.getParameter("prenom");
             String dateNaissance = request.getParameter("dateNaissance");
-            String description = request.getParameter("description");
             String adresse = request.getParameter("adresse");
             String telephone = request.getParameter("telephone");
 
@@ -106,12 +105,11 @@ public class secretaireProfilEditCtrl extends HttpServlet {
                 utilisateur.setNomUtilisateur(nom);
             if (prenom != null && !prenom.isEmpty())
                 utilisateur.setPrenomUtilisateur(prenom);
-            if (description != null && !description.isEmpty())
-                utilisateur.setDescription(description);
             if (adresse != null)
                 utilisateur.setAdresseUtilisateur(adresse);
             if (telephone != null)
                 utilisateur.setTelephoneUtilisateur(telephone);
+            utilisateur.setProfil(true);
 
             // Secretaire 可以修改出生日期
             if (dateNaissance != null && !dateNaissance.isEmpty()) {

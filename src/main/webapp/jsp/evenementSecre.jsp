@@ -8,7 +8,7 @@
     <title>Gestion des événements</title>
 
     <!-- CSS personnalisé (sans framework) -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/ProjetAgile/css/evenements.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/evenements.css">
 </head>
 
 <body>

@@ -11,9 +11,7 @@ import service.eventService;
 import util.SendEmailSSL;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 
 import static util.SendEmailSSL.sendEventInvitation;
 
@@ -106,15 +104,57 @@ public class convoquerCtrl extends HttpServlet {
                 Evenement evenement = service.findByIdWithParticipants(idEvenement);
                 UtilisateurService utilisateurService = new UtilisateurService();
                 List<Utilisateur> utilisateurs = utilisateurService.loadAllUtilisateurs();
+                List<Coach> coaches = new ArrayList<>();
+                List<Joueur> joueurs = new ArrayList<>();
+//                for (Utilisateur utilisateur : utilisateurs) {
+//                    if(utilisateur.getEmailUtilisateur()!=null) {
+//                        try {
+//                            sendEventInvitation(utilisateur,evenement);
+//                        } catch (MessagingException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }
+//                }
                 for (Utilisateur utilisateur : utilisateurs) {
-                    if(utilisateur.getEmailUtilisateur()!=null) {
-                        try {
-                            sendEventInvitation(utilisateur,evenement);
-                        } catch (MessagingException e) {
-                            throw new RuntimeException(e);
-                        }
+                    if (utilisateur.getClass().equals(Coach.class)) {
+                        coaches.add((Coach) utilisateur);
+                    }else if (utilisateur.getClass().equals(Joueur.class)) {
+                        joueurs.add((Joueur) utilisateur);
                     }
                 }
+                //TODO: add send invatation email to coaches
+                //TODO: add send invatation email to Familys.
+                HashMap<Set<Parent>, Set<Joueur>> family = new HashMap<>();
+
+                for (Joueur j : joueurs) {
+                    Set<Parent> parents = new HashSet<>(j.getParents());
+                    if (parents.isEmpty()) {
+                        continue;
+                    }
+
+                    boolean found = false;
+                    for (Map.Entry<Set<Parent>, Set<Joueur>> entry : family.entrySet()) {
+                        if (entry.getKey().equals(parents)) {
+                            entry.getValue().add(j);
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        Set<Joueur> joueursFamille = new HashSet<>();
+                        joueursFamille.add(j);
+                        family.put(parents, joueursFamille);
+                    }
+                }
+                for (Map.Entry<Set<Parent>, Set<Joueur>> entry : family.entrySet()) {
+                    try {
+                        SendEmailSSL.sendFamilyInvitation(entry.getKey(), entry.getValue(), evenement);
+                    } catch (MessagingException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
             }
         }
 

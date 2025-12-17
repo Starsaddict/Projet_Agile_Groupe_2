@@ -17,6 +17,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @WebServlet("/CtrlAbsence")
@@ -54,10 +56,16 @@ public class ControllerAbsence extends HttpServlet {
             throws ServletException, IOException {
         String url = "Absence";
         String idStr = request.getParameter("id_enfant");
+        String typeAbsence = request.getParameter("type_absence");
+        String dateDebut = request.getParameter("date_debut");
+        String dateFin = request.getParameter("date_fin");
+        String motif = request.getParameter("motif");
+
         HttpSession session = request.getSession(false);
 
-        if (idStr == null || session == null || !(session.getAttribute("user") instanceof Parent)) {
-            forwardWithMessage(request, response, "Erreur : enfant ou parent non trouvé.", url);
+        if (idStr == null || typeAbsence == null || session == null ||
+                !(session.getAttribute("user") instanceof Parent)) {
+            forwardWithMessage(request, response, "Erreur : paramètres manquants.", url);
             return;
         }
 
@@ -79,7 +87,14 @@ public class ControllerAbsence extends HttpServlet {
             return;
         }
 
-        boolean ok = absenceService.declareAbsence(enfant);
+        LocalDateTime debut = dateDebut != null ?
+                LocalDate.parse(dateDebut).atStartOfDay() : LocalDateTime.now();
+        LocalDateTime fin = "COURTE".equals(typeAbsence) && dateFin != null ?
+                LocalDate.parse(dateFin).atTime(23, 59, 59) : null;
+
+        boolean ok = absenceService.declareAbsence(enfant,
+                EtreAbsent.TypeAbsence.valueOf(typeAbsence), debut, fin, motif);
+
         if (ok) {
             refreshUserSession(session, parent);
         }
@@ -89,6 +104,8 @@ public class ControllerAbsence extends HttpServlet {
                         : "Erreur lors de l'enregistrement de l'absence.",
                 url);
     }
+
+
 
     private void handleUpload(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -117,6 +134,13 @@ public class ControllerAbsence extends HttpServlet {
         }
 
         EtreAbsent absence = opt.get();
+
+        String dateFinStr = request.getParameter("date_fin_certificat");
+        if (dateFinStr != null && !dateFinStr.isEmpty()) {
+            LocalDateTime dateFin = LocalDate.parse(dateFinStr).atTime(23, 59, 59);
+            absence.setAbsenceFin(dateFin);
+        }
+
         Part filePart = request.getPart("certificat");
 
         if (filePart == null || filePart.getSize() == 0) {
@@ -145,6 +169,7 @@ public class ControllerAbsence extends HttpServlet {
                         : "Erreur lors de l'enregistrement.",
                 url);
     }
+
 
     private void forwardWithMessage(HttpServletRequest request, HttpServletResponse response,
                                     String message, String url) throws ServletException, IOException {

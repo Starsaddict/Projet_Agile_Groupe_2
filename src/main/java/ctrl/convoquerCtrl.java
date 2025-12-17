@@ -59,13 +59,21 @@ public class convoquerCtrl extends HttpServlet {
         }
 
         eventService service = new eventService();
-        Evenement evenement = service.findByIdWithParticipants(idEvenement);
+        Evenement evenement;
+
+        // 🔒 SÉPARATION STRICTE MATCH / AUTRE EVENT
+        if ("match".equals(type)) {
+            evenement = service.findByIdWithParticipants(idEvenement);
+        } else {
+            evenement = service.findById(idEvenement);
+        }
 
         if (evenement == null) {
             request.setAttribute("messageErreur", "Événement introuvable.");
             doGet(request, response);
             return;
         }
+
 
         /* ======================================================
            🟥 CAS MATCH OFFICIEL — AVEC LIEN DE CONFIRMATION

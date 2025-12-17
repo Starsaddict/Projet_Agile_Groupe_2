@@ -150,7 +150,7 @@ hr {
 			<div class="header-actions">
 				<form action="CtrlCoach" method="get">
 					<input type="hidden" name="action" value="Home">
-					<button type="submit" class="btn-primary">Home</button>
+					<button type="submit" class="btn-primary">Accueil</button>
 				</form>
 
 				<form action="CtrlLogout" method="get">
@@ -287,20 +287,6 @@ hr {
 		<%
 		}
 		%>
-
-		<div class="btn-row">
-			<form action="CtrlCoach" method="get">
-				<input type="hidden" name="action" value="ConvocationGroupe">
-				<button type="submit" class="btn-secondary">Retour à la
-					page précédente</button>
-			</form>
-
-			<form action="CtrlCoach" method="get">
-				<input type="hidden" name="action" value="PageCoach">
-				<button type="submit" class="btn-secondary">Espace Coach</button>
-			</form>
-		</div>
-
 	</div>
 
 </body>

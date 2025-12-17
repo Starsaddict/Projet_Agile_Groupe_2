@@ -117,11 +117,9 @@ public class CtrlConvoquer extends HttpServlet {
 	        LocalDateTime start = evt.getDateEvenement().toLocalDate().atStartOfDay();
 	        LocalDateTime end = start.plusDays(1);
 
-	        // ✅ 1) 先检查：同人同天（跨组冲突）
 	        List<ConflitJoueur> conflitsJ = conflitsJoueursMemeJour(session, idGroupe, start, end, idEvenement);
 	        if (conflitsJ != null && !conflitsJ.isEmpty()) {
 
-	            // 拼接提示：每个人显示 “人名 + 冲突组名 + 冲突活动名”
 	            String detail = conflitsJ.stream()
 	                    .map(c -> c.getJoueurNom() + " (déjà dans " + c.getGroupeNom() + " : " + c.getEvenementNom() + ")")
 	                    .distinct()
@@ -185,7 +183,6 @@ public class CtrlConvoquer extends HttpServlet {
 	private List<ConflitJoueur> conflitsJoueursMemeJour(Session session, Long idGroupeChoisi, LocalDateTime start,
 			LocalDateTime end, Long idEvenementCourant) {
 
-// 这里返回 Object[]: [joueurNom, groupeNom, evenementNom]
 		List<Object[]> rows = session
 				.createQuery("select distinct j.nomUtilisateur, g.nomGroupe, e.nomEvenement " + "from Evenement e "
 						+ "join e.groupe g " + "join g.joueurs j " + "where e.typeEvenement = 'MATCH_OFFICIEL' "

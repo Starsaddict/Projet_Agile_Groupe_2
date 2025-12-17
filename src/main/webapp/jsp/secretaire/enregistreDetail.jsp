@@ -6,10 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List, model.EtrePresent, model.Evenement, model.Joueur" %>
+<%@ page import="java.util.List, model.ConvocationEvenement, model.Evenement, model.Joueur" %>
 <%
     Evenement evenement = (Evenement) request.getAttribute("evenement");
-    List<EtrePresent> etrePresents = (List<EtrePresent>) request.getAttribute("etrePresents");
+    List<ConvocationEvenement> convocations = (List<ConvocationEvenement>) request.getAttribute("convocations");
     String contextPath = request.getContextPath();
 %>
 <html>
@@ -69,7 +69,7 @@
         <% } %>
 
         <h2 style="margin-top:16px;">Participants</h2>
-        <% if (etrePresents != null && !etrePresents.isEmpty()) { %>
+        <% if (convocations != null && !convocations.isEmpty()) { %>
             <table class="table">
                 <thead>
                 <tr>
@@ -78,8 +78,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <% for (EtrePresent ep : etrePresents) {
-                       Joueur joueur = ep.getJoueur();
+                <% for (ConvocationEvenement ce : convocations) {
+                       Joueur joueur = ce.getJoueur();
                        String prenom = joueur != null ? joueur.getPrenomUtilisateur() : "";
                        String nom = joueur != null ? joueur.getNomUtilisateur() : "";
                        String avatar = joueur != null ? joueur.getProfilePicRoute() : null;
@@ -88,6 +88,13 @@
                            initial = prenom.substring(0,1).toUpperCase();
                        } else if (nom != null && !nom.isEmpty()) {
                            initial = nom.substring(0,1).toUpperCase();
+                       }
+                       Boolean presenceReelle = ce.getPresenceReelle();
+                       String nameColor = "inherit";
+                       if (Boolean.TRUE.equals(presenceReelle)) {
+                           nameColor = "green";
+                       } else if (Boolean.FALSE.equals(presenceReelle)) {
+                           nameColor = "red";
                        }
                 %>
                     <tr>
@@ -101,7 +108,7 @@
                                     <% } %>
                                 </div>
                                 <div>
-                                    <div class="player-name"><%= nom %> <%= prenom %></div>
+                                    <div class="player-name" style="color:<%= nameColor %>;"><%= nom %> <%= prenom %></div>
                                     <% if (joueur != null && joueur.getNumeroJoueur() != null) { %>
                                         <div class="player-sub">N° <%= joueur.getNumeroJoueur() %></div>
                                     <% } %>
@@ -110,24 +117,27 @@
                         </td>
                         <td data-label="Action">
                             <%
-                                String epIdValue = "";
-                                Boolean presenceReelle = ep.getPresenceReelle();
+                                String evenementId = (evenement != null && evenement.getIdEvenement() != null)
+                                        ? evenement.getIdEvenement().toString()
+                                        : (ce.getEvenement() != null && ce.getEvenement().getIdEvenement() != null
+                                            ? ce.getEvenement().getIdEvenement().toString()
+                                            : "");
+                                String joueurId = (joueur != null && joueur.getIdUtilisateur() != null)
+                                        ? joueur.getIdUtilisateur().toString()
+                                        : "";
                                 boolean disablePresent = Boolean.TRUE.equals(presenceReelle);
                                 boolean disableAbsent = Boolean.FALSE.equals(presenceReelle);
-                                if (ep.getEtrePresentId() != null) {
-                                    epIdValue = ep.getEtrePresentId().getIdJoueur() + "-" +
-                                            ep.getEtrePresentId().getIdGroupe() + "-" +
-                                            ep.getEtrePresentId().getIdEvenement();
-                                }
                             %>
                             <div class="action-buttons" style="gap:8px; justify-content:flex-start;">
                                 <form action="<%= contextPath %>/secretaire/enregistrement/confirmPresent" method="post" style="margin:0;">
-                                    <input type="hidden" name="etrepresentId" value="<%= epIdValue %>">
+                                    <input type="hidden" name="id" value="<%= evenementId %>">
+                                    <input type="hidden" name="joueurId" value="<%= joueurId %>">
                                     <input type="hidden" name="action" value="present">
                                     <button type="submit" class="btn" <%= disablePresent ? "disabled" : "" %>>Marquer présent</button>
                                 </form>
                                 <form action="<%= contextPath %>/secretaire/enregistrement/confirmPresent" method="post" style="margin:0;">
-                                    <input type="hidden" name="etrepresentId" value="<%= epIdValue %>">
+                                    <input type="hidden" name="id" value="<%= evenementId %>">
+                                    <input type="hidden" name="joueurId" value="<%= joueurId %>">
                                     <input type="hidden" name="action" value="absent">
                                     <button type="submit" class="btn secondary" <%= disableAbsent ? "disabled" : "" %>>Marquer absent</button>
                                 </form>

@@ -6,14 +6,14 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import model.EtrePresentId;
-import service.etrePresentService;
+import service.convocationEvenementService;
+import model.ConvocationEvenementId;
 
 @WebServlet("/secretaire/enregistrement/confirmPresent")
 
 public class etrepresentCtrl extends HttpServlet {
 
-    private final static etrePresentService etrePresentService = new etrePresentService();
+    private final static convocationEvenementService convocationService = new convocationEvenementService();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -22,34 +22,38 @@ public class etrepresentCtrl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
-        String id = req.getParameter("etrepresentId");
+        String eventId = req.getParameter("id");
+        String joueurId = req.getParameter("joueurId");
 
-        EtrePresentId epId = null;
-        if (id != null && !id.isEmpty()) {
-            String[] parts = id.split("-");
-            if (parts.length == 3) {
-                try {
-                    epId = new EtrePresentId(
-                            Long.parseLong(parts[0]),
-                            Long.parseLong(parts[1]),
-                            Long.parseLong(parts[2])
-                    );
-                } catch (NumberFormatException e) {
-                    epId = null;
-                }
+        Long evenementId = null;
+        Long joueurIdLong = null;
+        if (eventId != null && !eventId.isEmpty()) {
+            try {
+                evenementId = Long.parseLong(eventId);
+            } catch (NumberFormatException e) {
+                evenementId = null;
             }
         }
 
-        if (epId == null) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Identifiant etrepresentId invalide");
+        if (joueurId != null && !joueurId.isEmpty()) {
+            try {
+                joueurIdLong = Long.parseLong(joueurId);
+            } catch (NumberFormatException e) {
+                joueurIdLong = null;
+            }
+        }
+
+        if (evenementId == null || joueurIdLong == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Identifiants convocation invalides");
             return;
         }
 
         boolean etrePresent = "present".equalsIgnoreCase(action);
         // "absent" or any other value defaults to false
 
-        etrePresentService.updatePresenceReelle(epId, etrePresent);
+        ConvocationEvenementId convocationId = new ConvocationEvenementId(evenementId, joueurIdLong);
+        convocationService.updatePresenceReelle(convocationId, etrePresent);
 
-        resp.sendRedirect(req.getContextPath() + "/secretaire/enregistrement?id=" + epId.getIdEvenement());
+        resp.sendRedirect(req.getContextPath() + "/secretaire/enregistrement?id=" + req.getParameter("id"));
     }
 }

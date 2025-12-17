@@ -13,7 +13,6 @@ import model.Coach;
 import model.Code;
 import model.Covoiturage;
 import model.EtreAbsent;
-import model.EtrePresent;
 import model.Evenement;
 import model.Groupe;
 import model.Joueur;
@@ -85,19 +84,7 @@ public class BdTest {
             // clés composites)
             session.flush();
 
-            // 4) Présences : EtrePresent (clé composite joueur/groupe/evenement)
-            EtrePresent presenceMatch = new EtrePresent(joueur1, groupeA, match);
-            presenceMatch.setConfirmerPresenceJoueur("OUI");
-            presenceMatch.setConfirmerPresenceParent1("OUI");
-            presenceMatch.setConfirmerPresenceParent2("NON");
-            presenceMatch.setPresenceReelle(true);
-            session.save(presenceMatch);
-
-            EtrePresent presenceEntrainement = new EtrePresent(joueur1, groupeA, entrainement);
-            presenceEntrainement.setConfirmerPresenceJoueur("OUI");
-            session.save(presenceEntrainement);
-
-            // 5) Absence : EtreAbsent
+            // 4) Absence : EtreAbsent
             EtreAbsent absence = new EtreAbsent();
             absence.setAbsenceDebut(LocalDateTime.of(2025, 3, 12, 14, 30));
             absence.setJoueur(joueur1);
@@ -136,10 +123,6 @@ public class BdTest {
             session.createQuery("FROM Evenement", Evenement.class).getResultList()
                     .forEach(e -> System.out
                             .println(e.getIdEvenement() + " | " + e.getNomEvenement() + " | " + e.getDateEvenement()));
-
-            System.out.println("\n--- Présences (EtrePresent) ---");
-            session.createQuery("FROM EtrePresent", EtrePresent.class).getResultList()
-                    .forEach(p -> System.out.println(p));
 
             System.out.println("\n--- Absences (EtreAbsent) ---");
             session.createQuery("FROM EtreAbsent", EtreAbsent.class).getResultList()

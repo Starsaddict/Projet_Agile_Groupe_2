@@ -202,7 +202,7 @@ const modalConfig = {
         title: 'Déclarer une absence courte',
         info: '',
         showDateFin: true,
-        dateFin Required: true,
+        dateFinRequired: true,
         motifPlaceholder: 'Raison de l\'absence...',
         submitText: 'Confirmer l\'absence'
     },

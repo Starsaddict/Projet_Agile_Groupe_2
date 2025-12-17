@@ -8,6 +8,7 @@ import repository.AbsenceRepository;
 import repository.AbsenceRepositoryImpl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class AbsenceService {
@@ -22,22 +23,27 @@ public class AbsenceService {
         this.repo = new AbsenceRepositoryImpl();
     }
 
-    public boolean declareAbsence(Joueur joueur) {
-        if (joueur == null) return false;
+    public boolean declareAbsence(Joueur joueur, EtreAbsent.TypeAbsence type, LocalDateTime debut, LocalDateTime fin, String motif) {
+        if (joueur == null || type == null) return false;
+
         EtreAbsent ea = new EtreAbsent();
         ea.setJoueur(joueur);
-        ea.setAbsenceDebut(LocalDate.now().atStartOfDay());
-        ea.setAbsenceTerminee(false);
+        ea.setTypeAbsence(type);
+        ea.setAbsenceDebut(debut);
+        ea.setAbsenceFin(fin);
+        ea.setMotif(motif);
+
         EtreAbsent saved = repo.saveAbsence(ea);
         return saved != null;
     }
+
+
 
     public boolean closeAbsence(EtreAbsent absence, String fileName, String contentType, byte[] data) {
         if (absence == null) return false;
         absence.setCertificatName(fileName);
         absence.setCertificatContentType(contentType);
         absence.setCertificatData(data);
-        absence.setAbsenceTerminee(true);
         EtreAbsent saved = repo.saveAbsence(absence);
         return saved != null;
     }
@@ -47,7 +53,7 @@ public class AbsenceService {
                 .filter(j -> j.getIdUtilisateur().equals(idEnfant))
                 .findFirst()
                 .flatMap(j -> j.getAbsences().stream()
-                        .filter(a -> Boolean.FALSE.equals(a.getAbsenceTerminee()))
+                        .filter(EtreAbsent::isActive)
                         .findFirst());
     }
 
@@ -62,7 +68,10 @@ public class AbsenceService {
     public boolean hasOpenAbsence(Joueur enfant) {
         return enfant.getAbsences() != null &&
                 enfant.getAbsences().stream()
-                        .anyMatch(a -> Boolean.FALSE.equals(a.getAbsenceTerminee()));
+                        .anyMatch(EtreAbsent::isActive);
     }
 
+    public boolean isCurrentlyAbsent(Joueur enfant) {
+        return hasOpenAbsence(enfant);
+    }
 }

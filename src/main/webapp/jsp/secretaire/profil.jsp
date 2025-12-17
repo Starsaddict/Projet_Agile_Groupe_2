@@ -42,31 +42,29 @@
         </div>
         
         <div class="card" style="margin-top:12px;">
-            <h2>👥 Gestion des utilisateurs</h2>
+            <h2> Gestion des utilisateurs</h2>
             <ul>
                 <li style="padding-left:0;">
-                    <a href="<%= contextPath %>/secretaire/profil/modifier">👁️ Voir tous les utilisateurs</a>
+                    <a href="<%= contextPath %>/secretaire/profil/modifier">Voir tous les utilisateurs</a>
                     <p class="description">Consulter et modifier les profils existants</p>
                 </li>
             </ul>
         </div>
         
         <div class="card" style="margin-top:12px;">
-            <h2>➕ Création de comptes</h2>
+            <h2>Création de comptes</h2>
             <ul>
                 <li style="padding-left:0;">
-                    <a href="<%= contextPath %>/secretaire/profil/creerCompteFamile">👨‍👩‍👧 Créer une famille</a>
+                    <a href="<%= contextPath %>/secretaire/profil/creerCompteFamile">Créer une famille</a>
                     <p class="description">Ajouter un parent et ses enfants</p>
                 </li>
                 <li style="padding-left:0;">
-                    <a href="<%= contextPath %>/secretaire/profil/batchCreate">📊 Import en masse (Excel)</a>
+                    <a href="<%= contextPath %>/secretaire/profil/batchCreate">Import en masse (Excel)</a>
                     <p class="description">Importer plusieurs comptes via fichier Excel</p>
                 </li>
                 <li style="padding-left:0;">
-                    <form method="post" action="<%= contextPath %>/secretaire/profil/sendInvitation" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                        <input type="email" name="email" placeholder="Email parent" required style="flex:1; min-width:200px;" />
-                        <button type="submit" class="btn">Envoyer invitation</button>
-                    </form>
+                    <a class="btn" href="<%= contextPath %>/secretaire/profil/sendInvitation">Envoyer une invitation</a>
+                    <p class="description">Ouvrir la page dédiée pour envoyer un code d'inscription au parent</p>
                     <p class="description">Envoyer un code d'inscription au parent</p>
                 </li>
             </ul>

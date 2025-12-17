@@ -21,4 +21,15 @@ public class AbsenceRepositoryImpl implements AbsenceRepository {
             return null;
         }
     }
+
+    @Override
+    public java.util.Optional<EtreAbsent> findById(Long idAbsence) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            EtreAbsent ea = session.get(EtreAbsent.class, idAbsence);
+            return java.util.Optional.ofNullable(ea);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return java.util.Optional.empty();
+        }
+    }
 }

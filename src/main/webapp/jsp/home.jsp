@@ -316,67 +316,49 @@ th, td {
 						</div>
 					</div>
 				</c:if>
+    <c:if test="${not empty roles and fn:contains(roles, 'Parent')}">
+        <div class="card">
+            <div class="pill green">Parent</div>
+            <h2>Services Parent</h2>
+            <p>Accès rapide aux covoiturages, convocations et profil.</p>
+            <div class="links">
+                <a class="btn" href="${pageContext.request.contextPath}/parent/covoiturage">Covoiturage</a>
+                <a class="btn" href="${pageContext.request.contextPath}/jsp/convocation.jsp">Convocation</a>
+                <a class="btn" href="${pageContext.request.contextPath}/parent/profil">Profil parent</a>
+                <a class="btn" href="${pageContext.request.contextPath}/CtrlFrontAbsence">Gérer les absences</a>
+            </div>
+        </div>
+    </c:if>
 
-				<c:if test="${not empty roles and fn:contains(roles, 'Parent')}">
-					<div class="card">
-						<div class="pill green">Parent</div>
-						<h2>Services Parent</h2>
-						<p>Accès rapide aux covoiturages, convocations et profil.</p>
-						<div class="links">
-							<a class="btn"
-								href="${pageContext.request.contextPath}/jsp/covoiturage.jsp">Covoiturage</a>
-							<a class="btn"
-								href="${pageContext.request.contextPath}/jsp/convocation.jsp">Convocations</a>
-							<a class="btn"
-								href="${pageContext.request.contextPath}/parent/profil">Profil
-								parent</a>
-						</div>
-					</div>
-				</c:if>
+    <c:if test="${not empty roles and fn:contains(roles, 'Secretaire')}">
+        <div class="card">
+            <div class="pill pink">Secrétaire</div>
+            <h2>Administration</h2>
+            <p>Créer/éditer des comptes et gérer les événements.</p>
+            <div class="links">
+                <a class="btn" href="${pageContext.request.contextPath}/evenementSecre">Gestion des événements</a>
+                <a class="btn" href="${pageContext.request.contextPath}/secretaire/profil">Gestion des profils</a>
+                <a class="btn" href="${pageContext.request.contextPath}/secretaire/convoquer?type=match">Convoquer les Matches</a>
+                <a class="btn" href="${pageContext.request.contextPath}/secretaire/enregistrement">Enregister les entraintements</a>
 
-				<c:if test="${not empty roles and fn:contains(roles, 'Secretaire')}">
-					<div class="card">
-						<div class="pill pink">Secrétaire</div>
-						<h2>Administration</h2>
-						<p>Créer/éditer des comptes et gérer les événements.</p>
-						<div class="links">
-							<a class="btn"
-								href="${pageContext.request.contextPath}/evenementSecre">Gestion
-								des événements</a> <a class="btn"
-								href="${pageContext.request.contextPath}/secretaire/profil">Gestion
-								des profils</a> <a class="btn"
-								href="${pageContext.request.contextPath}/secretaire/convoquer?type=match">Convoquer
-								les Matches</a>
-						</div>
-						<div style="margin-top: 8px;">
-							<form method="post"
-								action="${pageContext.request.contextPath}/secretaire/profil/sendInvitation"
-								style="display: flex; gap: 8px; align-items: center;">
-								<input type="email" name="email"
-									placeholder="Envoyer code à email parent" required />
-								<button type="submit" class="btn">Envoyer</button>
-							</form>
-						</div>
-					</div>
-				</c:if>
+            </div>
+            <div style="margin-top:8px;">
+        </div>
+    </c:if>
 
-				<c:if test="${not empty roles and fn:contains(roles, 'Joueur')}">
-					<div class="card">
-						<div class="pill blue">Joueur</div>
-						<h2>Vue Joueur</h2>
-						<p>Consultez vos convocations et informations d'équipe.</p>
-						<div class="links">
-							<a class="btn"
-								href="${pageContext.request.contextPath}/jsp/convocation.jsp">Mes
-								convocations</a> <a class="btn"
-								href="${pageContext.request.contextPath}/joueur/profil">Ma
-								profil</a>
-						</div>
-					</div>
-				</c:if>
-			</div>
-		</div>
-	</div>
-
+    <c:if test="${not empty roles and fn:contains(roles, 'Joueur')}">
+        <div class="card">
+            <div class="pill blue">Joueur</div>
+            <h2>Vue Joueur</h2>
+            <p>Consultez vos convocations et informations d'équipe.</p>
+            <div class="links">
+                <a class="btn" href="${pageContext.request.contextPath}/jsp/convocation.jsp">Mes convocations</a>
+                <a class="btn" href="${pageContext.request.contextPath}/joueur/profil">Ma profil</a>
+            </div>
+        </div>
+    </c:if>
+        </div>
+    </div>
+</div>
 </body>
 </html>

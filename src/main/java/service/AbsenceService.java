@@ -65,6 +65,10 @@ public class AbsenceService {
                 .findFirst();
     }
 
+    public Optional<EtreAbsent> findAbsenceById(Long idAbsence) {
+        return repo.findById(idAbsence);
+    }
+
     public boolean hasOpenAbsence(Joueur enfant) {
         return enfant.getAbsences() != null &&
                 enfant.getAbsences().stream()

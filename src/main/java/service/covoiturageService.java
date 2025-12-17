@@ -1,6 +1,7 @@
 package service;
 
 import model.Covoiturage;
+import model.Reservation;
 import model.Utilisateur;
 import repo.covoiturageRepo;
 
@@ -10,38 +11,67 @@ public class covoiturageService {
 
     private final covoiturageRepo repo = new covoiturageRepo();
 
-    // -------------------- CREATE --------------------
+    /* ================= CREATE ================= */
+
     public void creerCovoiturage(Covoiturage c) {
         repo.save(c);
     }
 
-    // -------------------- READ --------------------
-    // Trouver par événement
+    /* ================= READ ================= */
+
     public List<Covoiturage> findByEvenement(Long idEvenement) {
         return repo.findByEvenement(idEvenement);
     }
 
-    // Récupérer tous les covoiturages avec les collections fetchées pour JSP
     public List<Covoiturage> findAllCovoiturages() {
         return repo.findAllWithReservations();
     }
 
-    // -------------------- UPDATE --------------------
-    // Réserver une place dans un covoiturage
-    public void reserver(Long idCovoiturage, Utilisateur utilisateur) {
-        // On utilise la méthode fetch pour éviter LazyInitializationException
+    /* ================= UPDATE ================= */
+
+    public void reserver(Long idCovoiturage, Utilisateur utilisateur, int nbPlaces) {
         Covoiturage c = repo.findByIdWithReservations(idCovoiturage);
         if (c == null) {
             throw new IllegalArgumentException("Covoiturage introuvable");
         }
 
-        c.addReservation(utilisateur);
+        Reservation r = c.getReservationParUtilisateur(utilisateur);
+
+        if (r == null) {
+            // Nouvelle réservation
+            r = new Reservation();
+            r.setUtilisateur(utilisateur);
+            r.setCovoiturage(c);
+            r.setNbPlaces(nbPlaces);
+            c.getReservations().add(r); // ajoute à la collection
+        } else {
+            // Modification de la réservation existante
+            r.setNbPlaces(nbPlaces);
+        }
+
+        // Met à jour le covoiturage (Hibernate va persister la réservation grâce au cascade)
         repo.update(c);
     }
 
-    // -------------------- DELETE --------------------
-    // Supprimer un covoiturage si l'utilisateur est le conducteur
+
+    /**
+     * Quitter un covoiturage
+     */
+    public void quitter(Long idCovoiturage, Utilisateur utilisateur) {
+
+        Covoiturage c = repo.findByIdWithReservations(idCovoiturage);
+        if (c == null) {
+            throw new IllegalArgumentException("Covoiturage introuvable");
+        }
+
+        c.quitter(utilisateur);
+        repo.update(c);
+    }
+
+    /* ================= DELETE ================= */
+
     public void supprimer(Long idCovoiturage, Utilisateur user) {
+
         Covoiturage c = repo.findByIdWithReservations(idCovoiturage);
         if (c == null) {
             throw new IllegalArgumentException("Covoiturage introuvable");
@@ -53,15 +83,4 @@ public class covoiturageService {
 
         repo.delete(c);
     }
-    
-    public void quitter(Long idCovoiturage, Utilisateur utilisateur) {
-        Covoiturage c = repo.findByIdWithReservations(idCovoiturage);
-        if (c == null) {
-            throw new IllegalArgumentException("Covoiturage introuvable");
-        }
-
-        c.removeReservation(utilisateur);
-        repo.update(c);
-    }
-    
 }

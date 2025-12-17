@@ -29,14 +29,13 @@ public class CtrlCovoiturage extends HttpServlet {
             return;
         }
 
-        // Récupérer tous les covoiturages avec fetch pour éviter LazyInitializationException
+        // Tous les covoiturages avec collections fetchées
         List<Covoiturage> covoiturages = service.findAllCovoiturages();
         req.setAttribute("covoiturages", covoiturages);
 
-        // Récupérer tous les événements
+        // Événements futurs
         List<Evenement> evenements = eService.findEvenementsFuturs();
         req.setAttribute("evenements", evenements);
-
 
         req.getRequestDispatcher("/jsp/parent/covoiturage.jsp").forward(req, resp);
     }
@@ -53,55 +52,52 @@ public class CtrlCovoiturage extends HttpServlet {
 
         String action = req.getParameter("action");
 
-        switch (action) {
-            case "creer": {
-                Long idEvenement = Long.valueOf(req.getParameter("idEvenement"));
-                Covoiturage c = new Covoiturage();
-                c.setConducteur(user);
-                c.setLieuDepartCovoiturage(req.getParameter("lieuDepart"));
-                c.setNbPlacesMaxCovoiturage(Integer.parseInt(req.getParameter("nbPlaces")));
-                c.setDateCovoiturage(LocalDateTime.parse(req.getParameter("date")));
+        try {
+            switch (action) {
+                case "creer": {
+                    Long idEvenement = Long.valueOf(req.getParameter("idEvenement"));
+                    Covoiturage c = new Covoiturage();
+                    c.setConducteur(user);
+                    c.setLieuDepartCovoiturage(req.getParameter("lieuDepart"));
+                    c.setNbPlacesMaxCovoiturage(Integer.parseInt(req.getParameter("nbPlaces")));
+                    c.setDateCovoiturage(LocalDateTime.parse(req.getParameter("date")));
 
-                Evenement e = new Evenement();
-                e.setIdEvenement(idEvenement);
-                c.setEvenement(e);
+                    Evenement e = new Evenement();
+                    e.setIdEvenement(idEvenement);
+                    c.setEvenement(e);
 
-                service.creerCovoiturage(c);
-                break;
-            }
-
-            case "supprimer": {
-                Long id = Long.valueOf(req.getParameter("idCovoiturage"));
-                service.supprimer(id, user);
-                break;
-            }
-
-            case "rejoindre": {
-                Long id = Long.valueOf(req.getParameter("idCovoiturage"));
-                try {
-                    service.reserver(id, user);
-                } catch (IllegalArgumentException ignored) {
-                    // tu peux logger ou afficher un message d'erreur si tu veux
+                    service.creerCovoiturage(c);
+                    break;
                 }
-                break;
-            }
-            
-            case "quitter":
-                Long idCovoiturage = Long.valueOf(req.getParameter("idCovoiturage"));
-                try {
-                    service.quitter(idCovoiturage, user);
-                } catch (IllegalArgumentException | IllegalStateException e) {
 
+                case "supprimer": {
+                    Long id = Long.valueOf(req.getParameter("idCovoiturage"));
+                    service.supprimer(id, user);
+                    break;
                 }
-                break;
 
+                case "rejoindre": {
+                    Long id = Long.valueOf(req.getParameter("idCovoiturage"));
+                    int nbPlaces = Integer.parseInt(req.getParameter("nbPlaces")); // multi-réservation
+                    service.reserver(id, user, nbPlaces);
+                    break;
+                }
 
-            default:
-                break;
+                case "quitter": {
+                    Long id = Long.valueOf(req.getParameter("idCovoiturage"));
+                    service.quitter(id, user);
+                    break;
+                }
+
+                default:
+                    break;
+            }
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            // Optionnel : logger l'erreur ou stocker un message pour JSP
+            ex.printStackTrace();
         }
 
-        // redirection générale après action
+        // Redirection unique après traitement
         resp.sendRedirect(req.getContextPath() + "/parent/covoiturage");
     }
-
 }

@@ -214,7 +214,7 @@ td.td-action {
 			<div class="header-actions">
 				<form action="CtrlCoach" method="get">
 					<input type="hidden" name="action" value="Home">
-					<button type="submit" class="btn-primary">Home</button>
+					<button type="submit" class="btn-primary">Accueil</button>
 				</form>
 
 				<form action="CtrlLogout" method="get">
@@ -375,14 +375,6 @@ td.td-action {
 				%>
 			</tbody>
 		</table>
-
-		<div class="btn-row">
-			<form action="CtrlCoach" method="get">
-				<input type="hidden" name="action" value="PageCoach">
-				<button type="submit" class="btn-secondary">Espace Coach</button>
-			</form>
-		</div>
-
 	</div>
 
 	<script>

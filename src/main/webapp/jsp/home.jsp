@@ -91,11 +91,7 @@ th, td {
 	color: #1d4ed8;
 	margin-left: 6px;
 }
-/* =========================
-   Coach 首页样式增强（只补充/覆盖）
-   ========================= */
 
-/* 1) “Coach” 蓝色小气泡与欢迎词同一行显示 */
 .section-grid > .card > h2:first-of-type {
   display: inline-flex;
   align-items: center;
@@ -103,50 +99,42 @@ th, td {
   margin-bottom: 6px;
 }
 
-/* 让 div.pill 不再占一整行（从 block -> inline） */
 .section-grid > .card > .pill {
-  display: inline-flex;   /* 覆盖你原来的 inline-block 也没问题 */
+  display: inline-flex;  
   align-items: center;
   vertical-align: middle;
-  margin: 0;              /* 防止它自己把行撑开 */
+  margin: 0;  
 }
 
-/* 把 pill “视觉上”挪到欢迎词旁边：紧贴上一个 h2 */
 .section-grid > .card > h2:first-of-type + .pill {
   margin-left: 10px;
   transform: translateY(-2px);
 }
 
-/* 2) évènement / groupe 数量小气泡显示在标题旁边（视觉上放到同一行右侧） */
 .section-grid > .card > h2 {
-  position: relative; /* 作为定位参考 */
+  position: relative;
 }
 
-/* 你的 badge 现在在 p 后面：用负 margin + 右浮动把它“拉回”标题行 */
 .section-grid > .card > p + .badge {
   float: right;
-  margin-top: -44px;  /* 往上拉到标题同一行（可微调 -40~-48） */
+  margin-top: -44px; 
 }
 
-/* 清掉 float 对后面 table 的影响 */
 .section-grid > .card > p + .badge::after {
   content: "";
   display: block;
   clear: both;
 }
 
-/* 3) “Gestion des groupes” 按钮居中显示 */
 .section-grid > .card > table + .links {
   justify-content: center;
 }
 
-/* 4) 给“Évènements...” 和 “Groupes...” 两个标题加小装饰（不影响第一个欢迎标题） */
 .section-grid > .card > h2:not(:first-of-type) {
   padding-left: 14px;
   margin-top: 22px;
 }
 
-/* 左侧小竖条 */
 .section-grid > .card > h2:not(:first-of-type)::before {
   content: "";
   position: absolute;
@@ -159,7 +147,6 @@ th, td {
   background: var(--primary);
 }
 
-/* 额外小圆点（更“有样式”一点） */
 .section-grid > .card > h2:not(:first-of-type)::after {
   content: "";
   position: absolute;
@@ -172,7 +159,6 @@ th, td {
   background: #c7d2fe;
 }
 
-/* 5) 小优化：表格标题和内容更对齐一些（不会改变你的结构） */
 .section-grid > .card > h2 + p {
   margin-top: 6px;
 }

@@ -103,7 +103,7 @@ public class BdTest {
             covoiturage.setLieuDepartCovoiturage("IUT de Rodez");
             covoiturage.setEvenement(match);
             covoiturage.setConducteur(parent1);
-            covoiturage.addReservation(joueur1);
+//            covoiturage.addReservation(joueur1);
             session.save(covoiturage);
 
             // 7) Messages entre utilisateurs (EnvoyerMessage)

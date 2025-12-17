@@ -83,7 +83,7 @@
     <div class="card">
         <h2>🚗 Proposer un covoiturage</h2>
         <p>Proposer ou gérer un trajet pour les événements.</p>
-        <a href="<%=request.getContextPath()%>/jsp/covoiturage.jsp">Accéder</a>
+		<a href="<%=request.getContextPath()%>/parent/covoiturage">Accéder</a>
     </div>
 
     <div class="card">

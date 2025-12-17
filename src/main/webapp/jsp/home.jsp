@@ -95,8 +95,8 @@
             <h2>Services Parent</h2>
             <p>Accès rapide aux covoiturages, convocations et profil.</p>
             <div class="links">
-                <a class="btn" href="${pageContext.request.contextPath}/jsp/covoiturage.jsp">Covoiturage</a>
-                <a class="btn" href="${pageContext.request.contextPath}/jsp/convocation.jsp">Convocations</a>
+                <a class="btn" href="${pageContext.request.contextPath}/parent/covoiturage">Covoiturage</a>
+                <a class="btn" href="${pageContext.request.contextPath}/jsp/convocation.jsp">Convocation</a>
                 <a class="btn" href="${pageContext.request.contextPath}/parent/profil">Profil parent</a>
                 <a class="btn" href="${pageContext.request.contextPath}/CtrlFrontAbsence">Gérer les absences</a>
             </div>

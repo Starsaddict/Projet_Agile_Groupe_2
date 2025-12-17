@@ -42,8 +42,6 @@ public abstract class Utilisateur {
     @Column(name = "TypeU", insertable = false, updatable = false)
     private String typeU;
 
-    @ManyToMany(mappedBy = "reservations", fetch = FetchType.LAZY)
-    private List<Covoiturage> covoiturages = new ArrayList<>();
 
     @OneToMany(mappedBy = "conducteur", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Covoiturage> conduits;
@@ -101,14 +99,6 @@ public abstract class Utilisateur {
 
     public void setDateNaissanceUtilisateur(LocalDate dateNaissanceUtilisateur) {
         this.dateNaissanceUtilisateur = dateNaissanceUtilisateur;
-    }
-
-    public List<Covoiturage> getCovoiturages() {
-        return covoiturages;
-    }
-
-    public void setCovoiturages(List<Covoiturage> covoiturages) {
-        this.covoiturages = covoiturages;
     }
 
     public List<Covoiturage> getConduits() {

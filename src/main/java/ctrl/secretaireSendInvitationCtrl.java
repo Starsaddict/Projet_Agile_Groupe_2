@@ -17,6 +17,15 @@ public class secretaireSendInvitationCtrl extends HttpServlet {
     private static final SecureRandom rnd = new SecureRandom();
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            request.getRequestDispatcher("/jsp/secretaire/sendInvitation.jsp").forward(request, response);
+        } catch (Exception e) {
+            response.sendRedirect(request.getContextPath() + "/secretaire/profil?error=Impossible+d'afficher+la+page+d'invitation");
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email");
         if (email == null || email.trim().isEmpty()) {

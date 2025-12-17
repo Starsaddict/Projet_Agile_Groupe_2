@@ -95,9 +95,10 @@
             <h2>Services Parent</h2>
             <p>Accès rapide aux covoiturages, convocations et profil.</p>
             <div class="links">
-                <a class="btn" href="${pageContext.request.contextPath}/jsp/covoiturage.jsp">Covoiturage</a>
-                <a class="btn" href="${pageContext.request.contextPath}/jsp/convocation.jsp">Convocations</a>
+                <a class="btn" href="${pageContext.request.contextPath}/parent/covoiturage">Covoiturage</a>
+                <a class="btn" href="${pageContext.request.contextPath}/jsp/convocation.jsp">Convocation</a>
                 <a class="btn" href="${pageContext.request.contextPath}/parent/profil">Profil parent</a>
+                <a class="btn" href="${pageContext.request.contextPath}/CtrlFrontAbsence">Gérer les absences</a>
             </div>
         </div>
     </c:if>
@@ -111,13 +112,10 @@
                 <a class="btn" href="${pageContext.request.contextPath}/evenementSecre">Gestion des événements</a>
                 <a class="btn" href="${pageContext.request.contextPath}/secretaire/profil">Gestion des profils</a>
                 <a class="btn" href="${pageContext.request.contextPath}/secretaire/convoquer?type=match">Convoquer les Matches</a>
+                <a class="btn" href="${pageContext.request.contextPath}/secretaire/enregistrement">Enregister les entraintements</a>
+
             </div>
             <div style="margin-top:8px;">
-                <form method="post" action="${pageContext.request.contextPath}/secretaire/profil/sendInvitation" style="display:flex;gap:8px;align-items:center;">
-                    <input type="email" name="email" placeholder="Envoyer code à email parent" required />
-                    <button type="submit" class="btn">Envoyer</button>
-                </form>
-            </div>
         </div>
     </c:if>
 

@@ -1,9 +1,9 @@
 package model;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.ArrayList;
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Covoiturage")
@@ -17,31 +17,28 @@ public class Covoiturage {
     @Column(name = "DateCovoiturage")
     private LocalDateTime dateCovoiturage;
 
-    @Column(name = "NbPlacesMax")
+    @Column(name = "NbPlacesMax", nullable = false)
     private int nbPlacesMaxCovoiturage;
 
-    @Column(name = "LieuDepart")
+    @Column(name = "LieuDepart", nullable = false)
     private String lieuDepartCovoiturage;
 
     @ManyToOne
     @JoinColumn(name = "IdConducteur", nullable = false)
     private Utilisateur conducteur;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "Reserver",
-            joinColumns = @JoinColumn(name = "IdCovoiturage"),
-            inverseJoinColumns = @JoinColumn(name = "IdUtilisateur")
-    )
-    private List<Utilisateur> reservations = new ArrayList<>();
-
     @ManyToOne
     @JoinColumn(name = "IdEvenement", nullable = false)
     private Evenement evenement;
 
+    @OneToMany(
+        mappedBy = "covoiturage",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<Reservation> reservations = new ArrayList<>();
 
-    public Covoiturage() {
-    }
+    /* ================= GETTERS / SETTERS ================= */
 
     public Long getIdCovoiturage() {
         return idCovoiturage;
@@ -63,24 +60,16 @@ public class Covoiturage {
         return nbPlacesMaxCovoiturage;
     }
 
-    public void setNbPlacesMaxCovoiturage(int nbPlacesMax) {
-        this.nbPlacesMaxCovoiturage = nbPlacesMax;
+    public void setNbPlacesMaxCovoiturage(int nbPlacesMaxCovoiturage) {
+        this.nbPlacesMaxCovoiturage = nbPlacesMaxCovoiturage;
     }
 
     public String getLieuDepartCovoiturage() {
         return lieuDepartCovoiturage;
     }
 
-    public void setLieuDepartCovoiturage(String lieuDepart) {
-        this.lieuDepartCovoiturage = lieuDepart;
-    }
-
-    public Evenement getEvenement() {
-        return evenement;
-    }
-
-    public void setEvenement(Evenement evenement) {
-        this.evenement = evenement;
+    public void setLieuDepartCovoiturage(String lieuDepartCovoiturage) {
+        this.lieuDepartCovoiturage = lieuDepartCovoiturage;
     }
 
     public Utilisateur getConducteur() {
@@ -91,44 +80,72 @@ public class Covoiturage {
         this.conducteur = conducteur;
     }
 
-    public List<Utilisateur> getReservations() {
+    public Evenement getEvenement() {
+        return evenement;
+    }
+
+    public void setEvenement(Evenement evenement) {
+        this.evenement = evenement;
+    }
+
+    public List<Reservation> getReservations() {
         return reservations;
     }
 
-    public void setReservations(List<Utilisateur> utilisateurs) {
-        this.reservations = utilisateurs;
+    /* ================= LOGIQUE MÉTIER ================= */
+
+    public int getPlacesReservees() {
+        return reservations.stream()
+                .mapToInt(Reservation::getNbPlaces)
+                .sum();
     }
 
-    public boolean hasPlacesDisponibles() {
-        return reservations.size() < nbPlacesMaxCovoiturage;
+    public int getPlacesRestantes() {
+        return nbPlacesMaxCovoiturage - getPlacesReservees();
     }
 
-    public void addReservation(Utilisateur utilisateur) {
-        if (utilisateur == null) return;
+    public void reserver(Utilisateur utilisateur, int nbPlaces) {
 
-        if (utilisateur.equals(conducteur)) {
-            throw new IllegalStateException("Le conducteur ne peut pas réserver son propre covoiturage");
-        }
+        if (utilisateur == null)
+            throw new IllegalArgumentException("Utilisateur invalide");
 
-        if (!hasPlacesDisponibles()) {
-            throw new IllegalStateException("Plus de places disponibles");
-        }
+        if (utilisateur.equals(conducteur))
+            throw new IllegalStateException("Le conducteur ne peut pas réserver");
 
-        if (!reservations.contains(utilisateur)) {
-            reservations.add(utilisateur);
-            utilisateur.getCovoiturages().add(this);
+        if (nbPlaces <= 0)
+            throw new IllegalArgumentException("Nombre de places invalide");
+
+        Reservation r = reservations.stream()
+                .filter(res -> res.getUtilisateur().equals(utilisateur))
+                .findFirst()
+                .orElse(null);
+
+        int dejaReserve = (r != null) ? r.getNbPlaces() : 0;
+        int delta = nbPlaces - dejaReserve;
+
+        if (delta > getPlacesRestantes())
+            throw new IllegalStateException("Pas assez de places disponibles");
+
+        if (r == null) {
+            r = new Reservation();
+            r.setUtilisateur(utilisateur);
+            r.setCovoiturage(this);
+            r.setNbPlaces(nbPlaces);
+            reservations.add(r);
+        } else {
+            r.setNbPlaces(nbPlaces); // modification
         }
     }
 
-
-
-    public void removeReservation(Utilisateur utilisateur) {
-        if (utilisateur == null) return;
-        if (reservations.remove(utilisateur)) {
-            // mettre à jour la collection inverse si présente
-            if (utilisateur.getCovoiturages() != null) {
-                utilisateur.getCovoiturages().remove(this);
-            }
-        }
+    public void quitter(Utilisateur utilisateur) {
+        reservations.removeIf(r -> r.getUtilisateur().equals(utilisateur));
     }
+    
+    public Reservation getReservationParUtilisateur(Utilisateur utilisateur) {
+        return reservations.stream()
+                .filter(r -> r.getUtilisateur().equals(utilisateur))
+                .findFirst()
+                .orElse(null);
+    }
+
 }

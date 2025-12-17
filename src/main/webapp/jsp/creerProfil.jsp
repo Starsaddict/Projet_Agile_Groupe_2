@@ -32,7 +32,6 @@
                     <h2 style="margin-top:0;">
                         <%= u.getPrenomUtilisateur() != null ? u.getPrenomUtilisateur() : "" %>
                         <%= u.getNomUtilisateur() != null ? u.getNomUtilisateur() : "" %>
-                        <small style="color: var(--text-muted);">(<%= u.getTypeU() %>)</small>
                     </h2>
                     <div class="field">
                         <label>Mot de passe</label>

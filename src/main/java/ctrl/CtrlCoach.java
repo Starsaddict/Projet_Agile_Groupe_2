@@ -50,38 +50,6 @@ public class CtrlCoach extends HttpServlet {
 			}
 			request.getRequestDispatcher("/jsp/home.jsp").forward(request, response);
 			break;
-		case "PageCoach":
-			try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-				LocalDateTime now = LocalDateTime.now();
-
-				List<Evenement> evenements = session.createQuery(
-						"from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
-						Evenement.class).setParameter("now", now).setParameter("typeEvt", "MATCH_OFFICIEL").list();
-
-				List<Groupe> groupes = session.createQuery("from Groupe", Groupe.class).list();
-				for (Groupe g : groupes) {
-					g.getJoueurs().size();
-				}
-
-				request.setAttribute("evenements", evenements);
-				request.setAttribute("groupes", groupes);
-			}
-			request.getRequestDispatcher("/jsp/coach/PageCoach.jsp").forward(request, response);
-			break;
-
-		case "ConvocationGroupe":
-			try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-				LocalDateTime now = LocalDateTime.now();
-
-				List<Evenement> evenements = session.createQuery(
-						"from Evenement e where e.dateEvenement >= :now and e.typeEvenement = :typeEvt order by e.dateEvenement",
-						Evenement.class).setParameter("now", now).setParameter("typeEvt", "MATCH_OFFICIEL").list();
-
-				request.setAttribute("evenements", evenements);
-			}
-			request.getRequestDispatcher("/jsp/coach/PageConvoquer.jsp").forward(request, response);
-			break;
-
 		case "GestionGroupe":
 			try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
@@ -190,14 +158,11 @@ public class CtrlCoach extends HttpServlet {
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-			// joueurs 列表（用于左侧勾选）
 			List<Joueur> joueurs = session.createQuery("from Joueur", Joueur.class).list();
 
-			// groupes 列表（用于下方 table，且要 fetch joueurs 防 lazy）
 			List<Groupe> groupes = session
 					.createQuery("select distinct g from Groupe g left join fetch g.joueurs", Groupe.class).list();
 
-			// 要编辑的 groupe（也要 fetch joueurs，否则 JSP 勾选会 lazy 失败）
 			Groupe groupeAEditer = session
 					.createQuery("select g from Groupe g left join fetch g.joueurs where g.idGroupe = :id",
 							Groupe.class)
@@ -224,7 +189,6 @@ public class CtrlCoach extends HttpServlet {
 			if (g != null) {
 				g.setNomGroupe(nomGroupe);
 
-				// 关键：重建 joueurs 集合（先清空，再按新的勾选加回去）
 				g.getJoueurs().clear();
 
 				if (joueursIds != null) {

@@ -173,13 +173,16 @@ public class SendEmailSSL {
     /* =========================================================
        AUTRES ÉVÉNEMENTS (INCHANGÉ)
        ========================================================= */
-    public static void sendEventInvitation(Utilisateur u, Evenement e)
-            throws MessagingException {
+    public static void sendEventInvitation(
+            Utilisateur u,
+            Evenement e,
+            String lienConfirmation
+    ) throws MessagingException {
 
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-        String subject = "Invitation à l'évènement : " + e.getNomEvenement();
+        String subject = "Confirmation de présence – " + e.getNomEvenement();
         String email = u.getEmailUtilisateur();
 
         String body =
@@ -187,17 +190,20 @@ public class SendEmailSSL {
                 + "<h2>Bonjour " + u.getPrenomUtilisateur() + " "
                 + u.getNomUtilisateur() + ",</h2>"
 
-                + "<p>Nous avons le plaisir de vous inviter à l'évènement :</p>"
+                + "<p>Merci de confirmer votre présence à l'évènement :</p>"
                 + "<ul>"
-                + "<li><strong>Nom :</strong> "
-                + e.getNomEvenement() + "</li>"
-                + "<li><strong>Date :</strong> "
-                + e.getDateEvenement().format(formatter) + "</li>"
-                + "<li><strong>Lieu :</strong> "
-                + e.getLieuEvenement() + "</li>"
+                + "<li><strong>Nom :</strong> " + e.getNomEvenement() + "</li>"
+                + "<li><strong>Date :</strong> " + e.getDateEvenement().format(formatter) + "</li>"
+                + "<li><strong>Lieu :</strong> " + e.getLieuEvenement() + "</li>"
                 + "</ul>"
 
-                + "<p>Cordialement,<br/>Le secrétariat</p>"
+                + "<p><a href='" + lienConfirmation + "'>"
+                + "👉 Confirmer / modifier ma présence</a></p>"
+
+                + "<p style='font-size:12px;color:gray;'>"
+                + "La dernière réponse enregistrée sera prise en compte."
+                + "</p>"
+
                 + "</body></html>";
 
         sendEmail(email, subject, body);

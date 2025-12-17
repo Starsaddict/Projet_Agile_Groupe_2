@@ -52,6 +52,8 @@ public class HibernateUtil
 			configuration.addAnnotatedClass(EtrePresentId.class);
 			configuration.addAnnotatedClass(Evenement.class);
 			configuration.addAnnotatedClass(ConvocationMatch.class);
+			configuration.addAnnotatedClass(ConvocationEvenement.class);
+
 
 			configuration.addAnnotatedClass(Groupe.class);
 			configuration.addAnnotatedClass(Joueur.class);

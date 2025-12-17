@@ -63,28 +63,16 @@ public class EvenementRepo {
 
     public Evenement findByIdWithGroupeAndJoueurs(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Evenement evenement = session.createQuery(
-                            "select distinct e from Evenement e " +
-                                    "left join fetch e.groupe g " +
-                                    "left join fetch g.joueurs " +
-                                    "where e.idEvenement = :id",
-                            Evenement.class
-                    )
-                    .setParameter("id", id)
-                    .uniqueResult();
-
-            if (evenement != null) {
-                Groupe groupe = evenement.getGroupe();
-                if (groupe != null) {
-                    Hibernate.initialize(groupe);
-                    List<Joueur> joueurs = groupe.getJoueurs();
-                    Hibernate.initialize(joueurs);
-                    for (Joueur joueur : joueurs) {
-                        Hibernate.initialize(joueur.getParents());
-                    }
-                }
-            }
-            return evenement;
+            return session.createQuery(
+                "select distinct e from Evenement e " +
+                "join fetch e.groupe g " +
+                "join fetch g.joueurs j " +
+                "left join fetch j.parents " +
+                "where e.idEvenement = :id",
+                Evenement.class
+            )
+            .setParameter("id", id)
+            .uniqueResult();
         }
     }
 

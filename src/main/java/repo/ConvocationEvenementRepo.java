@@ -1,14 +1,14 @@
 package repo;
 
 import bd.HibernateUtil;
-import model.ConvocationMatch;
+import model.ConvocationEvenement;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-public class ConvocationMatchRepo {
+public class ConvocationEvenementRepo {
 
     /* ================= CREATE ================= */
-    public void save(ConvocationMatch convocation) {
+    public void save(ConvocationEvenement convocation) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
@@ -21,7 +21,7 @@ public class ConvocationMatchRepo {
     }
 
     /* ================= UPDATE ================= */
-    public void update(ConvocationMatch convocation) {
+    public void update(ConvocationEvenement convocation) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
@@ -34,15 +34,15 @@ public class ConvocationMatchRepo {
     }
 
     /* ================= FIND BY TOKEN ================= */
-    public ConvocationMatch findByToken(String token) {
+    public ConvocationEvenement findByToken(String token) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                "select cm from ConvocationMatch cm " +
-                "join fetch cm.joueur j " +
+                "select ce from ConvocationEvenement ce " +
+                "join fetch ce.joueur j " +
                 "left join fetch j.parents " +
-                "join fetch cm.match m " +
-                "where cm.token = :token",
-                ConvocationMatch.class
+                "join fetch ce.evenement e " +
+                "where ce.token = :token",
+                ConvocationEvenement.class
             )
             .setParameter("token", token)
             .uniqueResult();
@@ -50,18 +50,18 @@ public class ConvocationMatchRepo {
     }
 
 
+    /* ================= FIND BY EVENEMENT + JOUEUR ================= */
+    public ConvocationEvenement findByEvenementAndJoueur(
+            Long idEvenement, Long idJoueur) {
 
-
-    /* ================= FIND BY MATCH + JOUEUR ================= */
-    public ConvocationMatch findByMatchAndJoueur(Long idMatch, Long idJoueur) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                    "select cm from ConvocationMatch cm " +
-                    "where cm.match.idEvenement = :idMatch " +
-                    "and cm.joueur.idUtilisateur = :idJoueur",
-                    ConvocationMatch.class
+                "select ce from ConvocationEvenement ce " +
+                "where ce.evenement.idEvenement = :idEvt " +
+                "and ce.joueur.idUtilisateur = :idJoueur",
+                ConvocationEvenement.class
             )
-            .setParameter("idMatch", idMatch)
+            .setParameter("idEvt", idEvenement)
             .setParameter("idJoueur", idJoueur)
             .uniqueResult();
         }

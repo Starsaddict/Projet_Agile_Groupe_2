@@ -2,6 +2,8 @@ package repo;
 
 import bd.HibernateUtil;
 import model.ConvocationEvenement;
+
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -36,18 +38,28 @@ public class ConvocationEvenementRepo {
     /* ================= FIND BY TOKEN ================= */
     public ConvocationEvenement findByToken(String token) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery(
+
+            ConvocationEvenement ce = session.createQuery(
                 "select ce from ConvocationEvenement ce " +
                 "join fetch ce.joueur j " +
-                "left join fetch j.parents " +
                 "join fetch ce.evenement e " +
                 "where ce.token = :token",
                 ConvocationEvenement.class
             )
             .setParameter("token", token)
             .uniqueResult();
+
+            if (ce != null) {
+                // Initialisation contrôlée
+                if (ce.getJoueur() != null) {
+                    Hibernate.initialize(ce.getJoueur().getParents());
+                }
+            }
+
+            return ce;
         }
     }
+
 
 
     /* ================= FIND BY EVENEMENT + JOUEUR ================= */

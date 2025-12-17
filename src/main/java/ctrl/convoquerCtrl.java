@@ -12,11 +12,13 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 @WebServlet("/secretaire/convoquer")
 public class convoquerCtrl extends HttpServlet {
 
+    /* ===================== GET ===================== */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -31,20 +33,41 @@ public class convoquerCtrl extends HttpServlet {
 
         request.setAttribute("mode", isMatch ? "match" : "event");
         request.setAttribute("evenements", evenements);
-
         request.getRequestDispatcher("/jsp/convocation/convoquerEvent.jsp")
                 .forward(request, response);
     }
 
+    /* ===================== POST ===================== */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String type = request.getParameter("type");
-        Long idEvenement = Long.parseLong(request.getParameter("idEvenement"));
+        String idParam = request.getParameter("idEvenement");
+
+        if (idParam == null || idParam.isBlank()) {
+            request.setAttribute("messageErreur", "Aucun événement sélectionné");
+            doGet(request, response);
+            return;
+        }
+
+        Long idEvenement;
+        try {
+            idEvenement = Long.parseLong(idParam);
+        } catch (NumberFormatException e) {
+            request.setAttribute("messageErreur", "Id événement invalide");
+            doGet(request, response);
+            return;
+        }
 
         eventService service = new eventService();
-        Evenement evenement = service.findByIdWithParticipants(idEvenement);
+        Evenement evenement;
+
+        if ("match".equalsIgnoreCase(type)) {
+            evenement = service.findByIdWithParticipants(idEvenement);
+        } else {
+            evenement = service.findById(idEvenement);
+        }
 
         if (evenement == null) {
             request.setAttribute("messageErreur", "Événement introuvable");
@@ -61,9 +84,7 @@ public class convoquerCtrl extends HttpServlet {
         doGet(request, response);
     }
 
-    /* ======================================================
-       🔴 MATCH OFFICIEL
-       ====================================================== */
+    /* ===================== MATCH OFFICIEL ===================== */
     private void traiterMatch(HttpServletRequest request, Evenement evenement) {
 
         if (evenement.getGroupe() == null) return;
@@ -86,22 +107,18 @@ public class convoquerCtrl extends HttpServlet {
                 matchRepo.save(convocation);
             }
 
-            String lien = buildLien(request,
-                    "/confirmation/match",
-                    convocation.getToken()
-            );
+            String lien = buildLien(request, "/confirmation/match", convocation.getToken());
 
             try {
-                SendEmailSSL.sendJoueurInvitation(joueur, evenement, lien);
+                if (joueur.getEmailUtilisateur() != null) {
+                    SendEmailSSL.sendJoueurInvitation(joueur, evenement, lien);
+                }
 
                 if (joueur.getParents() != null) {
                     for (Parent parent : joueur.getParents()) {
-                        SendEmailSSL.sendParentInvitation(
-                                parent,
-                                joueur,
-                                evenement,
-                                lien
-                        );
+                        if (parent.getEmailUtilisateur() != null) {
+                            SendEmailSSL.sendParentInvitation(parent, joueur, evenement, lien);
+                        }
                     }
                 }
             } catch (MessagingException e) {
@@ -110,9 +127,7 @@ public class convoquerCtrl extends HttpServlet {
         }
     }
 
-    /* ======================================================
-       🔵 AUTRES ÉVÉNEMENTS
-       ====================================================== */
+    /* ===================== AUTRES ÉVÉNEMENTS ===================== */
     private void traiterEvenement(HttpServletRequest request, Evenement evenement) {
 
         ConvocationEvenementRepo repo = new ConvocationEvenementRepo();
@@ -136,17 +151,18 @@ public class convoquerCtrl extends HttpServlet {
                 repo.save(convocation);
             }
 
-            String lien = buildLien(request,
-                    "/confirmation/evenement",
-                    convocation.getToken()
-            );
+            String lien = buildLien(request, "/confirmation/evenement", convocation.getToken());
 
             try {
-                SendEmailSSL.sendEventInvitation(joueur, evenement, lien);
+                if (joueur.getEmailUtilisateur() != null) {
+                    SendEmailSSL.sendEventInvitation(joueur, evenement, lien);
+                }
 
                 if (joueur.getParents() != null) {
                     for (Parent parent : joueur.getParents()) {
-                        SendEmailSSL.sendEventInvitation(parent, evenement, lien);
+                        if (parent.getEmailUtilisateur() != null) {
+                            SendEmailSSL.sendEventInvitation(parent, evenement, lien);
+                        }
                     }
                 }
             } catch (MessagingException e) {
@@ -155,6 +171,7 @@ public class convoquerCtrl extends HttpServlet {
         }
     }
 
+    /* ===================== UTIL ===================== */
     private String buildLien(HttpServletRequest req, String path, String token) {
         return req.getScheme() + "://" +
                req.getServerName() + ":" +

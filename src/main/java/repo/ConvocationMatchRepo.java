@@ -1,4 +1,5 @@
 package repo;
+import org.hibernate.Hibernate;
 
 import bd.HibernateUtil;
 import model.ConvocationMatch;
@@ -34,20 +35,28 @@ public class ConvocationMatchRepo {
     }
 
     /* ================= FIND BY TOKEN ================= */
+
     public ConvocationMatch findByToken(String token) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery(
+
+            ConvocationMatch cm = session.createQuery(
                 "select cm from ConvocationMatch cm " +
                 "join fetch cm.joueur j " +
-                "left join fetch j.parents " +
                 "join fetch cm.match m " +
                 "where cm.token = :token",
                 ConvocationMatch.class
             )
             .setParameter("token", token)
             .uniqueResult();
+
+            if (cm != null && cm.getJoueur() != null) {
+                Hibernate.initialize(cm.getJoueur().getParents());
+            }
+
+            return cm;
         }
     }
+
 
 
 

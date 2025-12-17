@@ -17,4 +17,7 @@ public class evenementService {
         return repo.findFuturs();
     }
 
+    public Evenement findById(Long id) {
+        return repo.findById(id);
+    }
 }

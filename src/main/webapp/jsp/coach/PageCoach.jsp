@@ -84,6 +84,7 @@
 .header-actions {
     display: flex;
     gap: 10px;
+    margin-left: auto; 
 }
     
     .btn-row {

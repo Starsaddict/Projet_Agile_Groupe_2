@@ -22,6 +22,17 @@
         <url-pattern>/Parent</url-pattern>
     </servlet-mapping>
     
+	<servlet>
+	    <servlet-name>ParentHome</servlet-name>
+	    <jsp-file>/jsp/home.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>ParentHome</servlet-name>
+	    <url-pattern>/parent/home</url-pattern>
+	</servlet-mapping>
+	    
+    
+    
     <servlet>
         <servlet-name>Coach</servlet-name>
         <jsp-file>/jsp/coach/PageCoach.jsp</jsp-file>

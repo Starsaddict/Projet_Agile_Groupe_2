@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @WebServlet("/parent/covoiturage")
@@ -54,21 +55,37 @@ public class CtrlCovoiturage extends HttpServlet {
 
         try {
             switch (action) {
-                case "creer": {
-                    Long idEvenement = Long.valueOf(req.getParameter("idEvenement"));
-                    Covoiturage c = new Covoiturage();
-                    c.setConducteur(user);
-                    c.setLieuDepartCovoiturage(req.getParameter("lieuDepart"));
-                    c.setNbPlacesMaxCovoiturage(Integer.parseInt(req.getParameter("nbPlaces")));
-                    c.setDateCovoiturage(LocalDateTime.parse(req.getParameter("date")));
+            case "creer": {
 
-                    Evenement e = new Evenement();
-                    e.setIdEvenement(idEvenement);
-                    c.setEvenement(e);
+                Long idEvenement = Long.valueOf(req.getParameter("idEvenement"));
+                String heure = req.getParameter("heure");
 
-                    service.creerCovoiturage(c);
-                    break;
+                // Événement EXISTANT depuis la DB
+                Evenement evenement = eService.findById(idEvenement);
+
+                if (evenement == null) {
+                    throw new IllegalStateException("Événement introuvable");
                 }
+
+                Covoiturage c = new Covoiturage();
+                c.setConducteur(user);
+                c.setEvenement(evenement);
+                c.setLieuDepartCovoiturage(req.getParameter("lieuDepart"));
+                c.setNbPlacesMaxCovoiturage(
+                        Integer.parseInt(req.getParameter("nbPlaces"))
+                );
+
+                LocalDateTime dateCovoiturage = LocalDateTime.of(
+                        evenement.getDateEvenement().toLocalDate(),
+                        LocalTime.parse(heure)
+                );
+
+                c.setDateCovoiturage(dateCovoiturage);
+
+                service.creerCovoiturage(c);
+                break;
+            }
+
 
                 case "supprimer": {
                     Long id = Long.valueOf(req.getParameter("idCovoiturage"));

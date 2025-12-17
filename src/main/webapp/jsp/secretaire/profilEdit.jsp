@@ -47,6 +47,14 @@
 </head>
 <body>
     <div class="container">
+        <div class="card" style="margin-bottom:12px;">
+            <div class="action-buttons" style="justify-content: space-between; align-items: center;">
+                <a href="<%= contextPath %>/secretaire/profil" class="btn secondary">⬅ Retour</a>
+                <form action="<%= contextPath %>/CtrlLogout" method="post" style="margin:0;">
+                    <button type="submit" class="btn danger">🚪 Déconnexion</button>
+                </form>
+            </div>
+        </div>
         <div class="card">
             <h1>Modifier le profil - Secrétariat</h1>
             

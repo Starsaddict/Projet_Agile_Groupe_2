@@ -13,69 +13,73 @@
 <html>
 <head>
     <title>Creer Compte</title>
-    <link rel="stylesheet" href="<%= contextPath %>/css/secretaire-profil.css">
+    <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
 </head>
 <body>
 <div class="container">
-    <h1>Création du compte famille</h1>
+    <div class="card" style="margin-bottom:12px;">
+        <a href="<%= contextPath %>/secretaire/profil" class="btn secondary">← Retour</a>
+    </div>
 
-    <% if (error != null && !error.isEmpty()) { %>
-        <div class="alert error"><%= error %></div>
-    <% } %>
+    <div class="card">
+        <h1>Création du compte famille</h1>
 
-    <form class="form-card" method="post" action="<%= contextPath %>/secretaire/profil/creerCompteFamile">
-        <div class="form-columns">
-            <div class="form-column">
-                <h2 class="section-title">Informations joueur</h2>
-                <div id="joueur-rows">
-                    <div class="dynamic-row joueur-row">
-                        <div class="field">
-                            <label>Nom</label>
-                            <input type="text" name="joueur_nom[]" required />
+        <% if (error != null && !error.isEmpty()) { %>
+            <div class="alert error"><%= error %></div>
+        <% } %>
+        <div class="action-buttons" style="margin-top:12px; gap:8px; flex-wrap:wrap;">
+                <button type="button" class="btn secondary" onclick="addJoueur()">+ Ajouter un joueur</button>
+                <button type="button" class="btn secondary" onclick="addParent()">+ Ajouter un parent</button>
+        </div>
+        <form method="post" action="<%= contextPath %>/secretaire/profil/creerCompteFamile">
+            <div class="form-columns">
+                <div class="form-column">
+                    <h2 class="section-title">Informations joueur</h2>
+                    <div id="joueur-rows">
+                        <div class="dynamic-row joueur-row">
+                            <div class="field">
+                                <label>Nom</label>
+                                <input type="text" name="joueur_nom[]" required />
+                            </div>
+                            <div class="field">
+                                <label>Prénom</label>
+                                <input type="text" name="joueur_prenom[]" required />
+                            </div>
+                            <div class="field">
+                                <label>Email</label>
+                                <input type="email" name="joueur_email[]" />
+                            </div>
                         </div>
-                        <div class="field">
-                            <label>Prénom</label>
-                            <input type="text" name="joueur_prenom[]" required />
-                        </div>
-                        <div class="field">
-                            <label>Email</label>
-                            <input type="email" name="joueur_email[]" />
+                    </div>
+                </div>
+
+                <div class="form-column">
+                    <h2 class="section-title">Informations parent</h2>
+                    <div id="parent-rows">
+                        <div class="dynamic-row parent-row">
+                            <div class="field">
+                                <label>Nom</label>
+                                <input type="text" name="parent_nom[]" required />
+                            </div>
+                            <div class="field">
+                                <label>Prénom</label>
+                                <input type="text" name="parent_prenom[]" required />
+                            </div>
+                            <div class="field">
+                                <label>Email</label>
+                                <input type="email" name="parent_email[]" required />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="form-column">
-                <h2 class="section-title">Informations parent</h2>
-                <div id="parent-rows">
-                    <div class="dynamic-row parent-row">
-                        <div class="field">
-                            <label>Nom</label>
-                            <input type="text" name="parent_nom[]" required />
-                        </div>
-                        <div class="field">
-                            <label>Prénom</label>
-                            <input type="text" name="parent_prenom[]" required />
-                        </div>
-                        <div class="field">
-                            <label>Email</label>
-                            <input type="email" name="parent_email[]" required />
-                        </div>
-                    </div>
-                </div>
+            <div class="action-buttons" style="margin-top:12px;">
+                <button type="submit" class="btn">Créer</button>
+                <button type="button" class="btn secondary" onclick="window.history.back();">Annuler</button>
             </div>
-        </div>
-
-        <div class="add-group">
-            <button type="button" class="btn secondary" onclick="addJoueur()">+ Ajouter un joueur</button>
-            <button type="button" class="btn secondary" onclick="addParent()">+ Ajouter un parent</button>
-        </div>
-
-        <div class="form-actions">
-            <button type="submit" class="btn">Créer</button>
-            <button type="button" class="btn secondary" onclick="window.history.back();">Annuler</button>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 
 <script>

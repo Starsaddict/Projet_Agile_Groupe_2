@@ -116,11 +116,6 @@
 
             </div>
             <div style="margin-top:8px;">
-                <form method="post" action="${pageContext.request.contextPath}/secretaire/profil/sendInvitation" style="display:flex;gap:8px;align-items:center;">
-                    <input type="email" name="email" placeholder="Envoyer code à email parent" required />
-                    <button type="submit" class="btn">Envoyer</button>
-                </form>
-            </div>
         </div>
     </c:if>
 

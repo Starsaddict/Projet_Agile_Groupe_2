@@ -23,7 +23,8 @@ public class EvenementRepo {
             session.save(e);
             tx.commit();
         } catch (Exception ex) {
-            if (tx != null) tx.rollback();
+            if (tx != null)
+                tx.rollback();
             ex.printStackTrace();
         }
     }
@@ -36,7 +37,8 @@ public class EvenementRepo {
             session.update(e);
             tx.commit();
         } catch (Exception ex) {
-            if (tx != null) tx.rollback();
+            if (tx != null)
+                tx.rollback();
             ex.printStackTrace();
         }
     }
@@ -49,7 +51,8 @@ public class EvenementRepo {
             session.delete(e);
             tx.commit();
         } catch (Exception ex) {
-            if (tx != null) tx.rollback();
+            if (tx != null)
+                tx.rollback();
             ex.printStackTrace();
         }
     }
@@ -64,12 +67,11 @@ public class EvenementRepo {
     public Evenement findByIdWithGroupeAndJoueurs(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Evenement evenement = session.createQuery(
-                            "select distinct e from Evenement e " +
-                                    "left join fetch e.groupe g " +
-                                    "left join fetch g.joueurs " +
-                                    "where e.idEvenement = :id",
-                            Evenement.class
-                    )
+                    "select distinct e from Evenement e " +
+                            "left join fetch e.groupe g " +
+                            "left join fetch g.joueurs " +
+                            "where e.idEvenement = :id",
+                    Evenement.class)
                     .setParameter("id", id)
                     .uniqueResult();
 
@@ -93,20 +95,16 @@ public class EvenementRepo {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
                     "FROM Evenement e ORDER BY e.dateEvenement ASC",
-                    Evenement.class
-            ).list();
+                    Evenement.class).list();
         }
     }
-        public List<Evenement> findFuturs() {
-            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-                return session.createQuery(
+
+    public List<Evenement> findFuturs() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
                     "FROM Evenement e WHERE e.dateEvenement >= CURRENT_TIMESTAMP ORDER BY e.dateEvenement ASC",
-                    Evenement.class
-                ).list();
-            }
+                    Evenement.class).list();
         }
-
-
     }
 
     /* ================= FIND ALL MATCH ================= */
@@ -128,10 +126,9 @@ public class EvenementRepo {
                             "left join fetch g.joueurs " +
                             "where e.typeEvenement " + operator + " (:matchTypes) " +
                             "order by e.dateEvenement asc",
-                    Evenement.class
-            )
-            .setParameterList("matchTypes", MATCH_TYPES)
-            .list();
+                    Evenement.class)
+                    .setParameterList("matchTypes", MATCH_TYPES)
+                    .list();
         }
     }
 
@@ -141,15 +138,14 @@ public class EvenementRepo {
                     "select distinct e from Evenement e " +
                             "where e.typeEvenement = :eventType " +
                             "order by e.dateEvenement asc",
-                    Evenement.class
-            )
-            .setParameter("eventType", "ENTRAINEMENT")
-            .list();
+                    Evenement.class)
+                    .setParameter("eventType", "ENTRAINEMENT")
+                    .list();
         }
     }
 
     public static void main(String[] args) {
-        EvenementRepo e =  new EvenementRepo();
+        EvenementRepo e = new EvenementRepo();
         System.out.println(e.findAllEntraintement());
     }
 }

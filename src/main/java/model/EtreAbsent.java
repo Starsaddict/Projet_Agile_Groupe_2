@@ -1,61 +1,64 @@
+// java
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "EtreAbsent")
-public class EtreAbsent {
+public class EtreAbsent implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IdEtreAbsent")
     private Long idEtreAbsent;
 
-    @Column(name = "Certificat")
-    private String certificat;
+    private LocalDateTime absenceDebut;
 
-    @Column(name = "AbsenceDebut")
-    private String absenceDebut;
+    private LocalDateTime absenceFin;
 
-    @Column(name = "AbsenceTerminee")
-    private Boolean absenceTerminee;
+    @Enumerated(EnumType.STRING)
+    private TypeAbsence typeAbsence;
 
     @ManyToOne
-    @JoinColumn(name = "IdJoueur", referencedColumnName = "IdUtilisateur")
+    @JoinColumn(name = "IdJoueur")
     private Joueur joueur;
 
-    public EtreAbsent() {
+    @Column(name = "CertificatName")
+    private String certificatName;
+
+    @Column(name = "CertificatContentType")
+    private String certificatContentType;
+
+    @Column(name = "Motif")
+    private String motif;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "Certificat")
+    private byte[] certificatData;
+
+    public enum TypeAbsence {
+        COURTE,
+        LONGUE
     }
 
-    public String getCertificat() {
-        return certificat;
+    // getters / setters
+
+    public Long getIdEtreAbsent() {
+        return idEtreAbsent;
     }
 
-    public void setCertificat(String certificat) {
-        this.certificat = certificat;
+    public void setIdEtreAbsent(Long idEtreAbsent) {
+        this.idEtreAbsent = idEtreAbsent;
     }
 
-    public String getAbsenceDebut() {
+    public LocalDateTime getAbsenceDebut() {
         return absenceDebut;
     }
 
-    public void setAbsenceDebut(String absenceDebut) {
+    public void setAbsenceDebut(LocalDateTime absenceDebut) {
         this.absenceDebut = absenceDebut;
-    }
-
-    public Boolean getAbsenceTerminee() {
-        return absenceTerminee;
-    }
-
-    public void setAbsenceTerminee(Boolean absenceTerminee) {
-        this.absenceTerminee = absenceTerminee;
     }
 
     public Joueur getJoueur() {
@@ -65,4 +68,62 @@ public class EtreAbsent {
     public void setJoueur(Joueur joueur) {
         this.joueur = joueur;
     }
+
+    public String getCertificatName() {
+        return certificatName;
+    }
+
+    public void setCertificatName(String certificatName) {
+        this.certificatName = certificatName;
+    }
+
+    public String getCertificatContentType() {
+        return certificatContentType;
+    }
+
+    public void setCertificatContentType(String certificatContentType) {
+        this.certificatContentType = certificatContentType;
+    }
+
+    public byte[] getCertificatData() {
+        return certificatData;
+    }
+
+    public void setCertificatData(byte[] certificatData) {
+        this.certificatData = certificatData;
+    }
+
+    public LocalDateTime getAbsenceFin() {
+        return absenceFin;
+    }
+
+    public void setAbsenceFin(LocalDateTime absenceFin) {
+        this.absenceFin = absenceFin;
+    }
+
+    public TypeAbsence getTypeAbsence() {
+        return typeAbsence;
+    }
+
+    public void setTypeAbsence(TypeAbsence typeAbsence) {
+        this.typeAbsence = typeAbsence;
+    }
+
+    public String getMotif() {
+        return motif;
+    }
+
+    public void setMotif(String motif) {
+        this.motif = motif;
+    }
+
+    public boolean hasCertificat() {
+        return certificatData != null && certificatData.length > 0;
+    }
+
+    public boolean isActive() {
+        LocalDateTime now = LocalDateTime.now();
+        return absenceFin == null || now.isBefore(absenceFin) || now.isEqual(absenceFin);
+    }
+
 }

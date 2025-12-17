@@ -27,14 +27,14 @@ public class Evenement {
     @Column(name = "TypeEvenement")
     private String typeEvenement;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "IdGroupe", nullable = true)
     private Groupe groupe;
 
     @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Covoiturage> covoiturages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<EtrePresent> etresPresents = new ArrayList<>();
 
     public Evenement() {}

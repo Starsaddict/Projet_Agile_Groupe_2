@@ -64,6 +64,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>Absence</servlet-name>
+        <jsp-file>/jsp/parent/absence.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Absence</servlet-name>
+        <url-pattern>/Absence</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>Home</servlet-name>
         <jsp-file>/index.jsp</jsp-file>
     </servlet>
@@ -158,4 +168,62 @@
   <url-pattern>/parent/profil/edit</url-pattern>
 </servlet-mapping>
 
+    <!-- Invitation envoyée par le secrétariat -->
+    <servlet>
+        <servlet-name>SecretaireSendInvitation</servlet-name>
+        <servlet-class>ctrl.secretaireSendInvitationCtrl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SecretaireSendInvitation</servlet-name>
+        <url-pattern>/secretaire/profil/sendInvitation</url-pattern>
+    </servlet-mapping>
+
+    <!-- Page d'inscription publique accessible via le code -->
+    <servlet>
+        <servlet-name>Inscription</servlet-name>
+        <servlet-class>ctrl.inscriptionCtrl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Inscription</servlet-name>
+        <url-pattern>/inscription</url-pattern>
+    </servlet-mapping>
+
+    <!-- Traitement du formulaire d'inscription -->
+    <servlet>
+        <servlet-name>InscriptionProcess</servlet-name>
+        <servlet-class>ctrl.inscriptionProcessCtrl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InscriptionProcess</servlet-name>
+        <url-pattern>/inscription/process</url-pattern>
+    </servlet-mapping>
+
+    <!-- Création du profil (définir mdp après inscription) -->
+    <servlet>
+        <servlet-name>CreerProfil</servlet-name>
+        <servlet-class>ctrl.creerProfilCtrl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreerProfil</servlet-name>
+        <url-pattern>/creerProfil</url-pattern>
+    </servlet-mapping>
+
+    <!-- Profil Joueur -->
+    <servlet>
+        <servlet-name>JoueurProfil</servlet-name>
+        <servlet-class>ctrl.joueurProfilCtrl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JoueurProfil</servlet-name>
+        <url-pattern>/joueur/profil</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>JoueurProfilEdit</servlet-name>
+        <servlet-class>ctrl.joueurProfilEditCtrl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JoueurProfilEdit</servlet-name>
+        <url-pattern>/joueur/profil/edit</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -1,6 +1,8 @@
 package repository;
 
 import bd.HibernateUtil;
+import model.Joueur;
+import model.Parent;
 import model.Utilisateur;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -52,6 +54,35 @@ public class UtilisateurRepositoryImpl implements UtilisateurRepository{
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public void findEnfantsAndAbsencesByParentId(Parent p) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            Parent parent = session.get(Parent.class, p.getIdUtilisateur());
+            parent = session.get(Parent.class, p.getIdUtilisateur());
+
+            List<Joueur> joueurs = parent.getJoueurs();
+            if (joueurs != null) {
+                joueurs.size();
+                for (Joueur j : joueurs) {
+                    if (j.getAbsences() != null) {
+                        j.getAbsences().size();
+                    }
+                }
+            }
+            p.setJoueurs(joueurs);
+
+            for (Joueur j : p.getJoueurs()) {
+                j.getAbsences().size();
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

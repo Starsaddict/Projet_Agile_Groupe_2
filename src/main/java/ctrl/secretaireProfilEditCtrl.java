@@ -97,18 +97,18 @@ public class secretaireProfilEditCtrl extends HttpServlet {
             String nom = request.getParameter("nom");
             String prenom = request.getParameter("prenom");
             String dateNaissance = request.getParameter("dateNaissance");
-            String email = request.getParameter("email");
-            String description = request.getParameter("description");
+            String adresse = request.getParameter("adresse");
+            String telephone = request.getParameter("telephone");
 
             // 更新数据
             if (nom != null && !nom.isEmpty())
                 utilisateur.setNomUtilisateur(nom);
             if (prenom != null && !prenom.isEmpty())
                 utilisateur.setPrenomUtilisateur(prenom);
-            if (email != null && !email.isEmpty())
-                utilisateur.setEmailUtilisateur(email);
-            if (description != null && !description.isEmpty())
-                utilisateur.setDescription(description);
+            if (adresse != null)
+                utilisateur.setAdresseUtilisateur(adresse);
+            if (telephone != null)
+                utilisateur.setTelephoneUtilisateur(telephone);
 
             // Secretaire 可以修改出生日期
             if (dateNaissance != null && !dateNaissance.isEmpty()) {
@@ -140,7 +140,8 @@ public class secretaireProfilEditCtrl extends HttpServlet {
                     }
 
                     String numero = joueur.getNumeroJoueur();
-                    String baseName = (numero != null && !numero.isEmpty()) ? numero : "joueur-" + joueur.getIdUtilisateur();
+                    String baseName = (numero != null && !numero.isEmpty()) ? numero
+                            : "joueur-" + joueur.getIdUtilisateur();
                     String fileName = baseName + "-" + System.currentTimeMillis() + extension;
 
                     String realDir = getServletContext().getRealPath("/img/joueur_avatar");

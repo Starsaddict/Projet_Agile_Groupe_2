@@ -1,5 +1,7 @@
 package repository;
 
+import model.Joueur;
+import model.Parent;
 import model.Utilisateur;
 
 import java.util.List;
@@ -11,4 +13,6 @@ public interface UtilisateurRepository {
     Optional<Utilisateur> findFirstByEmail(String email);
 
     List<String> findRolesByEmail(String email);
+
+    void findEnfantsAndAbsencesByParentId(Parent p);
 }

@@ -1,53 +1,35 @@
 package service;
 
 import model.Evenement;
-import model.Joueur;
 import repo.EvenementRepo;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class eventService {
 
     private final EvenementRepo evenementRepo = new EvenementRepo();
 
+    // MATCH OFFICIEL
     public List<Evenement> loadAllMatch() {
-        try {
-            List<Evenement> matches = evenementRepo.findAllMatch();
-            return matches != null ? matches : new ArrayList<>();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+        List<Evenement> matches = evenementRepo.findAllMatch();
+        return matches != null ? matches : Collections.emptyList();
     }
 
+    // AUTRES EVENEMENTS
     public List<Evenement> loadEvents() {
-        try {
-            List<Evenement> events = evenementRepo.findAllNonMatch();
-            return events != null ? events : new ArrayList<>();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+        List<Evenement> events = evenementRepo.findAllNonMatch();
+        return events != null ? events : Collections.emptyList();
     }
 
+    // AUTRE EVENT → SANS GROUPE
     public Evenement findById(long id) {
-        try {
-            Evenement evenement = evenementRepo.findById(id);
-            return evenement;
-        }catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return evenementRepo.findById(id);
     }
 
+    // MATCH → AVEC GROUPE + JOUEURS + PARENTS
     public Evenement findByIdWithParticipants(long id) {
-        try {
-            return evenementRepo.findByIdWithGroupeAndJoueurs(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return evenementRepo.findByIdWithGroupeAndJoueurs(id);
     }
 
     public List<Evenement> getAllEntrainements() {

@@ -13,7 +13,8 @@ import java.util.List;
 
 public class EvenementRepo {
 
-    private static final List<String> MATCH_TYPES = Arrays.asList("MATCH_OFFICIEL");
+    private static final List<String> MATCH_TYPES =
+            Arrays.asList("MATCH_OFFICIEL");
 
     /* ================= CREATE ================= */
     public void create(Evenement e) {
@@ -64,33 +65,35 @@ public class EvenementRepo {
         }
     }
 
+    /* ======================================================
+       🔴 MATCH OFFICIEL
+       Charger groupe + joueurs, puis parents MANUELLEMENT
+       ====================================================== */
     public Evenement findByIdWithGroupeAndJoueurs(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
             Evenement evenement = session.createQuery(
                     "select distinct e from Evenement e " +
-                            "left join fetch e.groupe g " +
-                            "left join fetch g.joueurs " +
-                            "where e.idEvenement = :id",
-                    Evenement.class)
-                    .setParameter("id", id)
-                    .uniqueResult();
+                    "left join fetch e.groupe g " +
+                    "left join fetch g.joueurs " +
+                    "where e.idEvenement = :id",
+                    Evenement.class
+            )
+            .setParameter("id", id)
+            .uniqueResult();
 
-            if (evenement != null) {
-                Groupe groupe = evenement.getGroupe();
-                if (groupe != null) {
-                    Hibernate.initialize(groupe);
-                    List<Joueur> joueurs = groupe.getJoueurs();
-                    Hibernate.initialize(joueurs);
-                    for (Joueur joueur : joueurs) {
-                        Hibernate.initialize(joueur.getParents());
-                    }
+            // 🔹 Initialisation MANUELLE des parents
+            if (evenement != null && evenement.getGroupe() != null) {
+                for (Joueur joueur : evenement.getGroupe().getJoueurs()) {
+                    Hibernate.initialize(joueur.getParents());
                 }
             }
+
             return evenement;
         }
     }
 
-    /* ================= FIND ALL (TRI PAR DATE) ================= */
+    /* ================= FIND ALL ================= */
     public List<Evenement> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
@@ -107,7 +110,7 @@ public class EvenementRepo {
         }
     }
 
-    /* ================= FIND ALL MATCH ================= */
+    /* ================= MATCH / NON MATCH ================= */
     public List<Evenement> findAllMatch() {
         return findByMatchType(true);
     }
@@ -122,13 +125,14 @@ public class EvenementRepo {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
                     "select distinct e from Evenement e " +
-                            "left join fetch e.groupe g " +
-                            "left join fetch g.joueurs " +
-                            "where e.typeEvenement " + operator + " (:matchTypes) " +
-                            "order by e.dateEvenement asc",
-                    Evenement.class)
-                    .setParameterList("matchTypes", MATCH_TYPES)
-                    .list();
+                    "left join fetch e.groupe g " +
+                    "left join fetch g.joueurs " +
+                    "where e.typeEvenement " + operator + " (:matchTypes) " +
+                    "order by e.dateEvenement asc",
+                    Evenement.class
+            )
+            .setParameterList("matchTypes", MATCH_TYPES)
+            .list();
         }
     }
 

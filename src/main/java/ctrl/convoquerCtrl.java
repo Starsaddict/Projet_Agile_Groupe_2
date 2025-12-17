@@ -2,8 +2,9 @@ package ctrl;
 
 import jakarta.mail.MessagingException;
 import model.*;
+import repo.ConvocationEvenementRepo;
 import repo.ConvocationMatchRepo;
-import service.UtilisateurService;
+import repo.utilisateurRepo;
 import service.eventService;
 import util.SendEmailSSL;
 
@@ -11,160 +12,171 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 @WebServlet("/secretaire/convoquer")
 public class convoquerCtrl extends HttpServlet {
 
+    /* ===================== GET ===================== */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String typeParam = request.getParameter("type");
-        boolean isMatchType = !"event".equalsIgnoreCase(typeParam);
+        boolean isMatch = !"event".equalsIgnoreCase(typeParam);
 
         eventService service = new eventService();
-        List<Evenement> evenements = isMatchType
+        List<Evenement> evenements = isMatch
                 ? service.loadAllMatch()
                 : service.loadEvents();
 
-        evenements = new ArrayList<>(new LinkedHashSet<>(evenements));
-
-        request.setAttribute("mode", isMatchType ? "match" : "event");
+        request.setAttribute("mode", isMatch ? "match" : "event");
         request.setAttribute("evenements", evenements);
         request.getRequestDispatcher("/jsp/convocation/convoquerEvent.jsp")
-               .forward(request, response);
+                .forward(request, response);
     }
 
+    /* ===================== POST ===================== */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String idEvtParam = request.getParameter("idEvenement");
         String type = request.getParameter("type");
+        String idParam = request.getParameter("idEvenement");
 
-        if (idEvtParam == null || idEvtParam.isBlank()) {
-            request.setAttribute("messageErreur", "Aucun événement sélectionné.");
+        if (idParam == null || idParam.isBlank()) {
+            request.setAttribute("messageErreur", "Aucun événement sélectionné");
             doGet(request, response);
             return;
         }
 
         Long idEvenement;
         try {
-            idEvenement = Long.parseLong(idEvtParam);
+            idEvenement = Long.parseLong(idParam);
         } catch (NumberFormatException e) {
-            request.setAttribute("messageErreur", "Id d'événement invalide.");
+            request.setAttribute("messageErreur", "Id événement invalide");
             doGet(request, response);
             return;
         }
 
         eventService service = new eventService();
-        Evenement evenement = service.findByIdWithParticipants(idEvenement);
+        Evenement evenement;
+
+        if ("match".equalsIgnoreCase(type)) {
+            evenement = service.findByIdWithParticipants(idEvenement);
+        } else {
+            evenement = service.findById(idEvenement);
+        }
 
         if (evenement == null) {
-            request.setAttribute("messageErreur", "Événement introuvable.");
+            request.setAttribute("messageErreur", "Événement introuvable");
             doGet(request, response);
             return;
         }
 
-        /* ======================================================
-           🟥 CAS MATCH OFFICIEL — AVEC LIEN DE CONFIRMATION
-           ====================================================== */
-        if ("match".equals(type)) {
-
-            if (evenement.getGroupe() == null) {
-                request.setAttribute("messageErreur", "Aucun groupe associé.");
-                doGet(request, response);
-                return;
-            }
-
-            List<Joueur> joueurs = evenement.getGroupe().getJoueurs();
-            if (joueurs == null || joueurs.isEmpty()) {
-                request.setAttribute("messageErreur", "Aucun joueur dans ce groupe.");
-                doGet(request, response);
-                return;
-            }
-
-            ConvocationMatchRepo convocationRepo = new ConvocationMatchRepo();
-
-            for (Joueur joueur : joueurs) {
-
-                // 1️⃣ Créer ou récupérer la convocation
-                ConvocationMatch convocation =
-                        convocationRepo.findByMatchAndJoueur(
-                                evenement.getIdEvenement(),
-                                joueur.getIdUtilisateur()
-                        );
-
-                if (convocation == null) {
-                    convocation = new ConvocationMatch();
-                    convocation.setMatch(evenement);
-                    convocation.setJoueur(joueur);
-                    convocation.setToken(UUID.randomUUID().toString());
-                    convocationRepo.save(convocation);
-                }
-
-                // 2️⃣ Construire le lien
-                String lienConfirmation =
-                        request.getScheme() + "://" +
-                        request.getServerName() + ":" +
-                        request.getServerPort() +
-                        request.getContextPath() +
-                        "/confirmation/match?token=" +
-                        convocation.getToken();
-
-                // 3️⃣ Envoyer mail AU JOUEUR
-                if (joueur.getEmailUtilisateur() != null) {
-                    try {
-                        SendEmailSSL.sendJoueurInvitation(
-                                joueur,
-                                evenement,
-                                lienConfirmation
-                        );
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                // 4️⃣ Envoyer mail AUX PARENTS (même lien)
-                if (joueur.getParents() != null) {
-                    for (Parent parent : joueur.getParents()) {
-                        if (parent.getEmailUtilisateur() != null) {
-                            try {
-                                SendEmailSSL.sendParentInvitation(
-                                        parent,
-                                        joueur,
-                                        evenement,
-                                        lienConfirmation
-                                );
-                            } catch (MessagingException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
-        /* ======================================================
-           🟦 CAS AUTRES ÉVÉNEMENTS (TON CODE EXISTANT)
-           ====================================================== */
-        else {
-
-            UtilisateurService utilisateurService = new UtilisateurService();
-            List<Utilisateur> utilisateurs = utilisateurService.loadAllUtilisateurs();
-
-            for (Utilisateur utilisateur : utilisateurs) {
-                if (utilisateur.getEmailUtilisateur() != null) {
-                    try {
-                        SendEmailSSL.sendEventInvitation(utilisateur, evenement);
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+        if ("match".equalsIgnoreCase(type)) {
+            traiterMatch(request, evenement);
+        } else {
+            traiterEvenement(request, evenement);
         }
 
         doGet(request, response);
+    }
+
+    /* ===================== MATCH OFFICIEL ===================== */
+    private void traiterMatch(HttpServletRequest request, Evenement evenement) {
+
+        if (evenement.getGroupe() == null) return;
+
+        ConvocationMatchRepo matchRepo = new ConvocationMatchRepo();
+
+        for (Joueur joueur : evenement.getGroupe().getJoueurs()) {
+
+            ConvocationMatch convocation =
+                    matchRepo.findByMatchAndJoueur(
+                            evenement.getIdEvenement(),
+                            joueur.getIdUtilisateur()
+                    );
+
+            if (convocation == null) {
+                convocation = new ConvocationMatch();
+                convocation.setMatch(evenement);
+                convocation.setJoueur(joueur);
+                convocation.setToken(UUID.randomUUID().toString());
+                matchRepo.save(convocation);
+            }
+
+            String lien = buildLien(request, "/confirmation/match", convocation.getToken());
+
+            try {
+                if (joueur.getEmailUtilisateur() != null) {
+                    SendEmailSSL.sendJoueurInvitation(joueur, evenement, lien);
+                }
+
+                if (joueur.getParents() != null) {
+                    for (Parent parent : joueur.getParents()) {
+                        if (parent.getEmailUtilisateur() != null) {
+                            SendEmailSSL.sendParentInvitation(parent, joueur, evenement, lien);
+                        }
+                    }
+                }
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /* ===================== AUTRES ÉVÉNEMENTS ===================== */
+    private void traiterEvenement(HttpServletRequest request, Evenement evenement) {
+
+        ConvocationEvenementRepo repo = new ConvocationEvenementRepo();
+        utilisateurRepo utilisateurRepo = new utilisateurRepo();
+
+        List<Joueur> joueurs = utilisateurRepo.findAllJoueursWithParents();
+
+        for (Joueur joueur : joueurs) {
+
+            ConvocationEvenement convocation =
+                    repo.findByEvenementAndJoueur(
+                            evenement.getIdEvenement(),
+                            joueur.getIdUtilisateur()
+                    );
+
+            if (convocation == null) {
+                convocation = new ConvocationEvenement();
+                convocation.setEvenement(evenement);
+                convocation.setJoueur(joueur);
+                convocation.setToken(UUID.randomUUID().toString());
+                repo.save(convocation);
+            }
+
+            String lien = buildLien(request, "/confirmation/evenement", convocation.getToken());
+
+            try {
+                if (joueur.getEmailUtilisateur() != null) {
+                    SendEmailSSL.sendEventInvitation(joueur, evenement, lien);
+                }
+
+                if (joueur.getParents() != null) {
+                    for (Parent parent : joueur.getParents()) {
+                        if (parent.getEmailUtilisateur() != null) {
+                            SendEmailSSL.sendEventInvitation(parent, evenement, lien);
+                        }
+                    }
+                }
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /* ===================== UTIL ===================== */
+    private String buildLien(HttpServletRequest req, String path, String token) {
+        return req.getScheme() + "://" +
+               req.getServerName() + ":" +
+               req.getServerPort() +
+               req.getContextPath() +
+               path + "?token=" + token;
     }
 }

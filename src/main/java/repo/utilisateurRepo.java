@@ -182,4 +182,16 @@ public class utilisateurRepo {
         List<Utilisateur> utilisateurs = utilisateurRepo.findByEmail("zhangkaiyangfr@126.com");
         System.out.println(utilisateurs);
     }
+    public List<Joueur> findAllJoueursWithParents() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            return session.createQuery(
+                "select distinct j from Joueur j " +
+                "left join fetch j.parents",
+                Joueur.class
+            ).list();
+
+        }
+    }
+
 }

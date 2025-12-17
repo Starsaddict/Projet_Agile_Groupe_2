@@ -108,6 +108,7 @@ public class EvenementRepo {
                     "FROM Evenement e WHERE e.dateEvenement >= CURRENT_TIMESTAMP ORDER BY e.dateEvenement ASC",
                     Evenement.class).list();
         }
+    }
 
   
 

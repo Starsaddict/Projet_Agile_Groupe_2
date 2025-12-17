@@ -2,10 +2,12 @@ package repo;
 
 import bd.HibernateUtil;
 import model.ConvocationEvenement;
+import model.ConvocationEvenementId;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import java.util.List;
 
 public class ConvocationEvenementRepo {
 
@@ -35,6 +37,12 @@ public class ConvocationEvenementRepo {
         }
     }
 
+    public ConvocationEvenement findById(ConvocationEvenementId id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(ConvocationEvenement.class, id);
+        }
+    }
+
     /* ================= FIND BY TOKEN ================= */
     public ConvocationEvenement findByToken(String token) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -61,21 +69,51 @@ public class ConvocationEvenementRepo {
     }
 
 
-
     /* ================= FIND BY EVENEMENT + JOUEUR ================= */
     public ConvocationEvenement findByEvenementAndJoueur(
             Long idEvenement, Long idJoueur) {
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(
+                    ConvocationEvenement.class,
+                    new ConvocationEvenementId(idEvenement, idJoueur)
+            );
+        }
+    }
+
+    /* ================= LISTE DES CONFIRMÉS POUR UN ÉVÈNEMENT ================= */
+    public List<ConvocationEvenement> findConfirmedByEvenement(Long idEvenement) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                "select ce from ConvocationEvenement ce " +
-                "where ce.evenement.idEvenement = :idEvt " +
-                "and ce.joueur.idUtilisateur = :idJoueur",
-                ConvocationEvenement.class
+                    "select ce from ConvocationEvenement ce " +
+                    "join fetch ce.joueur j " +
+                    "where ce.evenement.idEvenement = :idEvt " +
+                    "and ce.confirmePresence = true",
+                    ConvocationEvenement.class
             )
             .setParameter("idEvt", idEvenement)
-            .setParameter("idJoueur", idJoueur)
-            .uniqueResult();
+            .list();
+        }
+    }
+
+    /* ================= MAJ PRESENCE REELLE ================= */
+    public void updatePresenceReelle(ConvocationEvenementId convocationId, boolean presenceReelle) {
+        Transaction tx = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+
+            ConvocationEvenement ce = session.get(ConvocationEvenement.class, convocationId);
+            if (ce == null) {
+                throw new IllegalArgumentException("ConvocationEvenement introuvable pour l'id : " + convocationId);
+            }
+
+            ce.setPresenceReelle(presenceReelle);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw e;
         }
     }
 }

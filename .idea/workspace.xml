@@ -5,18 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="bd test">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ctrl/enregistrementCtrl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ctrl/etrepresentCtrl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/repo/etrePresentRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/service/etrePresentService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/enregistreDetail.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/enregistrement.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/EtrePresent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/EtrePresent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bd/BdTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bd/BdTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/bd/HibernateUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bd/HibernateUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/enregistrementCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/enregistrementCtrl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/etrepresentCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/etrepresentCtrl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/ConvocationEvenement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/ConvocationEvenement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/EtrePresent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/EtrePresentId.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/Evenement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Evenement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repo/EvenementRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repo/EvenementRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/eventService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/eventService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/home.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/home.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Joueur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Joueur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/repo/ConvocationEvenementRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repo/ConvocationEvenementRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/repo/etrePresentRepo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/etrePresentService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/enregistreDetail.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/enregistreDetail.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +108,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Smart Tomcat.Unnamed.executor": "Run",
     "Smart Tomcat.projetAgile.executor": "Run",
-    "git-widget-placeholder": "enregistrement",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",

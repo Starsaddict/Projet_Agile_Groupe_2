@@ -30,9 +30,6 @@ public class Joueur extends Utilisateur {
     @ManyToMany(mappedBy = "joueurs")
     private List<Groupe> groupes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "joueur", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<EtrePresent> presences;
-
     public Joueur() {
     }
 
@@ -73,27 +70,6 @@ public class Joueur extends Utilisateur {
         this.profilePicRoute = profilePicRoute;
     }
 
-
-public List<EtrePresent> getPresences() {
-    return presences;
-}
-
-public void setPresences(List<EtrePresent> presences) {
-    this.presences = presences;
-}
-
-public void addPresence(EtrePresent p) {
-    if (p != null && !presences.contains(p)) {
-        presences.add(p);
-        p.setJoueur(this);
-    }
-}
-
-public void removePresence(EtrePresent p) {
-    if (p != null && presences.remove(p)) {
-        p.setJoueur(null);
-    }
-}
 
     public void addAbsence(EtreAbsent a) {
         if (absences == null) {

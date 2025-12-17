@@ -48,8 +48,6 @@ public class HibernateUtil
 			configuration.addAnnotatedClass(EnvoyerMessage.class);
 			configuration.addAnnotatedClass(EnvoyerMessageId.class);
 			configuration.addAnnotatedClass(EtreAbsent.class);
-			configuration.addAnnotatedClass(EtrePresent.class);
-			configuration.addAnnotatedClass(EtrePresentId.class);
 			configuration.addAnnotatedClass(Evenement.class);
 			configuration.addAnnotatedClass(ConvocationMatch.class);
 			configuration.addAnnotatedClass(ConvocationEvenement.class);

@@ -12,8 +12,8 @@ import java.util.Properties;
 
 public class SendEmailSSL {
 
-    private static final String username = "chikaluchesi@gmail.com";
-    private static final String password = "wjuhoftlmantrydu";
+    private static final String username = "rugbyclub999@gmail.com";
+    private static final String password = "bxslvvlbqaijhoeh";
 
     /* =========================================================
        CONFIG SMTP

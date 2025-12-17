@@ -112,6 +112,8 @@
                 <a class="btn" href="${pageContext.request.contextPath}/evenementSecre">Gestion des événements</a>
                 <a class="btn" href="${pageContext.request.contextPath}/secretaire/profil">Gestion des profils</a>
                 <a class="btn" href="${pageContext.request.contextPath}/secretaire/convoquer?type=match">Convoquer les Matches</a>
+                <a class="btn" href="${pageContext.request.contextPath}/secretaire/enregistrement">Enregister les entraintements</a>
+
             </div>
             <div style="margin-top:8px;">
                 <form method="post" action="${pageContext.request.contextPath}/secretaire/profil/sendInvitation" style="display:flex;gap:8px;align-items:center;">

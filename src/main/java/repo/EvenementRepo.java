@@ -123,4 +123,22 @@ public class EvenementRepo {
             .list();
         }
     }
+
+    public List<Evenement> findAllEntraintement() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "select distinct e from Evenement e " +
+                            "where e.typeEvenement = :eventType " +
+                            "order by e.dateEvenement asc",
+                    Evenement.class
+            )
+            .setParameter("eventType", "ENTRAINEMENT")
+            .list();
+        }
+    }
+
+    public static void main(String[] args) {
+        EvenementRepo e =  new EvenementRepo();
+        System.out.println(e.findAllEntraintement());
+    }
 }

@@ -3,10 +3,12 @@ package controller;
 import model.EtreAbsent;
 import model.Joueur;
 import model.Parent;
+import model.Utilisateur;
 import repository.UtilisateurRepositoryImpl;
 import service.AbsenceService;
 import service.UtilisateurService;
-
+import util.SendEmailSSL;
+import jakarta.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -39,7 +41,8 @@ public class ControllerAbsence extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        if (action == null) action = "declare";
+        if (action == null)
+            action = "declare";
 
         switch (action) {
             case "upload":
@@ -87,10 +90,10 @@ public class ControllerAbsence extends HttpServlet {
             return;
         }
 
-        LocalDateTime debut = dateDebut != null ?
-                LocalDate.parse(dateDebut).atStartOfDay() : LocalDateTime.now();
-        LocalDateTime fin = "COURTE".equals(typeAbsence) && dateFin != null ?
-                LocalDate.parse(dateFin).atTime(23, 59, 59) : null;
+        LocalDateTime debut = dateDebut != null ? LocalDate.parse(dateDebut).atStartOfDay() : LocalDateTime.now();
+        LocalDateTime fin = "COURTE".equals(typeAbsence) && dateFin != null
+                ? LocalDate.parse(dateFin).atTime(23, 59, 59)
+                : null;
 
         boolean ok = absenceService.declareAbsence(enfant,
                 EtreAbsent.TypeAbsence.valueOf(typeAbsence), debut, fin, motif);
@@ -104,8 +107,6 @@ public class ControllerAbsence extends HttpServlet {
                         : "Erreur lors de l'enregistrement de l'absence.",
                 url);
     }
-
-
 
     private void handleUpload(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -162,6 +163,9 @@ public class ControllerAbsence extends HttpServlet {
         boolean ok = absenceService.closeAbsence(absence, submitted, contentType, data);
         if (ok) {
             refreshUserSession(session, parent);
+            // Envoie un email aux secrétaires avec un lien vers le certificat
+            sendCertificatEmail(request, parent, absence, submitted, idAbsence);
+
         }
 
         forwardWithMessage(request, response,
@@ -170,9 +174,8 @@ public class ControllerAbsence extends HttpServlet {
                 url);
     }
 
-
     private void forwardWithMessage(HttpServletRequest request, HttpServletResponse response,
-                                    String message, String url) throws ServletException, IOException {
+            String message, String url) throws ServletException, IOException {
         request.setAttribute("msg_absence", message);
         request.getRequestDispatcher(url).forward(request, response);
     }
@@ -180,6 +183,57 @@ public class ControllerAbsence extends HttpServlet {
     private void refreshUserSession(HttpSession session, Parent parent) {
         utilisateurService.getEnfantsAndAbsencesByParentId(parent);
         session.setAttribute("user", parent);
+    }
+
+    // Envoie un email aux secrétaires avec un lien pour télécharger le certificat
+    private void sendCertificatEmail(HttpServletRequest request, Parent parent, EtreAbsent absence, String filename, Long idAbsence) {
+        String destinataires = getSecretaireEmails();
+        if (destinataires == null || destinataires.isEmpty()) {
+            return; // pas de secrétaires configurés
+        }
+
+        String subject = "Certificat de reprise déposé";
+        Joueur enfant = absence.getJoueur();
+
+        String scheme = request.getScheme();
+        String host = request.getServerName();
+        int port = request.getServerPort();
+        String portPart = (port == 80 || port == 443) ? "" : ":" + port;
+        String link = scheme + "://" + host + portPart + request.getContextPath()
+                + "/DownloadCertificat?id=" + idAbsence;
+
+        String body = "<html><body>"
+                + "<h3>Nouveau certificat de reprise</h3>"
+                + "<ul>"
+                + "<li><strong>Parent :</strong> " + parent.getPrenomUtilisateur() + " "
+                + parent.getNomUtilisateur() + "</li>"
+                + "<li><strong>Joueur :</strong> " + enfant.getPrenomUtilisateur() + " "
+                + enfant.getNomUtilisateur() + "</li>"
+                + "<li><strong>Fichier :</strong> " + filename + "</li>"
+                + (absence.getAbsenceFin() != null
+                        ? "<li><strong>Date fin :</strong> " + absence.getAbsenceFin() + "</li>"
+                        : "")
+                + "</ul>"
+                + "<p>Certificat disponible ici : <a href='" + link + "'>Télécharger le certificat</a></p>"
+                + "</body></html>";
+        try {
+            SendEmailSSL.sendEmail(destinataires, subject, body);
+        } catch (MessagingException e) {
+            request.setAttribute("msg_absence",
+                    "Certificat enregistré, mais l'envoi de l'email a échoué.");
+            e.printStackTrace();
+        }
+    }
+
+    // Récupère les emails des secrétaires et les concatène avec des virgules
+    private String getSecretaireEmails() {
+        return utilisateurService.loadAllUtilisateurs().stream()
+                .filter(u -> "Secretaire".equalsIgnoreCase(u.getTypeU()))
+                .map(u -> u.getEmailUtilisateur())
+                .filter(e -> e != null && !e.trim().isEmpty())
+                .distinct()
+                .reduce((a, b) -> a + "," + b)
+                .orElse("");
     }
 
     @Override

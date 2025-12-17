@@ -30,12 +30,14 @@ public class ControllerDownloadCertificat extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        if (session == null || !(session.getAttribute("user") instanceof Parent)) {
+        Object user = session != null ? session.getAttribute("user") : null;
+        boolean authorised = (user instanceof Parent) || (user instanceof model.Secretaire);
+        if (!authorised) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Accès non autorisé");
             return;
         }
 
-        Parent parent = (Parent) session.getAttribute("user");
+        Parent parent = (user instanceof Parent) ? (Parent) user : null;
         String idAbsenceStr = request.getParameter("id");
 
         if (idAbsenceStr == null) {
@@ -44,8 +46,13 @@ public class ControllerDownloadCertificat extends HttpServlet {
         }
 
         Long idAbsence = Long.parseLong(idAbsenceStr);
-        Optional<EtreAbsent> opt = absenceService.findAbsenceById(parent, idAbsence);
-
+        Optional<EtreAbsent> opt;
+        if (parent != null) {
+            opt = absenceService.findAbsenceById(parent, idAbsence);
+        } else {
+            // Secrétaires peuvent accéder directement
+            opt = absenceService.findAbsenceById(idAbsence);
+        }
         if (!opt.isPresent()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Absence introuvable");
             return;

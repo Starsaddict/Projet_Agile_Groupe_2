@@ -22,6 +22,12 @@
             justify-content: space-between;
             align-items: center;
         }
+        .page-header {
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: flex-start;
+		    margin-bottom: 20px;
+		}
 
         .header-title {
             color: white;
@@ -29,10 +35,11 @@
             font-weight: bold;
         }
 
-        .header-actions {
-            display: flex;
-            gap: 10px;
-        }
+		.header-actions {
+		    display: flex;
+		    gap: 10px;
+		    margin-left: auto;
+		}
 
         /* ===== CONTAINER ===== */
         .container {
@@ -79,14 +86,20 @@
         .form-row { margin-bottom: 12px; }
 
         /* ===== BUTTONS ===== */
-        .btn-primary {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 7px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
+		.btn-primary {
+		    border: none;
+		    padding: 8px 16px;
+		    border-radius: 6px;
+		    font-size: 14px;
+		    cursor: pointer;
+		    background-color: #2563eb;
+		    color: #ffffff;
+		}
+		
+		.btn-primary:hover {
+		    background-color: #1d4ed8;
+		    transform: translateY(-1px);
+		}
 
         .btn-secondary {
             background: #e5e7eb;
@@ -183,17 +196,16 @@
 	    </div>
 	
 	    <div class="header-actions">
-	        <!-- Home -->
-	        <form method="get" action="${pageContext.request.contextPath}/parent/home" style="display:inline;">
+	        <form method="get" action="${pageContext.request.contextPath}/parent/home">
 	            <button type="submit" class="btn-primary">Home</button>
 	        </form>
 	
-	        <!-- Déconnexion -->
-	        <form method="get" action="${pageContext.request.contextPath}/CtrlLogout" style="display:inline;">
+	        <form method="get" action="${pageContext.request.contextPath}/CtrlLogout">
 	            <button type="submit" class="btn-primary">Déconnexion</button>
 	        </form>
 	    </div>
 	</div>
+
 
     <!-- ================= CREATION ================= -->
     <h2>Créer un covoiturage</h2>
@@ -236,7 +248,7 @@
             <input type="number" name="nbPlaces" min="1" required>
         </div>
 
-        <button class="btn-primary">Créer</button>
+        <button class="btn btn-primary">Créer</button>
     </form>
 
     <!-- ================= LISTE ================= -->
@@ -278,7 +290,7 @@
 	                <form method="post" action="${pageContext.request.contextPath}/parent/covoiturage">
 	                    <input type="hidden" name="action" value="supprimer">
 	                    <input type="hidden" name="idCovoiturage" value="${c.idCovoiturage}">
-	                    <button type="submit" class="btn-danger">Supprimer</button>
+	                    <button type="submit" class="btn btn-danger">Supprimer</button>
 	                </form>
 	            </div>
 	        </div>
@@ -335,7 +347,7 @@
                             <input type="number" name="nbPlaces"
                                    value="${maReservation.nbPlaces}"
                                    min="1" max="${c.nbPlacesMaxCovoiturage}">
-                            <button class="btn-primary">Modifier</button>
+                            <button class="btn btn-primary">Modifier</button>
                         </form>
 
                         <form method="post"
@@ -343,7 +355,7 @@
                             <input type="hidden" name="action" value="quitter">
                             <input type="hidden" name="idCovoiturage"
                                    value="${c.idCovoiturage}">
-                            <button class="btn-secondary">Quitter</button>
+                            <button class="btn btn-secondary">Quitter</button>
                         </form>
                     </div>
                 </c:if>
@@ -358,7 +370,7 @@
                                value="${c.idCovoiturage}">
                         <input type="number" name="nbPlaces"
                                min="1" max="${c.placesRestantes}" value="1">
-                        <button class="btn-primary">Rejoindre</button>
+                        <button class="btn btn-primary">Rejoindre</button>
                     </form>
                 </c:if>
 

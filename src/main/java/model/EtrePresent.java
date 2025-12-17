@@ -22,17 +22,17 @@ public class EtrePresent {
     private Boolean presenceReelle;
 
     @MapsId("idJoueur")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "IdJoueur", referencedColumnName = "IdUtilisateur", nullable = false)
     private Joueur joueur;
 
     @MapsId("idGroupe")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "IdGroupe", referencedColumnName = "IdGroupe", nullable = false)
     private Groupe groupe;
 
     @MapsId("idEvenement")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "IdEvenement", referencedColumnName = "IdEvenement", nullable = false)
     private Evenement evenement;
 

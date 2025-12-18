@@ -9,13 +9,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Floating Window</title>
+    <title>Messages</title>
     <style>
         /* Basic floating window styling */
         .floating-window {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
+            bottom: 64px;
+            right: 64px;
             width: 320px;
             max-height: 60vh;
             background: #ffffff;
@@ -107,22 +107,89 @@
             color: #444;
             margin-bottom: 2px;
         }
+
+        .message-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+        }
+
+        .message-modal {
+            background: #fff;
+            border-radius: 12px;
+            width: 420px;
+            max-width: 90vw;
+            padding: 20px;
+            box-shadow: 0 18px 32px rgba(0,0,0,0.18);
+        }
+
+        .message-modal h4 {
+            margin: 0 0 12px;
+            font-size: 18px;
+        }
+
+        .message-modal label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .message-modal input,
+        .message-modal textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .message-modal textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .message-modal__actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 14px;
+        }
     </style>
 </head>
 <body>
 
 <div id="floatingWindow" class="floating-window" aria-live="polite">
     <div class="floating-window__header">
-        <h4 class="floating-window__title">Quick Panel</h4>
+        <h4 class="floating-window__title">Faire un conversation</h4>
         <button class="floating-window__close" type="button" aria-label="Close" onclick="FloatingWindow.close()">&times;</button>
     </div>
     <div class="floating-window__content" id="floatingWindowContent">
         Loading...
     </div>
     <div class="floating-window__status" id="floatingWindowStatus"></div>
-    <div class="floating-window__actions">
-        <button class="floating-window__button floating-window__button--secondary" type="button" onclick="FloatingWindow.refresh()">Refresh</button>
-        <button class="floating-window__button" type="button" onclick="FloatingWindow.invokeAction()">Run Action</button>
+</div>
+
+<div class="message-modal-overlay" id="messageModalOverlay">
+    <div class="message-modal">
+        <h4 id="messageModalTitle">Envoyer un message</h4>
+        <input type="hidden" id="messageEmail">
+        <div>
+            <label for="messageSubject">Titre</label>
+            <input type="text" id="messageSubject" placeholder="Sujet du message">
+        </div>
+        <div style="margin-top:10px;">
+            <label for="messageBody">Contenu</label>
+            <textarea id="messageBody" placeholder="Tapez votre message"></textarea>
+        </div>
+        <div class="message-modal__actions">
+            <button type="button" class="floating-window__button floating-window__button--secondary" onclick="FloatingWindow.closeMessageModal()">Annuler</button>
+            <button type="button" class="floating-window__button" onclick="FloatingWindow.sendMessage()">Envoyer</button>
+        </div>
     </div>
 </div>
 
@@ -165,9 +232,13 @@
                     const items = (data && data.items) || [];
                     contentEl.innerHTML = items.length
                         ? items.map(function (item) {
+                            const name = ((item.prenom || '') + ' ' + (item.nom || '')).trim();
                             return (
-                                '<div class="floating-window__item">' +
-                                    '<div class="floating-window__name">' + (item.nom || 'N/A') + '</div>' +
+                                '<div class="floating-window__item" ' +
+                                    'data-email="' + (item.email || '') + '" ' +
+                                    'data-name="' + name + '" ' +
+                                    'onclick="FloatingWindow.openMessageModal(this.dataset)">' +
+                                    '<div class="floating-window__name">' + (name || 'N/A') + '</div>' +
                                     '<div class="floating-window__meta">Email: ' + (item.email || 'N/A') + '</div>' +
                                     '<div class="floating-window__meta">Rôles: ' + (item.roles || 'N/A') + '</div>' +
                                 '</div>'
@@ -187,6 +258,36 @@
                     setStatus('Action completed');
                 } catch (err) {
                     setStatus('Action failed: ' + err.message);
+                }
+            },
+            openMessageModal: function (data) {
+                const overlay = document.getElementById('messageModalOverlay');
+                document.getElementById('messageEmail').value = data.email || '';
+                document.getElementById('messageSubject').value = '';
+                document.getElementById('messageBody').value = '';
+                document.getElementById('messageModalTitle').textContent = 'Envoyer un message à ' + (data.name || 'utilisateur');
+                overlay.style.display = 'flex';
+            },
+            closeMessageModal: function () {
+                const overlay = document.getElementById('messageModalOverlay');
+                overlay.style.display = 'none';
+            },
+            sendMessage: async function () {
+                const email = document.getElementById('messageEmail').value;
+                const title = document.getElementById('messageSubject').value;
+                const content = document.getElementById('messageBody').value;
+                setStatus('Envoi...');
+                try {
+                    await fetch(API.base, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams({ email: email, title: title, content: content })
+                    });
+                    setStatus('Message prêt à être traité');
+                } catch (err) {
+                    setStatus('Échec: ' + err.message);
+                } finally {
+                    this.closeMessageModal();
                 }
             }
         };

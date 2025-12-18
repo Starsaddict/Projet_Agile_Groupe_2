@@ -14,6 +14,26 @@
 <head>
     <title>Mon Profil - Joueur</title>
     <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
+    <style>
+        .fab-menu {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #0a65cc;
+            color: #fff;
+            border: none;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -23,9 +43,9 @@
             <form action="<%= contextPath %>/CtrlLogout" method="post" style="margin:0;">
                 <button type="submit" class="btn danger">🚪 Déconnexion</button>
             </form>
-        </div>
+            </div>
 
-        <h1>Mon Profil</h1>
+            <h1>Mon Profil</h1>
 
         <% if (error != null) { %>
             <div class="alert error"><%= error %></div>
@@ -47,5 +67,7 @@
         </div>
     </div>
 </div>
+<button type="button" class="fab-menu" onclick="FloatingWindow && FloatingWindow.open()">☰</button>
+<jsp:include page="../components/floatingWindow.jsp"/>
 </body>
 </html>

@@ -166,6 +166,7 @@ th, td {
 </style>
 </head>
 <body class="page">
+    <jsp:include page="/jsp/includes/topbar.jspf" />
 	<div class="container">
 		<div class="card">
 			<div class="top-bar">

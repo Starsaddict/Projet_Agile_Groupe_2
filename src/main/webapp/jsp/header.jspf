@@ -1,0 +1,7 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<div class="card" style="margin-bottom:12px; display:flex; justify-content: space-between; align-items:center;">
+  <a href="${pageContext.request.contextPath}/jsp/home.jsp" class="btn secondary">⬅ Accueil</a>
+  <form action="${pageContext.request.contextPath}/CtrlLogout" method="post" style="margin:0;">
+    <button type="submit" class="btn danger">🚪 Déconnexion</button>
+  </form>
+</div>

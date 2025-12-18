@@ -13,8 +13,11 @@
 
     Joueur joueur = (Joueur) utilisateur;
 %>
-<html>
+<!DOCTYPE html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier mon profil - Joueur</title>
     <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
     <style>
@@ -26,8 +29,10 @@
         }
     </style>
 </head>
+
 <body>
-    <%@ include file="/jsp/header.jspf" %>
+<%@ include file="/jsp/header.jspf" %>
+
 <div class="container">
     <div class="card">
         
@@ -38,14 +43,14 @@
             <div class="alert error"><%= error %></div>
         <% } %>
 
-        <form method="post" action="<%= contextPath %>/joueur/profil/edit">
-            <div class="card" style="background:#f9f9f9; margin-top:12px;">
-                <p><strong>Nom:</strong> <%= joueur.getNomUtilisateur() %></p>
-                <p><strong>Prénom:</strong> <%= joueur.getPrenomUtilisateur() %></p>
-                <p><strong>Email:</strong> <%= joueur.getEmailUtilisateur() != null ? joueur.getEmailUtilisateur() : "-" %></p>
-                <p><strong>Numéro licence:</strong> <%= joueur.getNumeroJoueur() != null ? joueur.getNumeroJoueur() : "-" %></p>
-            </div>
+        <div class="alert" style="background: #e3f2fd; border-left: 4px solid var(--primary); color: var(--text);">
+            <p><strong>Nom :</strong> <%= joueur.getNomUtilisateur() %></p>
+            <p><strong>Prénom :</strong> <%= joueur.getPrenomUtilisateur() %></p>
+            <p><strong>Email :</strong> <%= joueur.getEmailUtilisateur() != null ? joueur.getEmailUtilisateur() : "-" %></p>
+            <p><strong>Numéro licence :</strong> <%= joueur.getNumeroJoueur() != null ? joueur.getNumeroJoueur() : "-" %></p>
+        </div>
 
+        <form method="post" action="<%= contextPath %>/joueur/profil/edit">
             <div class="field">
                 <label for="adresse">Adresse</label>
                 <input type="text" id="adresse" name="adresse" value="<%= joueur.getAdresseUtilisateur() != null ? joueur.getAdresseUtilisateur() : "" %>">
@@ -56,9 +61,9 @@
                 <input type="text" id="telephone" name="telephone" value="<%= joueur.getTelephoneUtilisateur() != null ? joueur.getTelephoneUtilisateur() : "" %>">
             </div>
 
-            <div class="action-buttons">
-                <button type="submit" class="btn">Enregistrer</button>
-                <a href="<%= contextPath %>/joueur/profil" class="btn secondary">Annuler</a>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <a href="<%= contextPath %>/joueur/profil" class="btn btn-secondary">Annuler</a>
             </div>
         </form>
     </div>

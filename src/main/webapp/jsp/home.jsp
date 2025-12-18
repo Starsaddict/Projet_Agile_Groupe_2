@@ -165,7 +165,6 @@ th, td {
 			<div class="top-bar">
 				<div>
 					<h1>Tableau de bord</h1>
-					<p>Contenus affichés selon vos rôles</p>
 				</div>
 				<div>
 					<c:if test="${not empty sessionScope.user}">
@@ -339,8 +338,8 @@ th, td {
             <div class="links">
                 <a class="btn" href="${pageContext.request.contextPath}/evenementSecre">Gestion des événements</a>
                 <a class="btn" href="${pageContext.request.contextPath}/secretaire/profil">Gestion des profils</a>
-                <a class="btn" href="${pageContext.request.contextPath}/secretaire/convoquer?type=match">Convoquer les Matches</a>
-                <a class="btn" href="${pageContext.request.contextPath}/secretaire/enregistrement">Enregister les entraintements</a>
+                <a class="btn" href="${pageContext.request.contextPath}/secretaire/convoquer?type=match">Convoquation des Matches</a>
+                <a class="btn" href="${pageContext.request.contextPath}/secretaire/enregistrement">Enregistrer présence</a>
 
             </div>
             <div style="margin-top:8px;">
@@ -353,7 +352,7 @@ th, td {
             <h2>Vue Joueur</h2>
             <p>Consultez vos convocations et informations d'équipe.</p>
             <div class="links">
-                <a class="btn" href="${pageContext.request.contextPath}/joueur/profil">Ma profil</a>
+                <a class="btn" href="${pageContext.request.contextPath}/joueur/profil">Profile</a>
             </div>
         </div>
     </c:if>

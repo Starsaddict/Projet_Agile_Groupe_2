@@ -2,9 +2,9 @@
 	<session-factory>
 
 		<!--		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>-->
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3307/db_hwd8293a_2</property>
-		<property name="hibernate.connection.username">hwd8293a</property>
-		<property name="hibernate.connection.password">hwd8293a</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3307/db_cog2665a_2</property>
+		<property name="hibernate.connection.username">cog2665a</property>
+		<property name="hibernate.connection.password">cog2665a</property>
 		<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
 
 		<!-- Sessions -->

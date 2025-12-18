@@ -156,6 +156,13 @@ th, td {
     justify-content: center;
 }
 
+.floating-panel-trigger {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9000;
+}
+
 </style>
 </head>
 <body class="page">
@@ -360,5 +367,13 @@ th, td {
         </div>
     </div>
 </div>
+<c:if test="${not empty roles and fn:contains(roles, 'Joueur')}">
+    <div class="floating-panel-trigger">
+        <button type="button" class="btn secondary" onclick="FloatingWindow && FloatingWindow.open()">Messages</button>
+    </div>
+</c:if>
+<c:if test="${not empty roles and fn:contains(roles, 'Joueur')}">
+    <jsp:include page="/jsp/components/floatingWindow.jsp"/>
+</c:if>
 </body>
 </html>

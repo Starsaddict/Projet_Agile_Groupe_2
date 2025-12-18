@@ -15,23 +15,11 @@
     <title>Mon Profil - Joueur</title>
     <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
     <style>
-        .fab-menu {
+        .floating-panel-trigger {
             position: fixed;
             bottom: 24px;
-            right: 24px;  
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: #0a65cc;
-            color: #fff;
-            border: none;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            font-size: 22px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
+            right: 24px;
+            z-index: 9000;
         }
     </style>
 </head>
@@ -69,7 +57,9 @@
         </div>
     </div>
 </div>
-<button type="button" class="fab-menu" onclick="FloatingWindow && FloatingWindow.open()">☰</button>
-<jsp:include page="../components/floatingWindow.jsp"/>
+<div class="floating-panel-trigger">
+    <button type="button" class="btn secondary" onclick="FloatingWindow && FloatingWindow.open()">Messages</button>
+</div>
+<jsp:include page="/jsp/components/floatingWindow.jsp"/>
 </body>
 </html>

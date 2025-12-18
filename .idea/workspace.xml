@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="nom_projet">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ctrl/FloatingWindowCtrl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/inscritExcel/~$sample.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/jsp/components/floatingWindow.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/home.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/home.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +29,27 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
+  <component name="GitHubPullRequestState"><![CDATA[{
+  "prStates": [
+    {
+      "id": {
+        "id": "PR_kwDOQkzhlM64XpHE",
+        "number": 42
+      },
+      "lastSeen": 1765464109951
+    },
+    {
+      "id": {
+        "id": "PR_kwDOQkzhlM65nC4G",
+        "number": 90
+      },
+      "lastSeen": 1766070446407
+    }
+  ]
+}]]></component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
     <option name="FILTER_WARNINGS" value="false" />
@@ -146,9 +164,6 @@
       <option name="catalinaBase" value="$USER_HOME$/.SmartTomcat/Projet_Agile_Groupe_2/Projet_Agile_Groupe_2" />
       <option name="contextPath" value="/KOZYLY_CLUB" />
       <option name="docBase" value="$PROJECT_DIR$/src/main/webapp" />
-      <option name="envOptions">
-        <map />
-      </option>
       <option name="extraClassPath" value="" />
       <option name="tomcatInfo">
         <TomcatInfo>
@@ -173,11 +188,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.EvenementRepo" />
         <item itemvalue="Application.BdTest" />
-        <item itemvalue="Application.utilisateurRepo" />
         <item itemvalue="Application.util.SendEmailSSL" />
         <item itemvalue="Application.SendEmailSSL" />
+        <item itemvalue="Application.utilisateurRepo" />
+        <item itemvalue="Application.EvenementRepo" />
       </list>
     </recent_temporary>
   </component>

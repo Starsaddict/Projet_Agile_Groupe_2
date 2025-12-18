@@ -17,6 +17,14 @@
 <head>
     <title>Modifier mon profil - Joueur</title>
     <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
+    <style>
+        .floating-panel-trigger {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9000;
+        }
+    </style>
 </head>
 <body>
     <%@ include file="/jsp/header.jspf" %>
@@ -55,5 +63,9 @@
         </form>
     </div>
 </div>
+<div class="floating-panel-trigger">
+    <button type="button" class="btn secondary" onclick="FloatingWindow && FloatingWindow.open()">Messages</button>
+</div>
+<jsp:include page="/jsp/components/floatingWindow.jsp"/>
 </body>
 </html>

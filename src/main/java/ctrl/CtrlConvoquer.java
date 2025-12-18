@@ -169,11 +169,9 @@ public class CtrlConvoquer extends HttpServlet {
 	            echec(tx, request, response, "La date de l'évènement est vide.");
 	            return;
 	        }
-	        
-	        
 
 	        LocalDateTime start = evt.getDateEvenement().toLocalDate().atStartOfDay();
-	        LocalDateTime end = start.plusDays(1);	       
+	        LocalDateTime end = start.plusDays(1);
 
 	        Long nbAbsents = session.createQuery(
 	                "select count(ea) from EtreAbsent ea " +
@@ -190,7 +188,6 @@ public class CtrlConvoquer extends HttpServlet {
 	            echec(tx, request, response, "Impossible : ce groupe contient un joueur absent ce jour-là.");
 	            return;
 	        }
-
 
 	        List<ConflitJoueur> conflitsJ = conflitsJoueursMemeJour(session, idGroupe, start, end, idEvenement);
 	        if (conflitsJ != null && !conflitsJ.isEmpty()) {
@@ -214,20 +211,63 @@ public class CtrlConvoquer extends HttpServlet {
 	            return;
 	        }
 
+	        // ✅ 你原来的 groupes
 	        List<Groupe> groupes = session.createQuery(
-	        	    "select distinct g from Groupe g left join fetch g.joueurs",
-	        	    Groupe.class
-	        	).list();
+	                "select distinct g from Groupe g left join fetch g.joueurs",
+	                Groupe.class
+	        ).list();
 	        request.setAttribute("groupesCoach", groupes);
+
+	        // ✅ ADD: 计算当天缺席球员 -> 推导缺席组 + 详情（和 afficherSelection 一样）
+	        List<Long> absentIds = session.createQuery(
+	                "select distinct ea.joueur.idUtilisateur " +
+	                "from EtreAbsent ea " +
+	                "where ea.absenceDebut < :endDay " +
+	                "and (ea.absenceFin is null or ea.absenceFin >= :startDay)",
+	                Long.class
+	        ).setParameter("startDay", start)
+	         .setParameter("endDay", end)
+	         .list();
+
+	        Set<Long> absentJoueurIds = new HashSet<>(absentIds);
+
+	        Set<Long> groupesIndisponibles = new HashSet<>();
+	        Map<Long, String> detailAbsencesParGroupe = new HashMap<>();
+
+	        for (Groupe gg : groupes) {
+	            List<String> absentsDansGroupe = new ArrayList<>();
+
+	            for (Joueur j : gg.getJoueurs()) {
+	                Long jid = j.getIdUtilisateur();
+	                if (jid != null && absentJoueurIds.contains(jid)) {
+	                    absentsDansGroupe.add(j.getNomUtilisateur());
+	                }
+	            }
+
+	            if (!absentsDansGroupe.isEmpty()) {
+	                groupesIndisponibles.add(gg.getIdGroupe());
+	                detailAbsencesParGroupe.put(
+	                        gg.getIdGroupe(),
+	                        "Joueur(s) absent(s) : " + String.join(", ", absentsDansGroupe)
+	                );
+	            }
+	        }
+
+	        request.setAttribute("groupesIndisponibles", groupesIndisponibles);
+	        request.setAttribute("detailAbsencesParGroupe", detailAbsencesParGroupe);
+	        // ✅ ADD END
+
+	        // ✅ 你原来的更新 & commit
 	        evt.setGroupe(g);
 	        session.update(evt);
 	        tx.commit();
 	    }
-	    
+
 	    request.setAttribute("evenementSelectionne", evt);
 	    request.setAttribute("messageSucces", "Le groupe est marqué pour convocation");
 	    request.getRequestDispatcher("/jsp/coach/PageSelection.jsp").forward(request, response);
 	}
+
 
 	private static class ConflitJoueur {
 		private final String joueurNom;

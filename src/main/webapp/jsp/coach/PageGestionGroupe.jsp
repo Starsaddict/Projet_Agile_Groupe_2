@@ -84,6 +84,13 @@ td.td-action { width: 260px; }
 	gap: 8px;
 	margin-bottom: 4px;
 }
+.btn-row {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    gap: 14px;
+    margin-top: 20px;
+}
 </style> 
 </head>
 

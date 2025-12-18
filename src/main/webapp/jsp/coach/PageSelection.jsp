@@ -49,9 +49,11 @@ table tbody td {
 table tbody tr:nth-child(even) { background-color: #f9fafb; }
 table tbody tr:hover { background-color: #eef2ff; }
 .btn-row {
-	margin-top: 16px;
-	display: flex;
-	gap: 10px;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    gap: 14px;
+    margin-top: 20px;
 }
 .empty-msg { color: var(--text-muted); font-style: italic; }
 hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
@@ -68,6 +70,28 @@ tr.absent-row:hover { background: #fecaca !important; }
 	margin-left: 8px;
 }
 .absent-hint { color: #991b1b; font-size: 12px; margin-top: 6px; }
+
+/* ===== Messages succès / erreur ===== */
+.success {
+    background: #d1fae5;        /* vert clair */
+    color: #065f46;             /* vert foncé */
+    border-left: 4px solid #10b981;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin: 12px 0;
+    font-weight: 500;
+}
+
+.error {
+    background: #fee2e2;        /* rouge clair */
+    color: #991b1b;             /* rouge foncé */
+    border-left: 4px solid #ef4444;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin: 12px 0;
+    font-weight: 500;
+}
+
 </style>
 
 </head>

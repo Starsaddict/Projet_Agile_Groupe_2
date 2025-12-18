@@ -314,6 +314,17 @@ th, td {
 							<a class="btn" href="CtrlCoach?action=GestionGroupe">Gestion
 								des groupes</a>
 						</div>
+						<!-- ================= STATISTIQUES ================= -->
+<h2>Statistiques</h2>
+<p>Analyse du taux de présence des joueurs aux entraînements.</p>
+
+<div class="links">
+    <a class="btn"
+       href="${pageContext.request.contextPath}/CtrlStatistique?action=presenceEntrainement">
+        📊 Taux de présence aux entraînements
+    </a>
+</div>
+						
 					</div>
 				</c:if>
     <c:if test="${not empty roles and fn:contains(roles, 'Parent')}">

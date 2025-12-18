@@ -5,22 +5,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import model.Coach;
-import model.Code;
-import model.Covoiturage;
-import model.EtreAbsent;
-import model.Evenement;
-import model.Groupe;
-import model.Joueur;
-import model.Parent;
-import model.Secretaire;
-import model.Utilisateur;
-import model.EnvoyerMessage;
-import service.UtilisateurService;
+import model.*;
 
 public class BdTest {
 
@@ -28,165 +18,165 @@ public class BdTest {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
 
-            // 1) Création des utilisateurs et de leurs relations
-            Parent parent1 = (Parent) buildUtilisateur("Parent", "lucas.veslin@test.fr", "Veslin", "Lucas",
-                    LocalDate.of(2003, 7, 21));
-            Parent parent2 = (Parent) buildUtilisateur("Parent", "oussama.lahrach@test.fr", "Lahrach", "Oussama",
-                    LocalDate.of(1902, 2, 2));
-            Joueur joueur1 = (Joueur) buildUtilisateur("Joueur", "clement@test.com", "Riols", "Clément",
-                    LocalDate.of(2018, 7, 15));
-            Joueur joueur2 = (Joueur) buildUtilisateur("Joueur", "zhangkaiyangfr@126.com", "Zhang", "Kaiyang",
-                    LocalDate.of(2018, 7, 15));
-            Parent parent3 = (Parent) buildUtilisateur("Parent", "18201122059zky@gmail.com", "ZHANG", "KAIYANG",
-                    LocalDate.of(2018, 7, 15));
-            Coach coach = (Coach) buildUtilisateur("Coach", "coach@example.com", "Berro", "Alain",
-                    LocalDate.of(1229, 5, 29));
-            Secretaire secretaire = (Secretaire) buildUtilisateur("Secretaire", "sid@example.com", "Elandaloussi",
-                    "Sid Ahmed", LocalDate.of(1989, 11, 9));
+            Random rand = new Random();
 
-            session.save(parent1);
-            session.save(parent2);
-            session.save(joueur1);
-            session.save(joueur2);
-            session.save(parent3);
-            session.save(coach);
+            // ======================= 1) Utilisateurs =======================
+            Secretaire secretaire = (Secretaire) buildUtilisateur("Secretaire", "secretaire.test@example.com",
+                    "Clément", "Riols", LocalDate.of(1989, 11, 9));
+
+            Coach coach = (Coach) buildUtilisateur("Coach", "coach1.test@example.com", "Sid Ahmed", "Elandaloussi",
+                    LocalDate.of(1980, 5, 29));
+
+            Coach coach2 = (Coach) buildUtilisateur("Coach", "coach2.test@example.com", "Sabrina", "Flavien",
+                    LocalDate.of(1982, 5, 29));
+
             session.save(secretaire);
+            session.save(coach);
+            session.save(coach2);
 
-            List<Parent> parents1 = new ArrayList<>();
-            parents1.add(parent1);
-            parents1.add(parent2);
-            joueur1.setParents(parents1);
+            // ======================= 2) Parents =======================
+            List<String> parentPrenoms = Arrays.asList("Lucas", "Oussama", "Marie", "Élodie", "Hassan", "Claire");
+            List<String> parentNoms = Arrays.asList("Veslin", "Lahrach", "Dupont", "Moreau", "Benali", "Petit");
 
-            List<Parent> parents2 = new ArrayList<>();
-            parents2.add(parent1);
-            parents2.add(parent3);
-            joueur2.setParents(parents2);
+            List<Parent> parents = new ArrayList<>();
+            for (int i = 0; i < 6; i++) {
+                Parent p = (Parent) buildUtilisateur("Parent",
+                        "parent" + (i + 1) + "@test.com",
+                        parentNoms.get(i),
+                        parentPrenoms.get(i),
+                        LocalDate.of(1970 + i, rand.nextInt(12) + 1, rand.nextInt(28) + 1));
+                session.save(p);
+                parents.add(p);
+            }
 
-            // 2) Création des groupes
+            // ======================= 3) Groupes =======================
             Groupe groupeA = new Groupe();
             groupeA.setNomGroupe("U13");
             Groupe groupeB = new Groupe();
             groupeB.setNomGroupe("U21");
             session.save(groupeA);
             session.save(groupeB);
-            joueur1.addGroupe(groupeA);
-            joueur2.addGroupe(groupeA);
 
-            // 3) Création d'événements (match, entraînement, réunion)
-            Evenement match = new Evenement("Match de coupe", "Stadium", LocalDateTime.of(2026, 3, 15, 14, 30), "MATCH",
-                    groupeA);
-            Evenement entrainement = new Evenement("Entraînement hebdo", "Stadium",
+            // ======================= 4) Joueurs =======================
+            List<String> joueurPrenoms = Arrays.asList("Léo","Emma","Gabriel","Chloé","Louis","Jade","Lucas","Manon","Nathan","Louise",
+                    "Raphaël","Sarah","Arthur","Inès","Hugo","Camille","Ethan","Lina","Maxime","Zoé");
+            List<String> joueurNoms = Arrays.asList("Martin","Bernard","Thomas","Petit","Robert","Richard","Durand","Dubois","Moreau","Laurent",
+                    "Simon","Michel","Lefebvre","Garcia","David","Bertrand","Roux","Vincent","Fournier","Morel");
+
+            List<Joueur> joueurs = new ArrayList<>();
+            for (int i = 0; i < 20; i++) {
+                Joueur j = (Joueur) buildUtilisateur("Joueur",
+                        "joueur" + (i + 1) + "@test.com",
+                        joueurNoms.get(i),
+                        joueurPrenoms.get(i),
+                        LocalDate.of(2010, rand.nextInt(12) + 1, rand.nextInt(28) + 1));
+
+                // Attribution de 1 à 2 parents aléatoires
+                List<Parent> pList = new ArrayList<>();
+                pList.add(parents.get(rand.nextInt(parents.size())));
+                if (rand.nextBoolean())
+                    pList.add(parents.get(rand.nextInt(parents.size())));
+                j.setParents(pList);
+
+                // Attribution groupe
+                if (i < 10)
+                    j.addGroupe(groupeA);
+                else
+                    j.addGroupe(groupeB);
+
+                session.save(j);
+                joueurs.add(j);
+            }
+
+            // ======================= 5) Événements =======================
+            Evenement match = new Evenement("Match de coupe", "Stadium Toulouse", LocalDateTime.of(2026, 3, 15, 14, 30),
+                    "MATCH_OFFICIEL", groupeA);
+            Evenement entrainement = new Evenement("Entraînement", "Toulouse Rugby Club",
                     LocalDateTime.of(2026, 3, 12, 18, 0), "ENTRAINEMENT", groupeA);
             session.save(match);
             session.save(entrainement);
 
-            // flush pour s'assurer que les ids générés sont disponibles (nécessaire pour
-            // clés composites)
-            session.flush();
+            session.flush(); // ids disponibles
 
-            // 4) Absence : EtreAbsent
+            // ======================= 6) Absences =======================
             EtreAbsent absence = new EtreAbsent();
             absence.setAbsenceDebut(LocalDateTime.of(2025, 3, 12, 14, 30));
-            absence.setJoueur(joueur1);
-            joueur1.addAbsence(absence);
+            absence.setJoueur(joueurs.get(0)); // 1er joueur
+            joueurs.get(0).addAbsence(absence);
             session.save(absence);
 
-            // 6) Covoiturage et réservations
+            // ======================= 7) Covoiturages =======================
             Covoiturage covoiturage = new Covoiturage();
             covoiturage.setDateCovoiturage(LocalDateTime.of(2026, 3, 12, 12, 0));
             covoiturage.setNbPlacesMaxCovoiturage(4);
-            covoiturage.setLieuDepartCovoiturage("IUT de Rodez");
+            covoiturage.setLieuDepartCovoiturage("METRO JEAN JAURES");
             covoiturage.setEvenement(match);
-            covoiturage.setConducteur(parent1);
+            covoiturage.setConducteur(parents.get(0));
             session.save(covoiturage);
 
-            // 7) Messages entre utilisateurs (EnvoyerMessage)
-            EnvoyerMessage msg1 = new EnvoyerMessage(joueur1, parent1, LocalDateTime.now().minusDays(1),
+            // ======================= 8) Messages =======================
+            EnvoyerMessage msg1 = new EnvoyerMessage(joueurs.get(0), parents.get(0), LocalDateTime.now().minusDays(1),
                     "Je serai en retard pour l'entraînement");
-            EnvoyerMessage msg2 = new EnvoyerMessage(parent1, coach, LocalDateTime.now().minusHours(4),
-                    "Fait jouer mon fils !");
+            EnvoyerMessage msg2 = new EnvoyerMessage(parents.get(0), coach, LocalDateTime.now().minusHours(4), "Fait jouer mon fils !");
             session.save(msg1);
             session.save(msg2);
 
-            // 8) Codes (générés manuellement par service)
+            // ======================= 9) Codes =======================
             Code registerCode = new Code("ABC12345", "Inscription");
             Code reinitializeCode = new Code("DFG54321", "Reinitialisation");
             session.save(registerCode);
             session.save(reinitializeCode);
 
-            // 9) Affichages récapitulatifs (pour démonstration)
-            System.out.println("\n--- Utilisateurs enregistrés ---");
-            session.createQuery("FROM Utilisateur", Utilisateur.class).getResultList()
-                    .forEach(u -> System.out.println(u));
-
-            System.out.println("\n--- Événements ---");
-            session.createQuery("FROM Evenement", Evenement.class).getResultList()
-                    .forEach(e -> System.out
-                            .println(e.getIdEvenement() + " | " + e.getNomEvenement() + " | " + e.getDateEvenement()));
-
-            System.out.println("\n--- Absences (EtreAbsent) ---");
-            session.createQuery("FROM EtreAbsent", EtreAbsent.class).getResultList()
-                    .forEach(a -> System.out.println("Absence id pour joueur: "
-                            + (a.getJoueur() != null ? a.getJoueur().getIdUtilisateur() : null)));
-
-            System.out.println("\n--- Covoiturages ---");
-            session.createQuery("FROM Covoiturage", Covoiturage.class).getResultList()
-                    .forEach(c -> System.out.println("Covoiturage " + c.getIdCovoiturage() + " conducteur="
-                            + (c.getConducteur() != null ? c.getConducteur().getIdUtilisateur() : null)));
-
-            System.out.println("\n--- Messages ---");
-            session.createQuery("FROM EnvoyerMessage", EnvoyerMessage.class).getResultList()
-                    .forEach(m -> System.out.println(m));
-
-            System.out.println("\n--- Codes ---");
-            session.createQuery("FROM Code", Code.class).getResultList()
-                    .forEach(c -> System.out.println(c));
-
-            // commit final
             tx.commit();
-            System.out.println("\n✔ Démonstration terminée avec succès.");
+            System.out.println("✔ Base test remplie avec 20 joueurs, parents, groupes, covoiturages, événements, absences, messages et codes.");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * Fabrique simple pour créer une instance concrète de Utilisateur selon le rôle
-     * demandé.
-     * Evite d'instancier la classe abstraite Utilisateur.
-     */
-    private static Utilisateur buildUtilisateur(String role, String email, String nom, String prenom,
-            LocalDate dateNaissance) {
+    private static Utilisateur buildUtilisateur(String role, String email, String nom, String prenom, LocalDate dateNaissance) {
         Utilisateur u;
-
-        UtilisateurService us = new UtilisateurService();
-
         switch (role) {
             case "Joueur":
-                Joueur joueur = new Joueur();
-                joueur.setNumeroJoueur(us.generateNumeroJoueur());
-                joueur.setProfilePicRoute("/img/joueur_avatar/default.png");
-                u = joueur;
+                Joueur j = new Joueur();
+                j.setEmailUtilisateur(email);
+                j.setNomUtilisateur(nom);
+                j.setPrenomUtilisateur(prenom);
+                j.setMdpUtilisateur("pwd");
+                j.setDateNaissanceUtilisateur(dateNaissance);
+                j.setProfilePicRoute("/img/joueur_avatar/default.png");
+                u = j;
                 break;
             case "Parent":
-                u = new Parent();
+                Parent p = new Parent();
+                p.setEmailUtilisateur(email);
+                p.setNomUtilisateur(nom);
+                p.setPrenomUtilisateur(prenom);
+                p.setMdpUtilisateur("pwd");
+                p.setDateNaissanceUtilisateur(dateNaissance);
+                u = p;
                 break;
             case "Coach":
-                u = new Coach();
+                Coach c = new Coach();
+                c.setEmailUtilisateur(email);
+                c.setNomUtilisateur(nom);
+                c.setPrenomUtilisateur(prenom);
+                c.setMdpUtilisateur("pwd");
+                c.setDateNaissanceUtilisateur(dateNaissance);
+                u = c;
                 break;
             case "Secretaire":
-                u = new Secretaire();
+                Secretaire s = new Secretaire();
+                s.setEmailUtilisateur(email);
+                s.setNomUtilisateur(nom);
+                s.setPrenomUtilisateur(prenom);
+                s.setMdpUtilisateur("pwd");
+                s.setDateNaissanceUtilisateur(dateNaissance);
+                u = s;
                 break;
             default:
                 throw new IllegalArgumentException("Rôle inconnu : " + role);
         }
-
-        u.setEmailUtilisateur(email);
-        u.setMdpUtilisateur("pwd");
-        u.setNomUtilisateur(nom);
-        u.setPrenomUtilisateur(prenom);
-        u.setDateNaissanceUtilisateur(dateNaissance);
-
         return u;
     }
 }

@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="merge convo-match and convo-events">
+    <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="nom_projet">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ctrl/FloatingWindowCtrl.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/inscritExcel/~$sample.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/jsp/components/floatingWindow.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/eventService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/eventService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/SendEmailSSL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/SendEmailSSL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,10 +19,18 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="XML Properties File" />
-        <option value="Jsp File" />
         <option value="Class" />
+        <option value="Jsp File" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
@@ -38,6 +43,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.BdTest.executor": "Run",
+    "Application.EvenementRepo.executor": "Run",
+    "Application.SendEmailSSL.executor": "Run",
+    "Application.util.SendEmailSSL.executor": "Run",
+    "Application.utilisateurRepo.executor": "Run",
+    "Maven.projetAgile [clean,package].executor": "Run",
+    "Maven.projetAgile [clean].executor": "Run",
+    "Maven.projetAgile [package].executor": "Run",
+    "Maven.projetAgile [verify].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "OpenRewrite.JavaxAuthorizationMigrationToJakartaAuthorization.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Smart Tomcat.Unnamed.executor": "Run",
+    "Smart Tomcat.projetAgile.executor": "Run",
+    "git-widget-placeholder": "Joueur-send-message",
+    "last_opened_file_path": "/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "模块",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true",
+    "应用程序.BdTest.executor": "Run"
+  }
+}]]></component>
   <component name="RunManager" selected="Smart Tomcat.Unnamed">
     <configuration name="BdTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="bd.BdTest" />
@@ -364,10 +402,33 @@
       <option name="project" value="LOCAL" />
       <updated>1766049276517</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="nom_projet">
+      <option name="closed" value="true" />
+      <created>1766051806621</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1766051806621</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="main" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
@@ -406,7 +467,8 @@
     <MESSAGE value="pom" />
     <MESSAGE value="bd test" />
     <MESSAGE value="merge convo-match and convo-events" />
-    <option name="LAST_COMMIT_MESSAGE" value="merge convo-match and convo-events" />
+    <MESSAGE value="nom_projet" />
+    <option name="LAST_COMMIT_MESSAGE" value="nom_projet" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

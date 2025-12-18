@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/secretaire-profil.css">
 </head>
 <body>
+    
 <div class="container">
     <h1>Inscription - Créer votre compte</h1>
 

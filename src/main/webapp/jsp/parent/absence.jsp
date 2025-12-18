@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
+    <%@ include file="/jsp/header.jspf" %>
 <div class="container">
     <div class="card">
         <h1>Gestion des absences</h1>

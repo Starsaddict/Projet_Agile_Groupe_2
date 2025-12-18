@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.util.List" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
     // Sécurité : utilisateur connecté
@@ -22,121 +23,68 @@
 <head>
     <meta charset="UTF-8">
     <title>Statistiques de présence</title>
-
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f6f7fb;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 60px auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 6px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
+        .subtitle { text-align: center; color: var(--text-muted); margin-bottom: 20px; }
         .stat-box {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin: 12px 0 24px;
         }
-
         .stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px;
             text-align: center;
+            box-shadow: var(--shadow-sm);
         }
-
         .stat strong {
             display: block;
             font-size: 26px;
-            color: #2c3e50;
+            color: var(--text);
         }
-
         .taux {
             text-align: center;
-            font-size: 38px;
+            font-size: 32px;
             font-weight: bold;
-            margin: 20px 0 5px;
+            margin: 12px 0 4px;
         }
-
-        .taux.bon {
-            color: #16a34a;
-        }
-
-        .taux.moyen {
-            color: #f59e0b;
-        }
-
-        .taux.faible {
-            color: #dc2626;
-        }
-
+        .taux.bon { color: #16a34a; }
+        .taux.moyen { color: #f59e0b; }
+        .taux.faible { color: #dc2626; }
         .qualite {
             text-align: center;
             font-size: 16px;
             font-weight: 500;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
         }
-
         th, td {
             padding: 8px;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid var(--border);
             text-align: center;
         }
-
-        th {
-            background: #f3f4f6;
-        }
-
+        th { background: #f3f4f6; }
         .info {
             text-align: center;
-            color: #555;
+            color: var(--text-muted);
             font-size: 14px;
-            margin-top: 25px;
-        }
-
-        .actions {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 18px;
-            background: #1d4ed8;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-
-        .btn:hover {
-            background: #153ea8;
+            margin-top: 16px;
         }
     </style>
 </head>
 
 <body>
+<%@ include file="/jsp/header.jspf" %>
 <div class="container">
 
+    <div class="card">
     <h1>Statistiques de présence</h1>
     <p class="subtitle">Entraînements uniquement</p>
 
@@ -228,12 +176,13 @@
     </p>
 
     <!-- ================= ACTIONS ================= -->
-    <div class="actions">
+    <div class="actions" style="text-align:center; margin-top:24px;">
         <a class="btn" href="CtrlCoach?action=Home">
-            ⬅ Retour à l’accueil Coach
+            Retour à l’accueil Coach
         </a>
     </div>
 
+</div>
 </div>
 </body>
 </html>

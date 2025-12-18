@@ -1,0 +1,76 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<style>
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    margin-bottom: 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    background: var(--bg-card);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.header-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.header-nav-link:hover {
+    color: var(--primary);
+}
+
+.header-user-info {
+    color: var(--text-muted);
+    margin-right: 12px;
+    font-size: 0.9rem;
+}
+
+.header-logout-btn {
+    background: none;
+    border: none;
+    color: var(--danger);
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+.header-logout-btn:hover {
+    color: #b91c1c;
+}
+</style>
+
+<div class="header-container">
+    <c:choose>
+        <c:when test="${not empty sessionScope.roles and fn:contains(sessionScope.roles, 'Coach')}">
+            <form action="${pageContext.request.contextPath}/CtrlCoach" method="get" 
+                  style="display: inline; margin: 0;">
+                <input type="hidden" name="action" value="Home">
+                <button type="submit" class="header-nav-link" 
+                        style="background: none; border: none; cursor: pointer; font: inherit; padding: 0;">
+                    <img src="${pageContext.request.contextPath}/img/logo.png" alt="Logo" style="height:20px; width:auto;">
+                    Accueil
+                </button>
+            </form>
+        </c:when>
+        <c:otherwise>
+            <a href="${pageContext.request.contextPath}/jsp/home.jsp" class="header-nav-link">
+                <img src="${pageContext.request.contextPath}/img/logo.png" alt="Logo" style="height:20px; width:auto;">
+                Accueil
+            </a>
+        </c:otherwise>
+    </c:choose>
+    <form action="${pageContext.request.contextPath}/CtrlLogout" method="post" style="margin-left: auto;">
+        <button type="submit" class="header-logout-btn">Deconnexion</button>
+    </form>
+</div>

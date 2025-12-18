@@ -88,25 +88,25 @@
 
     <div class="info">
         <strong>Match :</strong>
-        ${convocation.match.nomEvenement}
+        ${convocation.evenement.nomEvenement}
     </div>
 
     <div class="info">
         <strong>Date :</strong>
-        ${convocation.match.dateEvenement}
+        ${convocation.evenement.dateEvenement}
     </div>
 
     <!-- Affichage de la réponse actuelle -->
-    <c:if test="${convocation.peutJouer != null}">
+    <c:if test="${convocation.confirmePresence != null}">
         <div class="status">
             Réponse actuelle :
-            <span class="${convocation.peutJouer ? 'oui' : 'non'}">
-                ${convocation.peutJouer ? "OUI – Le joueur peut jouer" : "NON – Le joueur ne peut pas jouer"}
+            <span class="${convocation.confirmePresence ? 'oui' : 'non'}">
+                ${convocation.confirmePresence ? "OUI – Le joueur peut jouer" : "NON – Le joueur ne peut pas jouer"}
             </span>
         </div>
     </c:if>
 
-    <c:if test="${convocation.peutJouer == null}">
+    <c:if test="${convocation.confirmePresence == null}">
         <div class="status">
             Aucune réponse n’a encore été enregistrée.
         </div>

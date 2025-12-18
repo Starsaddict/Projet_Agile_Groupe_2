@@ -1,7 +1,7 @@
 package ctrl;
 
-import model.ConvocationMatch;
-import repo.ConvocationMatchRepo;
+import model.ConvocationEvenement;
+import repo.ConvocationEvenementRepo;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @WebServlet("/confirmation/match")
 public class ConfirmationMatchCtrl extends HttpServlet {
 
-    private final ConvocationMatchRepo convocationRepo = new ConvocationMatchRepo();
+    private final ConvocationEvenementRepo convocationRepo = new ConvocationEvenementRepo();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -25,7 +25,7 @@ public class ConfirmationMatchCtrl extends HttpServlet {
             return;
         }
 
-        ConvocationMatch convocation = convocationRepo.findByToken(token);
+        ConvocationEvenement convocation = convocationRepo.findByToken(token);
 
         if (convocation == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Convocation introuvable");
@@ -49,7 +49,7 @@ public class ConfirmationMatchCtrl extends HttpServlet {
             return;
         }
 
-        ConvocationMatch convocation = convocationRepo.findByToken(token);
+        ConvocationEvenement convocation = convocationRepo.findByToken(token);
 
         if (convocation == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -57,7 +57,7 @@ public class ConfirmationMatchCtrl extends HttpServlet {
         }
 
         // Mise à jour de la réponse (écrase l'ancienne si elle existe)
-        convocation.setPeutJouer("oui".equalsIgnoreCase(choix));
+        convocation.setConfirmePresence("oui".equalsIgnoreCase(choix));
         convocation.setLastUpdate(LocalDateTime.now());
 
         convocationRepo.update(convocation);

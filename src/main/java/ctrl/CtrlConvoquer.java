@@ -1,8 +1,9 @@
 package ctrl;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
@@ -46,15 +47,70 @@ public class CtrlConvoquer extends HttpServlet {
 		Long idEvenement = Long.parseLong(idEvtStr);
 
 		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			Evenement evt = session.get(Evenement.class, idEvenement);
-			List<Groupe> groupes = session.createQuery(
-				    "select distinct g from Groupe g left join fetch g.joueurs",
-				    Groupe.class
-				).list();
 
-			request.setAttribute("evenementSelectionne", evt);
-			request.setAttribute("groupesCoach", groupes);
+		    Evenement evt = session.get(Evenement.class, idEvenement);
+
+		    List<Groupe> groupes = session.createQuery(
+		            "select distinct g from Groupe g left join fetch g.joueurs",
+		            Groupe.class
+		    ).list();
+
+		    // ====== 1) 得到比赛当天的区间 [startDay, endDay) ======
+		    LocalDateTime startDay;
+		    Object d = evt.getDateEvenement(); // 一般是 Timestamp
+		    if (d instanceof java.sql.Timestamp) {
+		        startDay = ((java.sql.Timestamp) d).toLocalDateTime().toLocalDate().atStartOfDay();
+		    } else if (d instanceof LocalDateTime) {
+		        startDay = ((LocalDateTime) d).toLocalDate().atStartOfDay();
+		    } else {
+		        startDay = LocalDateTime.now().toLocalDate().atStartOfDay();
+		    }
+		    LocalDateTime endDay = startDay.plusDays(1);
+
+		    // ====== 2) 找到当天“有缺席重叠”的球员 id ======
+		    List<Long> absentIds = session.createQuery(
+		            "select distinct ea.joueur.idUtilisateur " +
+		            "from EtreAbsent ea " +
+		            "where ea.absenceDebut < :endDay " +
+		            "and (ea.absenceFin is null or ea.absenceFin >= :startDay)",
+		            Long.class
+		    ).setParameter("startDay", startDay)
+		     .setParameter("endDay", endDay)
+		     .list();
+
+		    Set<Long> absentJoueurIds = new HashSet<>(absentIds);
+
+
+		    // ====== 3) 推导缺席组（标红 + radio disabled）以及提示文本 ======
+		    Set<Long> groupesIndisponibles = new HashSet<>();
+		    Map<Long, String> detailAbsencesParGroupe = new HashMap<>();
+
+		    for (Groupe g : groupes) {
+		        List<String> absentsDansGroupe = new ArrayList<>();
+
+		        for (Joueur j : g.getJoueurs()) {
+		            Long jid = j.getIdUtilisateur();
+		            if (jid != null && absentJoueurIds.contains(jid)) {
+		                absentsDansGroupe.add(j.getNomUtilisateur());
+		            }
+		        }
+
+		        if (!absentsDansGroupe.isEmpty()) {
+		            groupesIndisponibles.add(g.getIdGroupe());
+		            detailAbsencesParGroupe.put(
+		                    g.getIdGroupe(),
+		                    "Joueur(s) absent(s) : " + String.join(", ", absentsDansGroupe)
+		            );
+		        }
+		    }
+
+		    request.setAttribute("evenementSelectionne", evt);
+		    request.setAttribute("groupesCoach", groupes);
+
+		    request.setAttribute("groupesIndisponibles", groupesIndisponibles);
+		    request.setAttribute("detailAbsencesParGroupe", detailAbsencesParGroupe);
 		}
+
 
 		request.getRequestDispatcher("/jsp/coach/PageSelection.jsp").forward(request, response);
 	}
@@ -113,9 +169,28 @@ public class CtrlConvoquer extends HttpServlet {
 	            echec(tx, request, response, "La date de l'évènement est vide.");
 	            return;
 	        }
+	        
+	        
 
 	        LocalDateTime start = evt.getDateEvenement().toLocalDate().atStartOfDay();
-	        LocalDateTime end = start.plusDays(1);
+	        LocalDateTime end = start.plusDays(1);	       
+
+	        Long nbAbsents = session.createQuery(
+	                "select count(ea) from EtreAbsent ea " +
+	                "where ea.joueur in (select j from Groupe gg join gg.joueurs j where gg.idGroupe = :gid) " +
+	                "and ea.absenceDebut < :endDay " +
+	                "and (ea.absenceFin is null or ea.absenceFin >= :startDay)",
+	                Long.class
+	        ).setParameter("gid", idGroupe)
+	         .setParameter("startDay", start)
+	         .setParameter("endDay", end)
+	         .uniqueResult();
+
+	        if (nbAbsents != null && nbAbsents > 0) {
+	            echec(tx, request, response, "Impossible : ce groupe contient un joueur absent ce jour-là.");
+	            return;
+	        }
+
 
 	        List<ConflitJoueur> conflitsJ = conflitsJoueursMemeJour(session, idGroupe, start, end, idEvenement);
 	        if (conflitsJ != null && !conflitsJ.isEmpty()) {
@@ -131,7 +206,6 @@ public class CtrlConvoquer extends HttpServlet {
 	            return;
 	        }
 
-	        // ✅ 2) 再检查：同组同天（同组冲突）——要显示冲突活动名称
 	        List<String> conflitsEvtNoms = conflitsMemeGroupeMemeJourNoms(session, idGroupe, start, end, idEvenement);
 	        if (conflitsEvtNoms != null && !conflitsEvtNoms.isEmpty()) {
 	            String noms = String.join(", ", conflitsEvtNoms);
@@ -140,7 +214,6 @@ public class CtrlConvoquer extends HttpServlet {
 	            return;
 	        }
 
-	        // ✅ 3) Save
 	        List<Groupe> groupes = session.createQuery(
 	        	    "select distinct g from Groupe g left join fetch g.joueurs",
 	        	    Groupe.class

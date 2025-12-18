@@ -7,6 +7,7 @@ import model.Parent;
 import model.Utilisateur;
 import model.Evenement;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.format.DateTimeFormatter;
@@ -55,7 +56,7 @@ public class SendEmailSSL {
     /* =========================================================
        RESET MOT DE PASSE
        ========================================================= */
-    public void sendResetRequest(Utilisateur u) throws MessagingException {
+    public void sendResetRequest(HttpServletRequest r, Utilisateur u) throws MessagingException {
 
         String subject = "Réinitialisation du mot de passe";
         String email = (u != null) ? u.getEmailUtilisateur() : null;
@@ -65,7 +66,7 @@ public class SendEmailSSL {
                 + "<h2>Bonjour " + u.getPrenomUtilisateur() + " "
                 + u.getNomUtilisateur() + ",</h2>"
                 + "<p>Vous avez demandé une réinitialisation de mot de passe.</p>"
-                + "<p><a href='http://localhost:8080/Projet_Agile_Groupe_2/resetPassword?uid="
+                + "<p><a href='http://"+ r.getServerName() + "/Projet_Agile_Groupe_2/resetPassword?uid="
                 + u.getIdUtilisateur() + "'>"
                 + "👉 Réinitialiser le mot de passe</a></p>"
                 + "<p>Si vous n'êtes pas à l'origine de cette demande, ignorez ce message.</p>"

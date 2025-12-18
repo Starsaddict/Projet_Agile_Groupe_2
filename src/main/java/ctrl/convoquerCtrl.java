@@ -3,7 +3,6 @@ package ctrl;
 import jakarta.mail.MessagingException;
 import model.*;
 import repo.ConvocationEvenementRepo;
-import repo.ConvocationMatchRepo;
 import repo.utilisateurRepo;
 import service.eventService;
 import util.SendEmailSSL;
@@ -89,19 +88,19 @@ public class convoquerCtrl extends HttpServlet {
 
         if (evenement.getGroupe() == null) return;
 
-        ConvocationMatchRepo matchRepo = new ConvocationMatchRepo();
+        ConvocationEvenementRepo matchRepo = new ConvocationEvenementRepo();
 
         for (Joueur joueur : evenement.getGroupe().getJoueurs()) {
 
-            ConvocationMatch convocation =
-                    matchRepo.findByMatchAndJoueur(
+            ConvocationEvenement convocation =
+                    matchRepo.findByEvenementAndJoueur(
                             evenement.getIdEvenement(),
                             joueur.getIdUtilisateur()
                     );
 
             if (convocation == null) {
-                convocation = new ConvocationMatch();
-                convocation.setMatch(evenement);
+                convocation = new ConvocationEvenement();
+                convocation.setEvenement(evenement);
                 convocation.setJoueur(joueur);
                 convocation.setToken(UUID.randomUUID().toString());
                 matchRepo.save(convocation);

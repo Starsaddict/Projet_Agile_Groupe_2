@@ -258,7 +258,7 @@ td.td-action { width: 260px; }
 								}
 								%>
 
-								<button type="submit" class="btn-danger"
+								<button type="submit" class="btn danger"
 									onclick="return confirm('<%=msg%>');">Supprimer</button>
 
 							</form>

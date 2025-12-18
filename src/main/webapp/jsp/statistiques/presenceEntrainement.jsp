@@ -229,7 +229,7 @@
 
     <!-- ================= ACTIONS ================= -->
     <div class="actions">
-        <a class="btn" href="<%= request.getContextPath() %>/jsp/home.jsp">
+        <a class="btn" href="CtrlCoach?action=Home">
             ⬅ Retour à l’accueil Coach
         </a>
     </div>

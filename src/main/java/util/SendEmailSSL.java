@@ -63,7 +63,7 @@ public class SendEmailSSL {
                 + "<h2>Bonjour " + u.getPrenomUtilisateur() + " "
                 + u.getNomUtilisateur() + ",</h2>"
                 + "<p>Vous avez demandé une réinitialisation de mot de passe.</p>"
-                + "<p><a href='http://localhost:8080/Projet_Agile_Groupe_2/resetPassword?uid="
+                + "<p><a href='http://localhost:8080/KOZYLY_CLUB/resetPassword?uid="
                 + u.getIdUtilisateur() + "'>"
                 + "👉 Réinitialiser le mot de passe</a></p>"
                 + "<p>Si vous n'êtes pas à l'origine de cette demande, ignorez ce message.</p>"

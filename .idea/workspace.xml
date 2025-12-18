@@ -6,19 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="bd test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bd/BdTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bd/BdTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/bd/HibernateUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bd/HibernateUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/enregistrementCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/enregistrementCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/etrepresentCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/etrepresentCtrl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/ConfirmationMatchCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/ConfirmationMatchCtrl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/convoquerCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/convoquerCtrl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/ConvocationEvenement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/ConvocationEvenement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/EtrePresent.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/EtrePresentId.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Evenement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Evenement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Joueur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Joueur.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repo/ConvocationEvenementRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repo/ConvocationEvenementRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repo/etrePresentRepo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/etrePresentService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/enregistreDetail.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/secretaire/enregistreDetail.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/ConvocationMatch.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/repo/ConvocationMatchRepo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/convocation/confirmationMatch.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/convocation/confirmationMatch.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,7 +102,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Smart Tomcat.Unnamed.executor": "Run",
     "Smart Tomcat.projetAgile.executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "convocation-merge",
     "last_opened_file_path": "/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -228,11 +222,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.EvenementRepo" />
         <item itemvalue="Application.BdTest" />
-        <item itemvalue="Application.utilisateurRepo" />
         <item itemvalue="Application.util.SendEmailSSL" />
         <item itemvalue="Application.SendEmailSSL" />
+        <item itemvalue="Application.utilisateurRepo" />
+        <item itemvalue="Application.EvenementRepo" />
       </list>
     </recent_temporary>
   </component>

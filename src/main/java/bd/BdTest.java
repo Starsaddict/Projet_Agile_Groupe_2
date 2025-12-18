@@ -4,7 +4,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.hibernate.Session;
@@ -20,8 +23,8 @@ public class BdTest {
 
             Random rand = new Random();
 
-            // ======================= 1) Utilisateurs =======================
-            Secretaire secretaire = (Secretaire) buildUtilisateur("Secretaire", "secretaire.test@example.com",
+         // ======================= 1) Utilisateurs =======================
+            Secretaire secretaire = (Secretaire) buildUtilisateur("Secretaire", "lahrach.oussama01@gmail.com",
                     "Clément", "Riols", LocalDate.of(1989, 11, 9));
 
             Coach coach = (Coach) buildUtilisateur("Coach", "coach1.test@example.com", "Sid Ahmed", "Elandaloussi",
@@ -39,6 +42,7 @@ public class BdTest {
             List<String> parentNoms = Arrays.asList("Veslin", "Lahrach", "Dupont", "Moreau", "Benali", "Petit");
 
             List<Parent> parents = new ArrayList<>();
+            Map<Parent, Integer> parentChildCount = new HashMap<>(); // suivi du nombre d'enfants par parent
             for (int i = 0; i < 6; i++) {
                 Parent p = (Parent) buildUtilisateur("Parent",
                         "parent" + (i + 1) + "@test.com",
@@ -47,6 +51,7 @@ public class BdTest {
                         LocalDate.of(1970 + i, rand.nextInt(12) + 1, rand.nextInt(28) + 1));
                 session.save(p);
                 parents.add(p);
+                parentChildCount.put(p, 0); // aucun enfant pour le moment
             }
 
             // ======================= 3) Groupes =======================
@@ -71,11 +76,16 @@ public class BdTest {
                         joueurPrenoms.get(i),
                         LocalDate.of(2010, rand.nextInt(12) + 1, rand.nextInt(28) + 1));
 
-                // Attribution de 1 à 2 parents aléatoires
+                // Attribution de 1 à 2 parents aléatoires avec max 3 enfants par parent
                 List<Parent> pList = new ArrayList<>();
-                pList.add(parents.get(rand.nextInt(parents.size())));
-                if (rand.nextBoolean())
-                    pList.add(parents.get(rand.nextInt(parents.size())));
+                Collections.shuffle(parents); // mélange pour random
+                for (Parent p : parents) {
+                    if (pList.size() >= 2) break;       // max 2 parents par joueur
+                    if (parentChildCount.get(p) < 3) { // max 3 enfants par parent
+                        pList.add(p);
+                        parentChildCount.put(p, parentChildCount.get(p) + 1);
+                    }
+                }
                 j.setParents(pList);
 
                 // Attribution groupe
@@ -87,6 +97,7 @@ public class BdTest {
                 session.save(j);
                 joueurs.add(j);
             }
+
 
             // ======================= 5) Événements =======================
             Evenement match = new Evenement("Match de coupe", "Stadium Toulouse", LocalDateTime.of(2026, 3, 15, 14, 30),

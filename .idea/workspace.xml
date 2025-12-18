@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="bd test">
+    <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="merge convo-match and convo-events">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/bd/HibernateUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bd/HibernateUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/ConfirmationMatchCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/ConfirmationMatchCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ctrl/convoquerCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ctrl/convoquerCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/ConvocationEvenement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/ConvocationEvenement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/ConvocationMatch.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/repo/ConvocationMatchRepo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/convocation/confirmationMatch.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/convocation/confirmationMatch.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,39 +77,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.BdTest.executor": "Run",
-    "Application.EvenementRepo.executor": "Run",
-    "Application.SendEmailSSL.executor": "Run",
-    "Application.util.SendEmailSSL.executor": "Run",
-    "Application.utilisateurRepo.executor": "Run",
-    "Maven.projetAgile [clean,package].executor": "Run",
-    "Maven.projetAgile [clean].executor": "Run",
-    "Maven.projetAgile [package].executor": "Run",
-    "Maven.projetAgile [verify].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "OpenRewrite.JavaxAuthorizationMigrationToJakartaAuthorization.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Smart Tomcat.Unnamed.executor": "Run",
-    "Smart Tomcat.projetAgile.executor": "Run",
-    "git-widget-placeholder": "convocation-merge",
-    "last_opened_file_path": "/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "模块",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true",
-    "应用程序.BdTest.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.BdTest.executor&quot;: &quot;Run&quot;,
+    &quot;Application.EvenementRepo.executor&quot;: &quot;Run&quot;,
+    &quot;Application.SendEmailSSL.executor&quot;: &quot;Run&quot;,
+    &quot;Application.util.SendEmailSSL.executor&quot;: &quot;Run&quot;,
+    &quot;Application.utilisateurRepo.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.projetAgile [clean,package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.projetAgile [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.projetAgile [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.projetAgile [verify].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;OpenRewrite.JavaxAuthorizationMigrationToJakartaAuthorization.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Smart Tomcat.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Smart Tomcat.projetAgile.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;convocation-merge&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;应用程序.BdTest.executor&quot;: &quot;Run&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/java" />
@@ -261,6 +254,7 @@
       <workItem from="1765789675159" duration="538000" />
       <workItem from="1765790241212" duration="364000" />
       <workItem from="1765800417723" duration="4853000" />
+      <workItem from="1766045942749" duration="161000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -446,7 +440,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765804677620</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="merge convo-match and convo-events">
+      <option name="closed" value="true" />
+      <created>1766045564218</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1766045564218</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -490,7 +492,8 @@
     <MESSAGE value="batch create" />
     <MESSAGE value="pom" />
     <MESSAGE value="bd test" />
-    <option name="LAST_COMMIT_MESSAGE" value="bd test" />
+    <MESSAGE value="merge convo-match and convo-events" />
+    <option name="LAST_COMMIT_MESSAGE" value="merge convo-match and convo-events" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

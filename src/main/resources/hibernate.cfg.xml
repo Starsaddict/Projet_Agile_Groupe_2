@@ -2,16 +2,16 @@
 	<session-factory>
 
 		<!--		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>-->
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3307/db_cog2665a_2</property>
-		<property name="hibernate.connection.username">cog2665a</property>
-		<property name="hibernate.connection.password">cog2665a</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3307/db_drm5337a</property>
+		<property name="hibernate.connection.username">drm5337a</property>
+		<property name="hibernate.connection.password">drm5337a</property>
 		<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
 
 		<!-- Sessions -->
 		<property name="hibernate.current_session_context_class">thread</property>
 
 		<!-- Mise à jour automatique -->
-		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="hibernate.hbm2ddl.auto">validate</property>
 		<property name="hibernate.show_sql">true</property>
 		<property name="hibernate.dialect">
 			org.hibernate.dialect.MySQL8Dialect

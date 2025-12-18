@@ -10,8 +10,12 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" />
 </head>
 <body class="page index">
-  <div class="container card">
-    <h2>Se connecter</h2>
+  <div style="display:flex; justify-content:center; align-items:center; min-height:100vh;">
+  <div class="container card" style="max-width: 520px; text-align: center;">
+    <div style="display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:12px;">
+      <img src="${pageContext.request.contextPath}/img/logo.png" alt="Logo" style="height:96px; width:auto;">
+      <h2 style="margin:0;">Se connecter</h2>
+    </div>
 
     <c:if test="${not empty requestScope.error or not empty param.error}">
       <div class="alert error">
@@ -30,13 +34,14 @@
         <input id="password" name="password" type="password" placeholder="Votre mot de passe" required  />
       </div>
 
-      <button type="submit" class="btn">Connexion</button>
+      <button type="submit" class="btn" style="width:100%;">Connexion</button>
     </form>
 
     <c:if test="${not empty msg_connection}">
       <div class="alert error">${msg_connection}</div>
     </c:if>
 
+  </div>
   </div>
 </body>
 </html>

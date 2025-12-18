@@ -27,10 +27,10 @@ public class BdTest {
             Secretaire secretaire = (Secretaire) buildUtilisateur("Secretaire", "lahrach.oussama01@gmail.com",
                     "Clément", "Riols", LocalDate.of(1989, 11, 9));
 
-            Coach coach = (Coach) buildUtilisateur("Coach", "coach1.test@example.com", "Sid Ahmed", "Elandaloussi",
+            Coach coach = (Coach) buildUtilisateur("Coach", "coach1.test@test.com", "Sid Ahmed", "Elandaloussi",
                     LocalDate.of(1980, 5, 29));
 
-            Coach coach2 = (Coach) buildUtilisateur("Coach", "coach2.test@example.com", "Sabrina", "Flavien",
+            Coach coach2 = (Coach) buildUtilisateur("Coach", "coach2.test@test.com", "Sabrina", "Flavien",
                     LocalDate.of(1982, 5, 29));
 
             session.save(secretaire);

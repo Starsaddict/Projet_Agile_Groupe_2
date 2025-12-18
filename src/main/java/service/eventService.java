@@ -32,4 +32,15 @@ public class eventService {
     public Evenement findByIdWithParticipants(long id) {
         return evenementRepo.findByIdWithGroupeAndJoueurs(id);
     }
+
+
+    public List<Evenement> getAllEntrainements() {
+        try {
+            List<Evenement> entrainements = evenementRepo.findAllEntraintement();
+            return entrainements != null ? entrainements : new ArrayList<>();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
 }

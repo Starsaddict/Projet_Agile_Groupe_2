@@ -14,8 +14,10 @@ import model.Joueur;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/CtrlCoach")
 public class CtrlCoach extends HttpServlet {
@@ -62,7 +64,24 @@ public class CtrlCoach extends HttpServlet {
 
 				// Supprimer les doublons éventuels causés par le fetch join
 				List<Groupe> groupesSansDoublons = new ArrayList<>(new LinkedHashSet<>(groupes));
+				
+				Map<Long, List<String>> evenementsParGroupe = new HashMap<>();
 
+				List<Object[]> rows = session.createQuery(
+				    "select g.idGroupe, e.nomEvenement " +
+				    "from Evenement e join e.groupe g",
+				    Object[].class
+				).list();
+
+				for (Object[] r : rows) {
+				    Long gid = (Long) r[0];
+				    String nomEvt = (String) r[1];
+				    evenementsParGroupe
+				        .computeIfAbsent(gid, k -> new ArrayList<>())
+				        .add(nomEvt);
+				}
+
+				request.setAttribute("evenementsParGroupe", evenementsParGroupe);
 				request.setAttribute("joueurs", joueurs);
 				request.setAttribute("groupes", groupesSansDoublons);
 			}

@@ -164,7 +164,7 @@ if (session.getAttribute("user") == null) {
                         </tbody>
                     </table>
 
-                    <div class="links">
+                    <div class="links center-stat">
                         <a class="btn btn-primary" href="CtrlCoach?action=GestionGroupe">Gestion des groupes</a>
                     </div>
 

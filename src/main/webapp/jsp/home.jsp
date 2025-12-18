@@ -165,7 +165,7 @@ th, td {
 			<div class="top-bar">
 				<div>
 					<h1>Tableau de bord</h1>
-					<p>Contenus affichés selon vos rôles</p>
+					<p>Contenus affichés selon votre rôle</p>
 				</div>
 				<div>
 					<c:if test="${not empty sessionScope.user}">

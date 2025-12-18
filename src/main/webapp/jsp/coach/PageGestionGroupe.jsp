@@ -8,101 +8,23 @@
 <meta charset="UTF-8">
 <title>Gestion des groupes</title>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <style>
-body {
-	font-family: Arial, sans-serif;
-	background-color: #f3f4f6;
-	margin: 0;
-	padding: 0;
-}
-
-.container {
-	max-width: 900px;
-	margin: 40px auto;
-	background-color: #ffffff;
-	padding: 30px 40px;
-	border-radius: 10px;
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-}
-
-h1 {
-	margin-top: 0;
-	font-size: 24px;
-	color: #111827;
-}
-
-h2 {
-	margin-top: 25px;
-	font-size: 20px;
-	color: #1f2933;
-	border-left: 4px solid #2563eb;
-	padding-left: 10px;
-}
-
-.subtitle {
-	color: #6b7280;
-	font-size: 14px;
-	margin-top: -5px;
-	margin-bottom: 20px;
-}
-
-label {
-	font-weight: 500;
-	color: #374151;
-}
-
-input[type="text"] {
-	padding: 6px 8px;
-	border-radius: 6px;
-	border: 1px solid #d1d5db;
-}
-
-input[type="checkbox"] {
-	margin-right: 6px;
-}
-
 .page-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
-	margin-bottom: 20px;
+	margin-bottom: 16px;
 }
-
-.header-actions {
-	display: flex;
-	gap: 10px;
+.header-actions { display: flex; gap: 10px; }
+.section-card {
+	background: var(--bg-card);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	padding: 1rem 1.25rem;
+	box-shadow: var(--shadow-sm);
+	margin-bottom: 16px;
 }
-
-.btn-primary, .btn-secondary, .btn-danger {
-	border: none;
-	padding: 8px 16px;
-	border-radius: 6px;
-	font-size: 14px;
-	cursor: pointer;
-}
-
-.btn-primary {
-	background-color: #2563eb;
-	color: white;
-}
-
-.btn-secondary {
-	background-color: #e5e7eb;
-	color: #111827;
-}
-
-.btn-danger {
-	background-color: #ef4444;
-	color: white;
-}
-
-.btn-row {
-	margin-top: 15px;
-	display: flex;
-	gap: 10px;
-	align-items: center;
-}
-
 .players-header {
 	display: flex;
 	justify-content: space-between;
@@ -110,90 +32,64 @@ input[type="checkbox"] {
 	margin-top: 10px;
 	margin-bottom: 6px;
 }
-
-.players-header input {
-	width: 260px;
-}
-
+.players-header input { width: 260px; }
 .players-list {
 	padding: 10px 12px;
 	border-radius: 8px;
-	border: 1px solid #e5e7eb;
+	border: 1px solid var(--border);
 	max-height: 220px;
 	overflow-y: auto;
 	background-color: #f9fafb;
 	font-size: 14px;
 }
-
-.player-item {
-	margin-bottom: 4px;
-}
-
-.empty-msg {
-	color: #6b7280;
-	font-style: italic;
-}
-
-/* ===== Table ===== */
+.player-item { margin-bottom: 4px; }
+.empty-msg { color: var(--text-muted); font-style: italic; }
 table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 15px;
 	font-size: 14px;
 }
-
 table thead th {
-	background-color: #2563eb;
+	background-color: var(--primary);
 	color: white;
 	padding: 8px 10px;
 	text-align: left;
 }
-
 table tbody td {
-	border-bottom: 1px solid #e5e7eb;
+	border-bottom: 1px solid var(--border);
 	padding: 12px 10px;
-	vertical-align: top; /* ✅ 行高不同也不会漂 */
+	vertical-align: top;
 }
-
-/* 给 Action 列固定宽度，保证按钮不会乱跑 */
-td.td-action {
-	width: 260px;
-}
-
-/* Action 按钮容器：不要用 btn-row（它带 margin-top） */
+td.td-action { width: 260px; }
 .action-cell {
 	display: flex;
 	gap: 10px;
-	align-items: flex-start; /* ✅ 顶部对齐 */
-	justify-content: flex-end; /* ✅ 右对齐：想左对齐改 flex-start */
+	align-items: flex-start;
+	justify-content: flex-end;
 	margin: 0;
 	padding-top: 2px;
 }
-
-.action-cell form {
-	margin: 0;
-}
-
+.action-cell form { margin: 0; }
 .avatar {
-	width: 34px;
-	height: 34px;
-	border-radius: 50%;
-	object-fit: cover;
-	border: 1px solid #e5e7eb;
-	vertical-align: middle;
-	margin-right: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  vertical-align: middle;
 }
-
 .player-line {
 	display: inline-flex;
 	align-items: center;
 	gap: 8px;
 	margin-bottom: 4px;
 }
-</style>
+</style> 
 </head>
 
 <body>
+	<%@ include file="/jsp/header.jspf" %>
 
 	<%
 	List<Joueur> joueurs = (List<Joueur>) request.getAttribute("joueurs");
@@ -206,24 +102,14 @@ td.td-action {
 
 	<div class="container">
 		<div class="page-header">
+	
 			<div>
 				<h1>Gestion des groupes</h1>
-				<p class="subtitle">Créer/Modifier un nouveau groupe et gérer
-					les groupes existants.</p>
-			</div>
-
-			<div class="header-actions">
-				<form action="CtrlCoach" method="get">
-					<input type="hidden" name="action" value="Home">
-					<button type="submit" class="btn-primary">Accueil</button>
-				</form>
-
-				<form action="CtrlLogout" method="get">
-					<button type="submit" class="btn-primary">Déconnexion</button>
-				</form>
+				<p class="subtitle">Créer/Modifier un nouveau groupe et gérer les groupes existants.</p>
 			</div>
 		</div>
 		<!-- ===================== Création ===================== -->
+		<div class="section-card">
 		<h2>Créer/Modifier un groupe</h2>
 
 		<form id="creerGroupeForm" action="CtrlCoach" method="post">
@@ -298,7 +184,7 @@ td.td-action {
 			</div>
 
 			<div class="btn-row">
-				<button type="submit" class="btn-primary">
+				<button type="submit" class="btn">
 					<%=(groupeAEditer != null) ? "Valider la modification" : "Créer"%>
 				</button>
 
@@ -307,15 +193,17 @@ td.td-action {
 				%>
 				<form action="CtrlCoach" method="get" style="margin: 0;">
 					<input type="hidden" name="action" value="GestionGroupe" />
-					<button type="submit" class="btn-secondary">Annuler</button>
+					<button type="submit" class="btn secondary">Annuler</button>
 				</form>
 				<%
 				}
 				%>
 			</div>
 		</form>
+		</div>
 
 		<!-- ===================== Liste groupes ===================== -->
+		<div class="section-card">
 		<h2>Groupes existants</h2>
 
 		<table>
@@ -351,7 +239,7 @@ td.td-action {
 							<form action="CtrlCoach" method="get" style="margin: 0;">
 								<input type="hidden" name="action" value="EditerGroupe" /> <input
 									type="hidden" name="idGroupe" value="<%=g.getIdGroupe()%>" />
-								<button type="submit" class="btn-secondary">Modifier</button>
+								<button type="submit" class="btn secondary">Modifier</button>
 							</form>
 
 							<!-- Supprimer -->
@@ -370,7 +258,7 @@ td.td-action {
 								}
 								%>
 
-								<button type="submit" class="btn-danger"
+								<button type="submit" class="btn danger"
 									onclick="return confirm('<%=msg%>');">Supprimer</button>
 
 							</form>
@@ -390,6 +278,7 @@ td.td-action {
 				%>
 			</tbody>
 		</table>
+		</div>
 	</div>
 
 	<script>

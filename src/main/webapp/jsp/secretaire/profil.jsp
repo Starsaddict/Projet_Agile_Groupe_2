@@ -11,14 +11,9 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
 </head>
 <body>
+    <%@ include file="/jsp/header.jspf" %>
 <div class="container">
-    <div class="card">
-        <div class="action-buttons" style="justify-content: space-between; align-items: center;">
-            <a href="<%= contextPath %>/jsp/home.jsp" class="btn secondary"> Retour à l’accueil</a>
-            <form action="<%= contextPath %>/CtrlLogout" method="post" style="margin:0;">
-                <button type="submit" class="btn danger"> Déconnexion</button>
-            </form>
-        </div>
+   
 
         <h1>Secrétariat - Gestion des Comptes</h1>
         

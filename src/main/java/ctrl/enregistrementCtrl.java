@@ -30,7 +30,7 @@ public class enregistrementCtrl extends HttpServlet {
             }
         }
 
-        req.setAttribute("events", eventService.getAllEntrainements());
+        //req.setAttribute("events", eventService.getAllEntrainements());
         req.getRequestDispatcher("/jsp/secretaire/enregistrement.jsp").forward(req, resp);
     }
 

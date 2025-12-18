@@ -18,7 +18,7 @@
         .fab-menu {
             position: fixed;
             bottom: 24px;
-            right: 24px;
+            right: 24px;  
             width: 56px;
             height: 56px;
             border-radius: 50%;
@@ -36,6 +36,7 @@
     </style>
 </head>
 <body>
+    <%@ include file="/jsp/header.jspf" %>
 <div class="container">
     <div class="card">
         <div class="action-buttons" style="justify-content: space-between; align-items: center;">
@@ -44,6 +45,7 @@
                 <button type="submit" class="btn danger">🚪 Déconnexion</button>
             </form>
             </div>
+
 
             <h1>Mon Profil</h1>
 

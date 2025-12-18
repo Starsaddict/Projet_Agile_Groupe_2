@@ -55,7 +55,7 @@ public class sendResetPasswordRequestCtrl extends HttpServlet {
             } else {
                 SendEmailSSL mailer = new SendEmailSSL();
                 try {
-                    mailer.sendResetRequest(utilisateur);
+                    mailer.sendResetRequest(request, utilisateur);
                     success = "Demande de réinitialisation envoyée.";
                 } catch (MessagingException e) {
                     error = "Impossible d'envoyer l'email de réinitialisation.";

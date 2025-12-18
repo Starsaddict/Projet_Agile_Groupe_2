@@ -6,205 +6,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Covoiturage</title>
-
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f4f6;
-            margin: 0;
-        }
-
-        /* ===== HEADER ===== */
-        .header {
-            background: #1f2937;
-            padding: 12px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .page-header {
-		    display: flex;
-		    justify-content: space-between;
-		    align-items: flex-start;
-		    margin-bottom: 20px;
-		}
-
-        .header-title {
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-		.header-actions {
-		    display: flex;
-		    gap: 10px;
-		    margin-left: auto;
-		}
-
-        /* ===== CONTAINER ===== */
-        .container {
-            max-width: 1100px;
-            margin: 40px auto;
-            background-color: #ffffff;
-            padding: 30px 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-
-        h1 { font-size: 26px; color: #111827; }
-        h2 {
-            margin-top: 30px;
-            font-size: 20px;
-            border-left: 4px solid #2563eb;
-            padding-left: 10px;
-        }
-
-        .subtitle {
-            color: #6b7280;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .badge {
-            background: #e5f2ff;
-            color: #1d4ed8;
-            font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 9999px;
-        }
-
-        label { font-size: 14px; }
-
-        input {
-            width: 100%;
-            padding: 7px;
-            border-radius: 6px;
-            border: 1px solid #d1d5db;
-            margin-top: 4px;
-        }
-
-        .form-row { margin-bottom: 12px; }
-
-        /* ===== BUTTONS ===== */
-		.btn-primary {
-		    border: none;
-		    padding: 8px 16px;
-		    border-radius: 6px;
-		    font-size: 14px;
-		    cursor: pointer;
-		    background-color: #2563eb;
-		    color: #ffffff;
-		}
-		
-		.btn-primary:hover {
-		    background-color: #1d4ed8;
-		    transform: translateY(-1px);
-		}
-
-        .btn-secondary {
-            background: #e5e7eb;
-            border: none;
-            padding: 7px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .btn-danger {
-            background: #dc2626;
-            color: white;
-            border: none;
-            padding: 7px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        /* ===== EVENTS ===== */
         .event-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 12px;
             margin-top: 10px;
         }
-
         .event-card {
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
             padding: 12px;
             cursor: pointer;
             background: white;
         }
-
-        .event-card:hover { border-color: #2563eb; }
+        .event-card:hover { border-color: var(--primary); }
         .event-card input { display: none; }
         .event-card input:checked + div {
-            border-left: 4px solid #2563eb;
+            border-left: 4px solid var(--primary);
             padding-left: 8px;
         }
-
-        /* ===== COVOITURAGES ===== */
-        .card {
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-            background: #fafafa;
-        }
-
         .actions {
             display: flex;
             gap: 10px;
             margin-top: 10px;
             align-items: center;
+            flex-wrap: wrap;
         }
-
-        .actions form {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
         .actions input[type="number"] { width: 70px; }
-
-        .empty-msg {
-            color: #6b7280;
-            font-style: italic;
-        }
-        
         .badge-ok {
-		    background-color: #dcfce7;
-		    color: #166534;
-		}
-		
-		.badge-full {
-		    background-color: #fee2e2;
-		    color: #991b1b;
-		}
-        
-        
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        .badge-full {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .subtitle { color: var(--text-muted); margin-bottom: 12px; }
     </style>
 </head>
 
 <body>
-
+<%@ include file="/jsp/header.jspf" %>
 
 <div class="container">
 
-	<div class="page-header">
-	    <div>
-	        <h1>Covoiturage</h1>
-	        <p class="subtitle">Créer, rejoindre ou gérer les covoiturages liés aux événements.</p>
-	    </div>
-	
-	    <div class="header-actions">
-	        <form method="get" action="${pageContext.request.contextPath}/parent/home">
-	            <button type="submit" class="btn-primary">Home</button>
-	        </form>
-	
-	        <form method="get" action="${pageContext.request.contextPath}/CtrlLogout">
-	            <button type="submit" class="btn-primary">Déconnexion</button>
-	        </form>
-	    </div>
-	</div>
+    <div class="card">
+        <h1>Covoiturage</h1>
+        <p class="subtitle">Créer, rejoindre ou gérer les covoiturages liés aux événements.</p>
 
 
     <!-- ================= CREATION ================= -->
@@ -233,22 +83,22 @@
 		    Aucun événement trouvé.
 		</div>
 
-        <div class="form-row">
+        <div class="field">
             <label>Lieu de départ</label>
             <input type="text" name="lieuDepart" required>
         </div>
 
-        <div class="form-row">
+        <div class="field">
             <label>Heure de départ</label>
             <input type="time" name="heure" required>
         </div>
 
-        <div class="form-row">
+        <div class="field">
             <label>Nombre de places</label>
             <input type="number" name="nbPlaces" min="1" required>
         </div>
 
-        <button class="btn btn-primary">Créer</button>
+        <button class="btn">Créer</button>
     </form>
 
     <!-- ================= LISTE ================= -->
@@ -290,7 +140,7 @@
 	                <form method="post" action="${pageContext.request.contextPath}/parent/covoiturage">
 	                    <input type="hidden" name="action" value="supprimer">
 	                    <input type="hidden" name="idCovoiturage" value="${c.idCovoiturage}">
-	                    <button type="submit" class="btn btn-danger">Supprimer</button>
+	                    <button type="submit" class="btn danger">Supprimer</button>
 	                </form>
 	            </div>
 	        </div>
@@ -347,7 +197,7 @@
                             <input type="number" name="nbPlaces"
                                    value="${maReservation.nbPlaces}"
                                    min="1" max="${c.nbPlacesMaxCovoiturage}">
-                            <button class="btn btn-primary">Modifier</button>
+                            <button class="btn">Modifier</button>
                         </form>
 
                         <form method="post"
@@ -355,7 +205,7 @@
                             <input type="hidden" name="action" value="quitter">
                             <input type="hidden" name="idCovoiturage"
                                    value="${c.idCovoiturage}">
-                            <button class="btn btn-secondary">Quitter</button>
+                            <button class="btn secondary">Quitter</button>
                         </form>
                     </div>
                 </c:if>
@@ -370,7 +220,7 @@
                                value="${c.idCovoiturage}">
                         <input type="number" name="nbPlaces"
                                min="1" max="${c.placesRestantes}" value="1">
-                        <button class="btn btn-primary">Rejoindre</button>
+                        <button class="btn">Rejoindre</button>
                     </form>
                 </c:if>
 

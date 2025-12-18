@@ -9,17 +9,19 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
 </head>
 <body>
+    <%@ include file="/jsp/header.jspf" %>
 <div class="container">
+    
+  
+    
     <div class="top-bar">
         <div>
             <h1>Import en masse (Excel)</h1>
             <p>Importez vos comptes via un fichier Excel (.xls ou .xlsx)</p>
         </div>
-        <div class="links">
-            <a href="<%= contextPath %>/secretaire/profil" class="btn btn-secondary">← Retour au profil</a>
-        </div>
+      
     </div>
-
+ <a href="<%= contextPath %>/secretaire/profil" class="btn btn-secondary">Retour</a>
     <% if (uploadError != null) { %>
         <div class="alert error"><%= uploadError %></div>
     <% } %>

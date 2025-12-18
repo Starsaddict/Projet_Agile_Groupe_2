@@ -136,6 +136,31 @@ hr {
 	border-top: 1px solid #e5e7eb;
 	margin: 25px 0;
 }
+/* groupe contenant un joueur absent */
+tr.absent-row {
+	background: #fee2e2 !important; /* rouge clair */
+}
+
+tr.absent-row:hover {
+	background: #fecaca !important;
+}
+
+.absent-badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 700;
+	color: #991b1b;
+	background: #ffe4e6;
+	margin-left: 8px;
+}
+
+.absent-hint {
+	color: #991b1b;
+	font-size: 12px;
+	margin-top: 6px;
+}
 </style>
 
 </head>
@@ -245,6 +270,18 @@ hr {
 						<th>Membres</th>
 					</tr>
 				</thead>
+				<%@ page import="java.util.Set"%>
+				<%@ page import="java.util.Map"%>
+
+				<%
+				Set<Long> groupesIndisponibles = (Set<Long>) request.getAttribute("groupesIndisponibles");
+				Map<Long, String> detailAbsencesParGroupe = (Map<Long, String>) request.getAttribute("detailAbsencesParGroupe");
+
+				if (groupesIndisponibles == null)
+					groupesIndisponibles = java.util.Collections.emptySet();
+				if (detailAbsencesParGroupe == null)
+					detailAbsencesParGroupe = java.util.Collections.emptyMap();
+				%>
 
 				<tbody>
 					<%
@@ -255,26 +292,43 @@ hr {
 						&& groupeSelectionne.getIdGroupe().equals(g.getIdGroupe())) {
 							checked = true;
 						}
+
+						boolean disabled = groupesIndisponibles.contains(g.getIdGroupe());
+						String detail = detailAbsencesParGroupe.get(g.getIdGroupe());
 					%>
-					<tr>
+
+					<tr class="<%=disabled ? "absent-row" : ""%>">
 						<td><input type="radio" name="idGroupe"
-							value="<%=g.getIdGroupe()%>" <%=checked ? "checked" : ""%>>
-						</td>
+							value="<%=g.getIdGroupe()%>" <%=checked ? "checked" : ""%>
+							<%=disabled ? "disabled" : ""%>></td>
+
 						<td><%=g.getIdGroupe()%></td>
-						<td><%=g.getNomGroupe()%></td>
+
+						<td><%=g.getNomGroupe()%> <%
+ if (disabled) {
+ %> <span
+							class="absent-badge">Absent</span> <%
+ if (detail != null && !detail.isBlank()) {
+ %>
+							<div class="absent-hint"><%=detail%></div> <%
+ }
+ %> <%
+ }
+ %></td>
+
 						<td>
 							<%
-							// 方案1：直接遍历 g.getJoueurs()
 							for (Joueur j : g.getJoueurs()) {
 							%> <%=j.getNomUtilisateur()%><br /> <%
  }
  %>
 						</td>
-
 					</tr>
+
 					<%
 					}
 					%>
+
 				</tbody>
 			</table>
 

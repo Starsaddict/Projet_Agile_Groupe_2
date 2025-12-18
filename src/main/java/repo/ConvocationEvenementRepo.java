@@ -116,4 +116,56 @@ public class ConvocationEvenementRepo {
             throw e;
         }
     }
+    public long countPresencesRenseigneesEntrainement() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            Long total = session.createQuery(
+                "select count(ce) " +
+                "from ConvocationEvenement ce " +
+                "where ce.evenement.typeEvenement = :type " +
+                "and ce.presenceReelle is not null",
+                Long.class
+            )
+            .setParameter("type", "ENTRAINEMENT")
+            .uniqueResult();
+
+            return total != null ? total : 0;
+        }
+    }
+    public long countPresencesEffectivesEntrainement() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            Long presents = session.createQuery(
+                "select count(ce) " +
+                "from ConvocationEvenement ce " +
+                "where ce.evenement.typeEvenement = :type " +
+                "and ce.presenceReelle = true",
+                Long.class
+            )
+            .setParameter("type", "ENTRAINEMENT")
+            .uniqueResult();
+
+            return presents != null ? presents : 0;
+        }
+    }
+    public List<Object[]> statsPresenceParJoueurEntrainement() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            return session.createQuery(
+                "select j.nomUtilisateur, j.prenomUtilisateur, " +
+                "count(ce), " +
+                "sum(case when ce.presenceReelle = true then 1 else 0 end) " +
+                "from ConvocationEvenement ce " +
+                "join ce.joueur j " +
+                "where ce.evenement.typeEvenement = :type " +
+                "and ce.presenceReelle is not null " +
+                "group by j.idUtilisateur, j.nomUtilisateur, j.prenomUtilisateur " +
+                "order by j.nomUtilisateur",
+                Object[].class
+            )
+            .setParameter("type", "ENTRAINEMENT")
+            .list();
+        }
+    }
+
 }

@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="merge convo-match and convo-events">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/inscritExcel/~$sample.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/eventService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/eventService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/SendEmailSSL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/SendEmailSSL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,44 +27,6 @@
       </list>
     </option>
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="main" />
-      </map>
-    </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {}
-}</component>
-  <component name="GitHubPullRequestState">{
-  &quot;prStates&quot;: [
-    {
-      &quot;id&quot;: {
-        &quot;id&quot;: &quot;PR_kwDOQkzhlM64XpHE&quot;,
-        &quot;number&quot;: 42
-      },
-      &quot;lastSeen&quot;: 1765464109951
-    }
-  ]
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Starsaddict/Projet_Agile_Groupe_2.git&quot;,
-    &quot;accountId&quot;: &quot;5926f4e0-985a-491c-b873-4075f659a06f&quot;
-  },
-  &quot;recentNewPullRequestHead&quot;: {
-    &quot;server&quot;: {
-      &quot;useHttp&quot;: false,
-      &quot;host&quot;: &quot;github.com&quot;,
-      &quot;port&quot;: null,
-      &quot;suffix&quot;: null
-    },
-    &quot;owner&quot;: &quot;Starsaddict&quot;,
-    &quot;repository&quot;: &quot;Projet_Agile_Groupe_2&quot;
-  }
-}</component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
     <option name="FILTER_WARNINGS" value="false" />
@@ -66,60 +34,9 @@
     <option name="FILTER_DEBUG" value="true" />
     <option name="CUSTOM_FILTER" />
   </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 8
-}</component>
-  <component name="ProjectId" id="36Z3pdEwae1s9BHxRCOGik2oPvi" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
-  </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.BdTest.executor&quot;: &quot;Run&quot;,
-    &quot;Application.EvenementRepo.executor&quot;: &quot;Run&quot;,
-    &quot;Application.SendEmailSSL.executor&quot;: &quot;Run&quot;,
-    &quot;Application.util.SendEmailSSL.executor&quot;: &quot;Run&quot;,
-    &quot;Application.utilisateurRepo.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projetAgile [clean,package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projetAgile [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projetAgile [package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.projetAgile [verify].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;OpenRewrite.JavaxAuthorizationMigrationToJakartaAuthorization.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Smart Tomcat.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Smart Tomcat.projetAgile.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;convocation-merge&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;应用程序.BdTest.executor&quot;: &quot;Run&quot;
-  }
-}</component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/java" />
-      <recent name="$PROJECT_DIR$/src/main" />
-      <recent name="$PROJECT_DIR$/src/main/java/bd" />
-      <recent name="$PROJECT_DIR$/src/main/resources" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/webapp/jsp/coach" />
-    </key>
   </component>
   <component name="RunManager" selected="Smart Tomcat.Unnamed">
     <configuration name="BdTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -189,8 +106,11 @@
       <predefined_log_file id="Tomcat Manager Log" />
       <predefined_log_file id="Tomcat Host Manager Log" />
       <option name="catalinaBase" value="$USER_HOME$/.SmartTomcat/Projet_Agile_Groupe_2/Projet_Agile_Groupe_2" />
-      <option name="contextPath" value="/Projet_Agile_Groupe_2" />
+      <option name="contextPath" value="/KOZYLY_CLUB" />
       <option name="docBase" value="$PROJECT_DIR$/src/main/webapp" />
+      <option name="envOptions">
+        <map />
+      </option>
       <option name="extraClassPath" value="" />
       <option name="tomcatInfo">
         <TomcatInfo>
@@ -215,11 +135,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.EvenementRepo" />
         <item itemvalue="Application.BdTest" />
+        <item itemvalue="Application.utilisateurRepo" />
         <item itemvalue="Application.util.SendEmailSSL" />
         <item itemvalue="Application.SendEmailSSL" />
-        <item itemvalue="Application.utilisateurRepo" />
-        <item itemvalue="Application.EvenementRepo" />
       </list>
     </recent_temporary>
   </component>
@@ -230,9 +150,6 @@
         <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.29188.11" />
       </set>
     </attachedChunks>
-  </component>
-  <component name="StructureViewState">
-    <option name="selectedTab" value="Logical" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
@@ -254,7 +171,6 @@
       <workItem from="1765789675159" duration="538000" />
       <workItem from="1765790241212" duration="364000" />
       <workItem from="1765800417723" duration="4853000" />
-      <workItem from="1766045942749" duration="161000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -442,17 +358,14 @@
     </task>
     <task id="LOCAL-00024" summary="merge convo-match and convo-events">
       <option name="closed" value="true" />
-      <created>1766045564218</created>
+      <created>1766049276517</created>
       <option name="number" value="00024" />
       <option name="presentableId" value="LOCAL-00024" />
       <option name="project" value="LOCAL" />
-      <updated>1766045564218</updated>
+      <updated>1766049276517</updated>
     </task>
     <option name="localTasksCounter" value="25" />
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -504,9 +417,5 @@
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
   </component>
 </project>

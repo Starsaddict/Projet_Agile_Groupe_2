@@ -20,12 +20,12 @@ if (session.getAttribute("user") == null) {
     <style>
         .center-stat {
             justify-content: center;
+        }
         .floating-panel-trigger {
             position: fixed;
             bottom: 24px;
             right: 24px;
             z-index: 9000;
-        }
         }
     </style>
 </head>

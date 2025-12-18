@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="nom_projet">
+    <list default="true" id="b3154b9e-9eae-49bf-8262-80f10577f0a4" name="更改" comment="message-all">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/jsp/home.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/jsp/home.jsp" afterDir="false" />
     </list>
@@ -30,7 +30,6 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="HARD" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestState"><![CDATA[{
   "prStates": [
@@ -49,6 +48,12 @@
       "lastSeen": 1766070446407
     }
   ]
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Starsaddict/Projet_Agile_Groupe_2.git",
+    "accountId": "5926f4e0-985a-491c-b873-4075f659a06f"
+  }
 }]]></component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
@@ -79,7 +84,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Smart Tomcat.Unnamed.executor": "Run",
     "Smart Tomcat.projetAgile.executor": "Run",
-    "git-widget-placeholder": "Joueur-send-message",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "/Users/kaiyangzhang/eclipse-workspace/Projet_Agile_Groupe_2/src/main/java/bd",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -425,7 +430,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766051806621</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="message-all">
+      <option name="closed" value="true" />
+      <created>1766071711848</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1766071711848</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -483,7 +496,8 @@
     <MESSAGE value="bd test" />
     <MESSAGE value="merge convo-match and convo-events" />
     <MESSAGE value="nom_projet" />
-    <option name="LAST_COMMIT_MESSAGE" value="nom_projet" />
+    <MESSAGE value="message-all" />
+    <option name="LAST_COMMIT_MESSAGE" value="message-all" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

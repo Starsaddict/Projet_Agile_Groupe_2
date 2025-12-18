@@ -241,9 +241,12 @@ tr.absent-row:hover { background: #fecaca !important; }
 						<td>
 							<%
 							for (Joueur j : g.getJoueurs()) {
-							%> <%=j.getNomUtilisateur()%><br /> <%
- }
- %>
+							%>
+							<%= j.getNomUtilisateur() %> <%= j.getPrenomUtilisateur() %><br />
+							<%
+							}
+							%>
+
 						</td>
 					</tr>
 

@@ -3,7 +3,6 @@ package controller;
 import model.EtreAbsent;
 import model.Joueur;
 import model.Parent;
-import model.Utilisateur;
 import repository.UtilisateurRepositoryImpl;
 import service.AbsenceService;
 import service.UtilisateurService;
@@ -44,7 +43,7 @@ public class ControllerAbsence extends HttpServlet {
         if (action == null)
             action = "declare";
 
-        switch (action) {
+        switch (action) { //declarer une absence ou uploader un certificat
             case "upload":
                 handleUpload(request, response);
                 break;
@@ -78,7 +77,7 @@ public class ControllerAbsence extends HttpServlet {
         Joueur enfant = parent.getJoueurs().stream()
                 .filter(j -> j.getIdUtilisateur().equals(idEnfant))
                 .findFirst()
-                .orElse(null);
+                .orElse(null); // trouver l'enfant qui sera absent
 
         if (enfant == null) {
             forwardWithMessage(request, response, "Enfant introuvable.", url);
@@ -225,7 +224,7 @@ public class ControllerAbsence extends HttpServlet {
         }
     }
 
-    // Récupère les emails des secrétaires et les concatène avec des virgules
+    // Récupère les emails des secrétaires et les concatène
     private String getSecretaireEmails() {
         return utilisateurService.loadAllUtilisateurs().stream()
                 .filter(u -> "Secretaire".equalsIgnoreCase(u.getTypeU()))

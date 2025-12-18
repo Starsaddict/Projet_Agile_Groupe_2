@@ -7,6 +7,8 @@ import model.Parent;
 import model.Utilisateur;
 import model.Evenement;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
@@ -76,7 +78,7 @@ public class SendEmailSSL {
        CONVOCATION MATCH — JOUEUR (AVEC LIEN)
        ========================================================= */
     public static void sendJoueurInvitation(Utilisateur joueur, Evenement match, String lienConfirmation)
-            throws MessagingException {
+            throws MessagingException, UnsupportedEncodingException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -90,7 +92,9 @@ public class SendEmailSSL {
                 + "<ul>"
                 + "<li><strong>Match :</strong> " + match.getNomEvenement() + "</li>"
                 + "<li><strong>Date :</strong> " + match.getDateEvenement().format(formatter) + "</li>"
-                + "<li><strong>Lieu :</strong> " + match.getLieuEvenement() + "</li>"
+                + "<li><strong>Lieu :</strong> <a href='https://www.google.com/maps/search/?api=1&query="
+                + URLEncoder.encode(match.getLieuEvenement(), "UTF-8")
+                + "' target='_blank'>" + match.getLieuEvenement() + "</a></li>"
                 + "</ul>"
                 + "<p><strong>Merci d’indiquer si le joueur peut jouer :</strong></p>"
                 + "<p><a href='" + lienConfirmation + "'>👉 Confirmer / modifier la disponibilité</a></p>"
@@ -104,7 +108,7 @@ public class SendEmailSSL {
        CONVOCATION MATCH — PARENT (AVEC LIEN)
        ========================================================= */
     public static void sendParentInvitation(Parent parent, Utilisateur joueur, Evenement match, String lienConfirmation)
-            throws MessagingException {
+            throws MessagingException, UnsupportedEncodingException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -119,7 +123,9 @@ public class SendEmailSSL {
                 + "<ul>"
                 + "<li><strong>Match :</strong> " + match.getNomEvenement() + "</li>"
                 + "<li><strong>Date :</strong> " + match.getDateEvenement().format(formatter) + "</li>"
-                + "<li><strong>Lieu :</strong> " + match.getLieuEvenement() + "</li>"
+                + "<li><strong>Lieu :</strong> <a href='https://www.google.com/maps/search/?api=1&query="
+                + URLEncoder.encode(match.getLieuEvenement(), "UTF-8")
+                + "' target='_blank'>" + match.getLieuEvenement() + "</a></li>"
                 + "</ul>"
                 + "<p><strong>Merci d’indiquer si le joueur peut jouer :</strong></p>"
                 + "<p><a href='" + lienConfirmation + "'>👉 Confirmer / modifier la disponibilité</a></p>"
@@ -133,7 +139,7 @@ public class SendEmailSSL {
        AUTRES ÉVÉNEMENTS
        ========================================================= */
     public static void sendEventInvitation(Utilisateur u, Evenement e, String lienConfirmation)
-            throws MessagingException {
+            throws MessagingException, UnsupportedEncodingException {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -147,7 +153,9 @@ public class SendEmailSSL {
                 + "<ul>"
                 + "<li><strong>Nom :</strong> " + e.getNomEvenement() + "</li>"
                 + "<li><strong>Date :</strong> " + e.getDateEvenement().format(formatter) + "</li>"
-                + "<li><strong>Lieu :</strong> " + e.getLieuEvenement() + "</li>"
+                + "<li><strong>Lieu :</strong> <a href='https://www.google.com/maps/search/?api=1&query="
+                + URLEncoder.encode(e.getLieuEvenement(), "UTF-8")
+                + "' target='_blank'>" + e.getLieuEvenement() + "</a></li>"
                 + "</ul>"
                 + "<p><a href='" + lienConfirmation + "'>👉 Confirmer / modifier ma présence</a></p>"
                 + "<p style='font-size:12px;color:gray;'>La dernière réponse enregistrée sera prise en compte.</p>"

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Optional;
 
+// Servlet permettant de télécharger les certificats d'absence
 @WebServlet("/DownloadCertificat")
 public class ControllerDownloadCertificat extends HttpServlet {
 

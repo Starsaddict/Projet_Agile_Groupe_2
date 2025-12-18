@@ -2,9 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Covoiturage</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
@@ -35,6 +36,12 @@
             flex-wrap: wrap;
         }
         .actions input[type="number"] { width: 70px; }
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
         .badge-ok {
             background-color: #dcfce7;
             color: #166534;
@@ -43,7 +50,20 @@
             background-color: #fee2e2;
             color: #991b1b;
         }
-        .subtitle { color: var(--text-muted); margin-bottom: 12px; }
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        .empty-msg {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 1.5rem;
+            font-style: italic;
+        }
+        .covoiturage-card {
+            margin-bottom: 1rem;
+            padding: 1.25rem;
+        }
     </style>
 </head>
 
@@ -51,187 +71,168 @@
 <%@ include file="/jsp/header.jspf" %>
 
 <div class="container">
-
     <div class="card">
         <h1>Covoiturage</h1>
         <p class="subtitle">Créer, rejoindre ou gérer les covoiturages liés aux événements.</p>
 
+        <!-- ================= CREATION ================= -->
+        <h2>Créer un covoiturage</h2>
 
-    <!-- ================= CREATION ================= -->
-    <h2>Créer un covoiturage</h2>
+        <form method="post" action="${pageContext.request.contextPath}/parent/covoiturage">
+            <input type="hidden" name="action" value="creer">
 
-    <form method="post" action="${pageContext.request.contextPath}/parent/covoiturage">
-        <input type="hidden" name="action" value="creer">
+            <div class="field">
+                <input type="text" id="searchEvent" placeholder="Rechercher un événement...">
+            </div>
 
-        <input type="text" id="searchEvent" placeholder="Rechercher un événement...">
+            <div class="event-list">
+                <c:forEach var="e" items="${evenements}">
+                    <label class="event-card">
+                        <input type="radio" name="idEvenement" value="${e.idEvenement}" required>
+                        <div>
+                            <b>${e.nomEvenement}</b>
+                            <p>Date : ${e.dateEvenement}</p>
+                            <p>Lieu : ${e.lieuEvenement}</p>
+                            <p>Type : ${e.typeEvenement}</p>
+                        </div>
+                    </label>
+                </c:forEach>
+            </div>
+            <div id="noEventMsg" class="empty-msg" style="display:none;">
+                Aucun événement trouvé.
+            </div>
 
-        <div class="event-list">
-            <c:forEach var="e" items="${evenements}">
-                <label class="event-card">
-                    <input type="radio" name="idEvenement"
-                           value="${e.idEvenement}" required>
-                    <div>
-                        <b>${e.nomEvenement}</b>
-                        <p>Date : ${e.dateEvenement}</p>
-                        <p>Lieu : ${e.lieuEvenement}</p>
-                        <p>Type : ${e.typeEvenement}</p>
-                    </div>
-                </label>
-            </c:forEach>
-        </div>
-        <div id="noEventMsg" class="empty-msg" style="display:none;">
-		    Aucun événement trouvé.
-		</div>
+            <div class="field">
+                <label>Lieu de départ</label>
+                <input type="text" name="lieuDepart" required>
+            </div>
+
+            <div class="field">
+                <label>Heure de départ</label>
+                <input type="time" name="heure" required>
+            </div>
+
+            <div class="field">
+                <label>Nombre de places</label>
+                <input type="number" name="nbPlaces" min="1" required>
+            </div>
+
+            <button class="btn btn-primary">Créer</button>
+        </form>
+
+        <!-- ================= LISTE ================= -->
+        <h2>Covoiturages <span class="badge">${covoiturages.size()}</span></h2>
 
         <div class="field">
-            <label>Lieu de départ</label>
-            <input type="text" name="lieuDepart" required>
+            <input type="text" id="searchCovoiturage" placeholder="Rechercher un covoiturage...">
         </div>
 
-        <div class="field">
-            <label>Heure de départ</label>
-            <input type="time" name="heure" required>
+        <c:set var="userId" value="${sessionScope.user.idUtilisateur}" />
+        <div id="noCovoiturageMsg" class="empty-msg" style="display:none;">
+            Aucun covoiturage trouvé.
         </div>
 
-        <div class="field">
-            <label>Nombre de places</label>
-            <input type="number" name="nbPlaces" min="1" required>
-        </div>
+        <!-- ===== MES COVOITURAGES CREES ===== -->
+        <h3>Mes covoiturages créés</h3>
 
-        <button class="btn">Créer</button>
-    </form>
+        <c:forEach var="c" items="${covoiturages}">
+            <c:if test="${c.conducteur.idUtilisateur == userId}">
+                <div class="card covoiturage-card">
+                    <p><b>Événement :</b> ${c.evenement.nomEvenement}</p>
+                    <p><b>Date :</b> ${c.dateCovoiturage}</p>
+                    <p><b>Départ :</b> ${c.lieuDepartCovoiturage}</p>
 
-    <!-- ================= LISTE ================= -->
-    <h2>Covoiturages <span class="badge">${covoiturages.size()}</span></h2>
+                    <p>
+                        <b>Places :</b>
+                        ${c.placesReservees} / ${c.nbPlacesMaxCovoiturage}
 
-    <input type="text" id="searchCovoiturage"
-           placeholder="Rechercher un covoiturage...">
-
-    <c:set var="userId" value="${sessionScope.user.idUtilisateur}" />
-    <div id="noCovoiturageMsg" class="empty-msg" style="display:none;">
-    Aucun covoiturage trouvé.
-	</div>
-    
-
-    <!-- ===== MES COVOITURAGES CREES ===== -->
-	<h3>Mes covoiturages créés</h3>
-	
-	<c:forEach var="c" items="${covoiturages}">
-	    <c:if test="${c.conducteur.idUtilisateur == userId}">
-	
-	        <div class="card covoiturage-card">
-	            <p><b>Événement :</b> ${c.evenement.nomEvenement}</p>
-	            <p><b>Date :</b> ${c.dateCovoiturage}</p>
-	            <p><b>Départ :</b> ${c.lieuDepartCovoiturage}</p>
-	
-	            <p>
-	                <b>Places :</b>
-	                ${c.placesReservees} / ${c.nbPlacesMaxCovoiturage}
-	
-	                <c:if test="${c.placesRestantes == 0}">
-	                    <span class="badge badge-full">Complet</span>
-	                </c:if>
-	                <c:if test="${c.placesRestantes > 0}">
-	                    <span class="badge badge-ok">${c.placesRestantes} restantes</span>
-	                </c:if>
-	            </p>
-	
-	            <div class="actions">
-	                <form method="post" action="${pageContext.request.contextPath}/parent/covoiturage">
-	                    <input type="hidden" name="action" value="supprimer">
-	                    <input type="hidden" name="idCovoiturage" value="${c.idCovoiturage}">
-	                    <button type="submit" class="btn danger">Supprimer</button>
-	                </form>
-	            </div>
-	        </div>
-	
-	    </c:if>
-	</c:forEach>
-
-
-    <!-- ===== COVOITURAGES PROPOSES ===== -->
-    <h3>Covoiturages proposés</h3>
-
-    <c:forEach var="c" items="${covoiturages}">
-        <c:if test="${c.conducteur.idUtilisateur != userId}">
-
-            <c:set var="maReservation"
-                   value="${c.getReservationParUtilisateur(sessionScope.user)}"/>
-
-            <div class="card covoiturage-card">
-                <p><b>Événement :</b> ${c.evenement.nomEvenement}</p>
-                <p><b>Date :</b> ${c.dateCovoiturage}</p>
-                <p><b>Départ :</b> ${c.lieuDepartCovoiturage}</p>
-                <p><b>Conducteur :</b>
-                    ${c.conducteur.prenomUtilisateur}
-                    ${c.conducteur.nomUtilisateur}
-                </p>
-
-                <p>
-                    <b>Places :</b>
-                    ${c.placesReservees} / ${c.nbPlacesMaxCovoiturage}
-
-                    <c:if test="${c.placesRestantes == 0}">
-                        <span class="badge badge-full">Complet</span>
-                    </c:if>
-                    <c:if test="${c.placesRestantes > 0}">
-                        <span class="badge badge-ok">
-                            ${c.placesRestantes} restantes
-                        </span>
-                    </c:if>
-                </p>
-
-                <!-- ===== DEJA RESERVE ===== -->
-                <c:if test="${maReservation != null}">
-                    <p class="empty-msg">
-                        Vous avez réservé
-                        <b>${maReservation.nbPlaces}</b> place(s)
+                        <c:if test="${c.placesRestantes == 0}">
+                            <span class="badge badge-full">Complet</span>
+                        </c:if>
+                        <c:if test="${c.placesRestantes > 0}">
+                            <span class="badge badge-ok">${c.placesRestantes} restantes</span>
+                        </c:if>
                     </p>
 
                     <div class="actions">
-                        <form method="post"
-                              action="${pageContext.request.contextPath}/parent/covoiturage">
-                            <input type="hidden" name="action" value="rejoindre">
-                            <input type="hidden" name="idCovoiturage"
-                                   value="${c.idCovoiturage}">
-                            <input type="number" name="nbPlaces"
-                                   value="${maReservation.nbPlaces}"
-                                   min="1" max="${c.nbPlacesMaxCovoiturage}">
-                            <button class="btn">Modifier</button>
-                        </form>
-
-                        <form method="post"
-                              action="${pageContext.request.contextPath}/parent/covoiturage">
-                            <input type="hidden" name="action" value="quitter">
-                            <input type="hidden" name="idCovoiturage"
-                                   value="${c.idCovoiturage}">
-                            <button class="btn secondary">Quitter</button>
+                        <form method="post" action="${pageContext.request.contextPath}/parent/covoiturage">
+                            <input type="hidden" name="action" value="supprimer">
+                            <input type="hidden" name="idCovoiturage" value="${c.idCovoiturage}">
+                            <button type="submit" class="btn danger">Supprimer</button>
                         </form>
                     </div>
-                </c:if>
+                </div>
+            </c:if>
+        </c:forEach>
 
-                <!-- ===== PAS ENCORE RESERVE ===== -->
-                <c:if test="${maReservation == null && c.placesRestantes > 0}">
-                    <form method="post"
-                          action="${pageContext.request.contextPath}/parent/covoiturage"
-                          class="actions">
-                        <input type="hidden" name="action" value="rejoindre">
-                        <input type="hidden" name="idCovoiturage"
-                               value="${c.idCovoiturage}">
-                        <input type="number" name="nbPlaces"
-                               min="1" max="${c.placesRestantes}" value="1">
-                        <button class="btn">Rejoindre</button>
-                    </form>
-                </c:if>
+        <!-- ===== COVOITURAGES PROPOSES ===== -->
+        <h3>Covoiturages proposés</h3>
 
-            </div>
+        <c:forEach var="c" items="${covoiturages}">
+            <c:if test="${c.conducteur.idUtilisateur != userId}">
+                <c:set var="maReservation" value="${c.getReservationParUtilisateur(sessionScope.user)}"/>
 
-        </c:if>
-    </c:forEach>
+                <div class="card covoiturage-card">
+                    <p><b>Événement :</b> ${c.evenement.nomEvenement}</p>
+                    <p><b>Date :</b> ${c.dateCovoiturage}</p>
+                    <p><b>Départ :</b> ${c.lieuDepartCovoiturage}</p>
+                    <p><b>Conducteur :</b>
+                        ${c.conducteur.prenomUtilisateur}
+                        ${c.conducteur.nomUtilisateur}
+                    </p>
 
+                    <p>
+                        <b>Places :</b>
+                        ${c.placesReservees} / ${c.nbPlacesMaxCovoiturage}
+
+                        <c:if test="${c.placesRestantes == 0}">
+                            <span class="badge badge-full">Complet</span>
+                        </c:if>
+                        <c:if test="${c.placesRestantes > 0}">
+                            <span class="badge badge-ok">
+                                ${c.placesRestantes} restantes
+                            </span>
+                        </c:if>
+                    </p>
+
+                    <!-- ===== DEJA RESERVE ===== -->
+                    <c:if test="${maReservation != null}">
+                        <p class="empty-msg">
+                            Vous avez réservé
+                            <b>${maReservation.nbPlaces}</b> place(s)
+                        </p>
+
+                        <div class="actions">
+                            <form method="post" action="${pageContext.request.contextPath}/parent/covoiturage">
+                                <input type="hidden" name="action" value="rejoindre">
+                                <input type="hidden" name="idCovoiturage" value="${c.idCovoiturage}">
+                                <input type="number" name="nbPlaces" value="${maReservation.nbPlaces}" min="1" max="${c.nbPlacesMaxCovoiturage}">
+                                <button class="btn btn-primary">Modifier</button>
+                            </form>
+
+                            <form method="post" action="${pageContext.request.contextPath}/parent/covoiturage">
+                                <input type="hidden" name="action" value="quitter">
+                                <input type="hidden" name="idCovoiturage" value="${c.idCovoiturage}">
+                                <button class="btn btn-secondary">Quitter</button>
+                            </form>
+                        </div>
+                    </c:if>
+
+                    <!-- ===== PAS ENCORE RESERVE ===== -->
+                    <c:if test="${maReservation == null && c.placesRestantes > 0}">
+                        <form method="post" action="${pageContext.request.contextPath}/parent/covoiturage" class="actions">
+                            <input type="hidden" name="action" value="rejoindre">
+                            <input type="hidden" name="idCovoiturage" value="${c.idCovoiturage}">
+                            <input type="number" name="nbPlaces" min="1" max="${c.placesRestantes}" value="1">
+                            <button class="btn btn-primary">Rejoindre</button>
+                        </form>
+                    </c:if>
+                </div>
+            </c:if>
+        </c:forEach>
+    </div>
 </div>
 
-<!-- ================= JS ================= -->
 <script>
 const eventCards = document.querySelectorAll(".event-card");
 const noEventMsg = document.getElementById("noEventMsg");
@@ -251,7 +252,6 @@ document.getElementById("searchEvent").addEventListener("input", e => {
     noEventMsg.style.display = visibleCount === 0 ? "block" : "none";
 });
 
-
 const covoiturageCards = document.querySelectorAll(".covoiturage-card");
 const noCovoiturageMsg = document.getElementById("noCovoiturageMsg");
 
@@ -269,7 +269,6 @@ document.getElementById("searchCovoiturage").addEventListener("input", e => {
 
     noCovoiturageMsg.style.display = visibleCount === 0 ? "block" : "none";
 });
-
 </script>
 
 </body>

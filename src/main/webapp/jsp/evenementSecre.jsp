@@ -10,7 +10,6 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/style.css">
 <style>
-/* Ajustements spécifiques pour garder l'esprit de l'ancien design */
 .evt-form-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -109,7 +108,7 @@
 
 			<!-- ===================== LISTE EVENEMENTS ===================== -->
 			<div class="card" style="margin-top: 12px;">
-				<h3>Liste des événements (du plus proche au plus lointain)</h3>
+				<h3>Liste des événements</h3>
 				<div style="margin: 10px 0;">
 					<input type="text" id="searchEvenement"
 						placeholder="Rechercher un événement..."

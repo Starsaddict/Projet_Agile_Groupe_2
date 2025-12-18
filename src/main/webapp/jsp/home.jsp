@@ -152,6 +152,10 @@ th, td {
   margin-top: 6px;
 }
 
+.center-stat {
+    justify-content: center;
+}
+
 </style>
 </head>
 <body class="page">
@@ -304,12 +308,13 @@ th, td {
 <h2>Statistiques</h2>
 <p>Analyse du taux de présence des joueurs aux entraînements.</p>
 
-<div class="links">
+<div class="links center-stat">
     <a class="btn"
        href="${pageContext.request.contextPath}/CtrlStatistique?action=presenceEntrainement">
         📊 Taux de présence aux entraînements
     </a>
 </div>
+
 						
 					</div>
 				</c:if>

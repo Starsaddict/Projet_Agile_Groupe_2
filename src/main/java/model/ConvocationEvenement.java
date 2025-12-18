@@ -17,12 +17,12 @@ public class ConvocationEvenement {
 
     /* ================= RELATIONS ================= */
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @MapsId("evenementId")
     @JoinColumn(name = "IdEvenement", nullable = false)
     private Evenement evenement;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @MapsId("joueurId")
     @JoinColumn(name = "IdJoueur", nullable = false)
     private Joueur joueur;

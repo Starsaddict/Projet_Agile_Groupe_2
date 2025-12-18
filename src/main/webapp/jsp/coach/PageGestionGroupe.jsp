@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.util.List"%>
+<%@ page import="java.util.*"%>
 <%@ page import="model.Groupe, model.Joueur"%>
 <!DOCTYPE html>
 <html>
@@ -80,10 +80,10 @@ td.td-action { width: 260px; }
   vertical-align: middle;
 }
 .player-line {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 4px;
 }
 </style> 
 </head>
@@ -146,27 +146,28 @@ td.td-action { width: 260px; }
 						String search = (nom + " " + prenom + " " + prenom + " " + nom).toLowerCase();
 				%>
 				<div class="player-item" data-search="<%=search%>">
-					<label class="player-line">
-				<%boolean checked = false;
-					 if (groupeAEditer != null && groupeAEditer.getJoueurs() != null) {
- 					for (Joueur jj : groupeAEditer.getJoueurs()) {
- 					if (jj.getIdUtilisateur().equals(j.getIdUtilisateur())) {
- 					checked = true;
- 					break;
- 						}
- 					}
-				 } %> 
-				 <%String pic = j.getProfilePicRoute();
- 					if (pic == null || pic.isBlank()) {
- 					pic = "/img/joueur_avatar/default.png";
- 					}
- 					String src = request.getContextPath() + pic; %>
- 						<input type="checkbox" name="joueursIds"
+					<label class="player-line"> <%
+ boolean checked = false;
+ if (groupeAEditer != null && groupeAEditer.getJoueurs() != null) {
+ 	for (Joueur jj : groupeAEditer.getJoueurs()) {
+ 		if (jj.getIdUtilisateur().equals(j.getIdUtilisateur())) {
+ 	checked = true;
+ 	break;
+ 		}
+ 	}
+ }
+ %> <%
+ String pic = j.getProfilePicRoute();
+ if (pic == null || pic.isBlank()) {
+ 	pic = "/img/joueur_avatar/default.png";
+ }
+ String src = request.getContextPath() + pic;
+ %> <input
+						type="checkbox" name="joueursIds"
 						value="<%=j.getIdUtilisateur()%>" <%=checked ? "checked" : ""%> />
-						<%=nom%> <%=prenom%>
-						 
- 						<img class="avatar" src="<%=src%>" alt="avatar"
-						onerror="this.onerror=null;this.src='<%=request.getContextPath()%>/img/joueur_avatar/default.png';" />				
+						<%=nom%> <%=prenom%> <img class="avatar" src="<%=src%>"
+						alt="avatar"
+						onerror="this.onerror=null;this.src='<%=request.getContextPath()%>/img/joueur_avatar/default.png';" />
 					</label>
 				</div>
 				<%
@@ -245,8 +246,21 @@ td.td-action { width: 260px; }
 							<form action="CtrlCoach" method="post" style="margin: 0;">
 								<input type="hidden" name="action" value="SupprimerGroupe" /> <input
 									type="hidden" name="idGroupe" value="<%=g.getIdGroupe()%>" />
-								<button type="submit" class="btn danger"
-									onclick="return confirm('Supprimer ce groupe ?');">Supprimer</button>
+								<%
+								Map<Long, List<String>> evenementsParGroupe = (Map<Long, List<String>>) request.getAttribute("evenementsParGroupe");
+
+								List<String> evts = evenementsParGroupe != null ? evenementsParGroupe.get(g.getIdGroupe()) : null;
+
+								String msg = "Supprimer ce groupe ?";
+								if (evts != null && !evts.isEmpty()) {
+									msg = "⚠ Ce groupe est déjà affecté aux événements suivants :\\n" + String.join("\\n- ", evts)
+									+ "\\n\\nVoulez-vous vraiment le supprimer ?";
+								}
+								%>
+
+								<button type="submit" class="btn-danger"
+									onclick="return confirm('<%=msg%>');">Supprimer</button>
+
 							</form>
 						</div>
 					</td>

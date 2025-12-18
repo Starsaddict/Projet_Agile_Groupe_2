@@ -1,20 +1,21 @@
 package ctrl;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import model.EtrePresent;
 import model.Evenement;
+import model.ConvocationEvenement;
 import service.eventService;
+import service.convocationEvenementService;
 
 @WebServlet("/secretaire/enregistrement")
 public class enregistrementCtrl extends HttpServlet {
     private static final eventService eventService = new eventService();
+    private static final convocationEvenementService convocationService = new convocationEvenementService();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String eventId = req.getParameter("id");
@@ -56,15 +57,11 @@ public class enregistrementCtrl extends HttpServlet {
             return;
         }
 
-        List<EtrePresent> joueursPresent = new ArrayList<>();
-        evenement.getEtresPresents().forEach(e -> {
-            if (e.getJoueur() != null && "OUI".equalsIgnoreCase(e.getConfirmerPresenceJoueur())) {
-                joueursPresent.add(e);
-            }
-        });
-
         req.setAttribute("evenement", evenement);
-        req.setAttribute("etrePresents", joueursPresent);
+        List<ConvocationEvenement> convocations =
+                convocationService.findConfirmedByEvenement(evenement.getIdEvenement());
+
+        req.setAttribute("convocations", convocations);
 
         req.getRequestDispatcher("/jsp/secretaire/enregistreDetail.jsp").forward(req, resp);
     }

@@ -34,9 +34,6 @@ public class Evenement {
     @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Covoiturage> covoiturages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<EtrePresent> etresPresents = new ArrayList<>();
-
     public Evenement() {}
 
     public Evenement(String nom, String lieu, LocalDateTime date, String type, Groupe groupe) {
@@ -75,9 +72,6 @@ public class Evenement {
     public List<Covoiturage> getCovoiturages() { return covoiturages; }
     public void setCovoiturages(List<Covoiturage> covoiturages) { this.covoiturages = covoiturages; }
 
-    public List<EtrePresent> getEtresPresents() { return etresPresents; }
-    public void setEtresPresents(List<EtrePresent> etresPresents) { this.etresPresents = etresPresents; }
-
     public void addCovoiturage(Covoiturage c) {
         if (c != null && !covoiturages.contains(c)) {
             covoiturages.add(c);
@@ -91,19 +85,6 @@ public class Evenement {
         }
     }
 
-    public void addEtrePresent(EtrePresent p) {
-        if (p != null && !etresPresents.contains(p)) {
-            etresPresents.add(p);
-            p.setEvenement(this);
-        }
-    }
-
-    public void removeEtrePresent(EtrePresent p) {
-        if (p != null && etresPresents.remove(p)) {
-            p.setEvenement(null);
-        }
-    }
-    
     public String getDateForInput() {
         return dateEvenement.format(
                 DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")

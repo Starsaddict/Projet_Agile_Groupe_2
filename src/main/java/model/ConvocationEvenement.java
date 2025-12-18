@@ -12,17 +12,18 @@ import javax.persistence.*;
 )
 public class ConvocationEvenement {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private ConvocationEvenementId id;
 
     /* ================= RELATIONS ================= */
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @MapsId("evenementId")
     @JoinColumn(name = "IdEvenement", nullable = false)
     private Evenement evenement;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @MapsId("joueurId")
     @JoinColumn(name = "IdJoueur", nullable = false)
     private Joueur joueur;
 
@@ -35,6 +36,10 @@ public class ConvocationEvenement {
     @Column(name = "confirme_presence")
     private Boolean confirmePresence;
 
+    // Présence réelle enregistrée le jour J (null = non renseigné)
+    @Column(name = "presence_reelle")
+    private Boolean presenceReelle;
+
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
 
@@ -44,8 +49,12 @@ public class ConvocationEvenement {
 
     /* ================= GETTERS / SETTERS ================= */
 
-    public Long getId() {
+    public ConvocationEvenementId getId() {
         return id;
+    }
+
+    public void setId(ConvocationEvenementId id) {
+        this.id = id;
     }
 
     public Evenement getEvenement() {
@@ -54,6 +63,9 @@ public class ConvocationEvenement {
 
     public void setEvenement(Evenement evenement) {
         this.evenement = evenement;
+        if (evenement != null) {
+            ensureId().setEvenementId(evenement.getIdEvenement());
+        }
     }
 
     public Joueur getJoueur() {
@@ -62,6 +74,9 @@ public class ConvocationEvenement {
 
     public void setJoueur(Joueur joueur) {
         this.joueur = joueur;
+        if (joueur != null) {
+            ensureId().setJoueurId(joueur.getIdUtilisateur());
+        }
     }
 
     public String getToken() {
@@ -80,11 +95,26 @@ public class ConvocationEvenement {
         this.confirmePresence = confirmePresence;
     }
 
+    public Boolean getPresenceReelle() {
+        return presenceReelle;
+    }
+
+    public void setPresenceReelle(Boolean presenceReelle) {
+        this.presenceReelle = presenceReelle;
+    }
+
     public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
 
     public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    private ConvocationEvenementId ensureId() {
+        if (id == null) {
+            id = new ConvocationEvenementId();
+        }
+        return id;
     }
 }

@@ -10,141 +10,53 @@
 <meta charset="UTF-8">
 <title>Sélection des groupes</title>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <style>
-body {
-	font-family: Arial, sans-serif;
-	background-color: #f3f4f6;
-	margin: 0;
-	padding: 0;
+/* Ajustements spécifiques */
+.page-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: 16px;
 }
-
-.container {
-	max-width: 900px;
-	margin: 40px auto;
-	background-color: #ffffff;
-	padding: 30px 40px;
-	border-radius: 10px;
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+.header-actions { display: flex; gap: 10px; }
+.section-card {
+	background: var(--bg-card);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	padding: 1rem 1.25rem;
+	box-shadow: var(--shadow-sm);
+	margin-bottom: 16px;
 }
-
-h1 {
-	margin-top: 0;
-	font-size: 24px;
-	color: #111827;
-}
-
-h2 {
-	margin-top: 25px;
-	font-size: 20px;
-	color: #1f2933;
-	border-left: 4px solid #2563eb;
-	padding-left: 10px;
-}
-
-.success {
-	color: green;
-	font-weight: bold;
-}
-
-.error {
-	color: red;
-	font-weight: bold;
-}
-
+.section-card h2 { margin-bottom: 0.5rem; }
 table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 12px;
 	font-size: 14px;
 }
-
 table thead th {
-	background-color: #2563eb;
+	background-color: var(--primary);
 	color: #ffffff;
 	text-align: left;
 	padding: 8px 10px;
 }
-
 table tbody td {
-	border-bottom: 1px solid #e5e7eb;
+	border-bottom: 1px solid var(--border);
 	padding: 8px 10px;
 	vertical-align: top;
 }
-
-table tbody tr:nth-child(even) {
-	background-color: #f9fafb;
-}
-
-table tbody tr:hover {
-	background-color: #eef2ff;
-}
-
-.btn-primary, .btn-secondary {
-	border: none;
-	padding: 8px 16px;
-	border-radius: 6px;
-	font-size: 14px;
-	cursor: pointer;
-	transition: background-color 0.15s ease, transform 0.05s ease;
-}
-
-.page-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	margin-bottom: 20px;
-}
-
-.header-actions {
-	display: flex;
-	gap: 10px;
-}
-
-.btn-primary {
-	background-color: #2563eb;
-	color: white;
-}
-
-.btn-primary:hover {
-	background-color: #1d4ed8;
-	transform: translateY(-1px);
-}
-
-.btn-secondary {
-	background-color: #e5e7eb;
-	color: #111827;
-}
-
-.btn-secondary:hover {
-	background-color: #d1d5db;
-	transform: translateY(-1px);
-}
-
+table tbody tr:nth-child(even) { background-color: #f9fafb; }
+table tbody tr:hover { background-color: #eef2ff; }
 .btn-row {
-	margin-top: 20px;
+	margin-top: 16px;
 	display: flex;
 	gap: 10px;
 }
-
-.empty-msg {
-	color: #6b7280;
-	font-style: italic;
-}
-
-hr {
-	border: none;
-	border-top: 1px solid #e5e7eb;
-	margin: 25px 0;
-}
-/* groupe contenant un joueur absent */
-tr.absent-row {
-	background: #fee2e2 !important; /* rouge clair */
-}
-
-tr.absent-row:hover {
-	background: #fecaca !important;
-}
-
+.empty-msg { color: var(--text-muted); font-style: italic; }
+hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+tr.absent-row { background: #fee2e2 !important; }
+tr.absent-row:hover { background: #fecaca !important; }
 .absent-badge {
 	display: inline-block;
 	padding: 2px 8px;
@@ -155,12 +67,7 @@ tr.absent-row:hover {
 	background: #ffe4e6;
 	margin-left: 8px;
 }
-
-.absent-hint {
-	color: #991b1b;
-	font-size: 12px;
-	margin-top: 6px;
-}
+.absent-hint { color: #991b1b; font-size: 12px; margin-top: 6px; }
 </style>
 
 </head>
@@ -170,17 +77,6 @@ tr.absent-row:hover {
 		<div class="page-header">
 			<div>
 				<h1>Sélection des groupes à convoquer</h1>
-			</div>
-
-			<div class="header-actions">
-				<form action="CtrlCoach" method="get">
-					<input type="hidden" name="action" value="Home">
-					<button type="submit" class="btn-primary">Accueil</button>
-				</form>
-
-				<form action="CtrlLogout" method="get">
-					<button type="submit" class="btn-primary">Déconnexion</button>
-				</form>
 			</div>
 		</div>
 
@@ -202,6 +98,7 @@ tr.absent-row:hover {
 		Evenement evt = (Evenement) request.getAttribute("evenementSelectionne");
 		%>
 
+		<div class="section-card">
 		<h2>Événement sélectionné</h2>
 
 		<%
@@ -224,8 +121,9 @@ tr.absent-row:hover {
 		}
 		%>
 
-		<hr>
+		</div>
 
+		<div class="section-card">
 		<h2>Choisissez les groupes à convoquer</h2>
 
 		<%
@@ -333,7 +231,7 @@ tr.absent-row:hover {
 			</table>
 
 			<div class="btn-row">
-				<button type="submit" class="btn-primary">Valider</button>
+				<button type="submit" class="btn">Valider</button>
 			</div>
 
 		</form>
@@ -341,6 +239,7 @@ tr.absent-row:hover {
 		<%
 		}
 		%>
+		</div>
 	</div>
 
 </body>

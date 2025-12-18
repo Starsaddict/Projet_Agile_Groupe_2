@@ -1,4 +1,3 @@
-// java
 package service;
 
 import model.EtreAbsent;
@@ -7,7 +6,6 @@ import model.Parent;
 import repository.AbsenceRepository;
 import repository.AbsenceRepositoryImpl;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 

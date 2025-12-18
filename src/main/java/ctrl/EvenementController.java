@@ -26,6 +26,9 @@ public class EvenementController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
 
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+
         String action = req.getParameter("action");
 
         if ("create".equals(action)) create(req);
@@ -34,6 +37,7 @@ public class EvenementController extends HttpServlet {
 
         resp.sendRedirect(req.getContextPath() + "/evenementSecre");
     }
+
 
     /* ================= CREATE ================= */
     private void create(HttpServletRequest r) {

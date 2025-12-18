@@ -193,6 +193,7 @@ td.td-action {
 </head>
 
 <body>
+	<%@ include file="/jsp/header.jspf" %>
 
 	<%
 	List<Joueur> joueurs = (List<Joueur>) request.getAttribute("joueurs");

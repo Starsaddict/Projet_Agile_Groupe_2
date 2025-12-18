@@ -140,7 +140,7 @@ hr {
 
 </head>
 <body>
-
+<%@ include file="/jsp/header.jspf" %>
 	<div class="container">
 		<div class="page-header">
 			<div>

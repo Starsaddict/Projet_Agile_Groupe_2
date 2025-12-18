@@ -7,53 +7,82 @@
     <meta charset="UTF-8">
     <title>Gestion des événements</title>
 
-    <!-- CSS personnalisé (sans framework) -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/evenements.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <style>
+        /* Ajustements spécifiques pour garder l'esprit de l'ancien design */
+        .evt-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+        .evt-form-grid .field label {
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .evt-form-grid .field input,
+        .evt-form-grid .field select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+        }
+        .evt-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .evt-table th, .evt-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+        .evt-table thead {
+            background: #f8fafc;
+        }
+        .evt-table tr:hover {
+            background: #f1f5f9;
+        }
+        .evt-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+    </style>
 </head>
 
 <body>
+    <%@ include file="/jsp/header.jspf" %>
 
 <!-- ================= ACTIONS HAUT ================= -->
-<div class="top-actions">
-    <a href="${pageContext.request.contextPath}/jsp/home.jsp"
-       class="btn btn-retour">
-        ⬅ Retour à l’accueil
-    </a>
 
-    <form method="post"
-          action="${pageContext.request.contextPath}/CtrlLogout"
-          class="logout-form">
-        <button type="submit" class="btn btn-logout">
-            🚪 Déconnexion
-        </button>
-    </form>
-</div>
-
-<h2 class="page-title">Gestion des événements</h2>
+<div class="container">
+<div class="card">
+<h2>Gestion des événements</h2>
 
 <!-- ===================== CREATION EVENEMENT ===================== -->
-<div class="box">
+<div class="card" style="margin-top:12px;">
     <h3>Créer un événement</h3>
 
-    <form method="post" action="${pageContext.request.contextPath}/evenementSecre" class="form-grid">
+    <form method="post" action="${pageContext.request.contextPath}/evenementSecre" class="evt-form-grid">
         <input type="hidden" name="action" value="create">
 
-        <div class="form-group">
+        <div class="field">
             <label>Nom</label>
             <input type="text" name="nom" required>
         </div>
 
-        <div class="form-group">
+        <div class="field">
             <label>Lieu</label>
             <input type="text" name="lieu" required>
         </div>
 
-        <div class="form-group">
+        <div class="field">
             <label>Date</label>
             <input type="datetime-local" name="date" required>
         </div>
 
-        <div class="form-group">
+        <div class="field">
             <label>Type</label>
             <select name="type" required>
                 <option value="">-- Choisir --</option>
@@ -73,10 +102,10 @@
 </div>
 
 <!-- ===================== LISTE EVENEMENTS ===================== -->
-<div class="box">
+<div class="card" style="margin-top:12px;">
     <h3>Liste des événements (du plus proche au plus lointain)</h3>
 
-    <table>
+    <table class="evt-table">
         <thead>
         <tr>
             <th>ID</th>
@@ -136,8 +165,9 @@
                     </form>
 
                     <button type="submit"
-                            class="btn btn-update"
-                            form="update${e.idEvenement}">
+                            class="btn"
+                            form="update${e.idEvenement}"
+                            style="min-width:110px;">
                         Modifier
                     </button>
 
@@ -150,7 +180,7 @@
       );">
     <input type="hidden" name="action" value="delete">
     <input type="hidden" name="id" value="${e.idEvenement}">
-    <button type="submit" class="btn btn-delete">
+    <button type="submit" class="btn danger" style="min-width:110px;">
         Supprimer
     </button>
 </form>
@@ -164,5 +194,7 @@
     </table>
 </div>
 
+</div>
+</div>
 </body>
 </html>

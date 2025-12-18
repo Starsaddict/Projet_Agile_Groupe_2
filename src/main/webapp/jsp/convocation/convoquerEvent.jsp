@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
+    <%@ include file="/jsp/header.jspf" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <div class="container">
@@ -21,17 +22,6 @@
                 <c:out value="${mode == 'match' ? 'Matches' : 'Autres événements'}" />
                 - Sélectionnez un événement à convoquer
             </p>
-        </div>
-        <div class="links">
-            <a href="${ctx}/secretaire/profil" class="btn btn-secondary">Retour au profil</a>
-            <form method="post" action="${ctx}/CtrlLogout" style="display: inline;">
-                <button type="submit" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
-                    <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                    </svg>
-                    Déconnexion
-                </button>
-            </form>
         </div>
     </div>
 

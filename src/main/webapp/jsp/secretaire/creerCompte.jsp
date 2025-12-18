@@ -16,14 +16,15 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/style.css">
 </head>
 <body>
-<div class="container">
-    <div class="card" style="margin-bottom:12px;">
-        <a href="<%= contextPath %>/secretaire/profil" class="btn secondary">← Retour</a>
-    </div>
+    <%@ include file="/jsp/header.jspf" %>
+
+    
 
     <div class="card">
         <h1>Création du compte famille</h1>
-
+         <a href="<%= contextPath %>/secretaire/profil" class="btn secondary">← Retour</a>
+        <div class="card" style="margin-bottom:12px;">
+       
         <% if (error != null && !error.isEmpty()) { %>
             <div class="alert error"><%= error %></div>
         <% } %>

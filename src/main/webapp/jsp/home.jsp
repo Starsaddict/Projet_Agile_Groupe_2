@@ -62,18 +62,7 @@ th, td {
 	font-style: italic;
 }
 
-.top-bar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 1rem;
-	margin-bottom: 1rem;
-}
 
-.top-bar p {
-	margin: 0;
-	color: var(--text-muted);
-}
 
 .links {
 	display: flex;
@@ -166,7 +155,7 @@ th, td {
 </style>
 </head>
 <body class="page">
-    <jsp:include page="/jsp/includes/topbar.jspf" />
+     <%@ include file="/jsp/header.jspf" %>
 	<div class="container">
 		<div class="card">
 			<div class="top-bar">
@@ -178,10 +167,6 @@ th, td {
 					<c:if test="${not empty sessionScope.user}">
 						<span class="pill blue">${sessionScope.user.emailUtilisateur}</span>
 					</c:if>
-					<form action="${pageContext.request.contextPath}/CtrlLogout"
-						method="post" style="display: inline;">
-						<button class="btn secondary" type="submit">Déconnexion</button>
-					</form>
 				</div>
 			</div>
 
@@ -324,7 +309,6 @@ th, td {
             <p>Accès rapide aux covoiturages, convocations et profil.</p>
             <div class="links">
                 <a class="btn" href="${pageContext.request.contextPath}/parent/covoiturage">Covoiturage</a>
-                <a class="btn" href="${pageContext.request.contextPath}/jsp/convocation.jsp">Convocation</a>
                 <a class="btn" href="${pageContext.request.contextPath}/parent/profil">Profil parent</a>
                 <a class="btn" href="${pageContext.request.contextPath}/CtrlFrontAbsence">Gérer les absences</a>
             </div>
@@ -353,7 +337,6 @@ th, td {
             <h2>Vue Joueur</h2>
             <p>Consultez vos convocations et informations d'équipe.</p>
             <div class="links">
-                <a class="btn" href="${pageContext.request.contextPath}/jsp/convocation.jsp">Mes convocations</a>
                 <a class="btn" href="${pageContext.request.contextPath}/joueur/profil">Ma profil</a>
             </div>
         </div>

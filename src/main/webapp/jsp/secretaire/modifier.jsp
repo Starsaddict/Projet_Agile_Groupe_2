@@ -88,7 +88,7 @@
                             <td data-label="Type"><%= typeU %></td>
                             <td class="actions" data-label="Action">
                                 <a href="<%= contextPath %>/secretaire/profil/sendResetPasswordRequest?id=<%= userId %>" class="btn">
-                                    Send Modification Request
+                                    envoyer demande de modification
                                 </a>
                                 <a href="<%= contextPath %>/secretaire/profil/edit?id=<%= userId %>" class="btn">
                                     Modifier

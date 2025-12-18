@@ -164,4 +164,10 @@ public class SendEmailSSL {
 
         sendEmail(email, subject, body);
     }
+
+    public static void encoyerMessage(Utilisateur sender, String email, String sujet, String context) throws MessagingException {
+        String sender_nom = sender.getNomUtilisateur() + " " + sender.getPrenomUtilisateur();
+        String newSujet = "[ " + sender_nom +" ]: " + sujet;
+        sendEmail(email, newSujet, context);
+    }
 }

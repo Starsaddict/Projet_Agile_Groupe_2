@@ -92,6 +92,14 @@ public class BdTest {
                     "Junior",
                     LocalDate.of(2011, 3, 20)
             );
+            
+            Joueur joueurSpecial2 = (Joueur) buildUtilisateur(
+                    "Joueur",
+                    "lucas.veslin@outlook.fr",
+                    "Lukas",
+                    "Veslin",
+                    LocalDate.of(2011, 3, 20)
+            );
 
             joueurSpecial.setParents(List.of(parentSpecial));
             parentChildCount.put(parentSpecial, 1);
@@ -100,7 +108,8 @@ public class BdTest {
             session.save(joueurSpecial);
             joueurs.add(joueurSpecial);
 
-            
+            session.save(joueurSpecial2);
+            joueurs.add(joueurSpecial2);
             
             
             
@@ -151,6 +160,9 @@ public class BdTest {
                     "MATCH_OFFICIEL", groupeA);
             Evenement entrainement = new Evenement("Entraînement", "Toulouse Rugby Club",
                     LocalDateTime.of(2026, 3, 12, 18, 0), "ENTRAINEMENT", groupeA);
+
+            
+            
             session.save(match);
             session.save(entrainement);
 

@@ -165,7 +165,7 @@
 
 <div id="floatingWindow" class="floating-window" aria-live="polite">
     <div class="floating-window__header">
-        <h4 class="floating-window__title">Faire un conversation</h4>
+        <h4 class="floating-window__title">Messagerie</h4>
         <button class="floating-window__close" type="button" aria-label="Close" onclick="FloatingWindow.close()">&times;</button>
     </div>
     <div class="floating-window__content" id="floatingWindowContent">

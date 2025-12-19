@@ -2,11 +2,11 @@
 <%
     // Récupération du chemin de contexte de l'application
     String contextPath = request.getContextPath();
-    
+
     // Récupération du code d'invitation depuis les attributs ou paramètres de requête
     String code = (String) request.getAttribute("invitationCode");
     if (code == null) code = request.getParameter("code");
-    
+
     // Récupération des messages d'erreur
     String error = request.getParameter("error");
 %>
@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="<%= contextPath %>/css/secretaire-profil.css">
 </head>
 <body>
-    
+
 <div class="container">
     <h1>Inscription - Créer votre compte</h1>
 
@@ -106,7 +106,7 @@
     function addRow(containerId, type) {
         // Récupération du conteneur par son ID
         var container = document.getElementById(containerId);
-        
+
         // Ajout d'un séparateur visuel si ce n'est pas la première ligne
         if (container.children.length) {
             var separator = document.createElement("hr");
@@ -117,7 +117,7 @@
         // Création de la nouvelle ligne
         var row = document.createElement("div");
         row.className = "dynamic-row " + type + "-row";
-        
+
         // Construction du HTML de la nouvelle ligne
         row.innerHTML =
             '<div class="field">'
@@ -141,8 +141,8 @@
      * Fonction spécifique pour ajouter un nouveau joueur
      * Appelle addRow() avec les paramètres appropriés
      */
-    function addJoueur() { 
-        addRow('joueur-rows', 'joueur'); 
+    function addJoueur() {
+        addRow('joueur-rows', 'joueur');
     }
 </script>
 </body>

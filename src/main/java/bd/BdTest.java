@@ -37,22 +37,41 @@ public class BdTest {
             session.save(coach);
             session.save(coach2);
 
-            // ======================= 2) Parents =======================
-            List<String> parentPrenoms = Arrays.asList("Lucas", "Oussama", "Marie", "Élodie", "Hassan", "Claire");
-            List<String> parentNoms = Arrays.asList("Veslin", "Lahrach", "Dupont", "Moreau", "Benali", "Petit");
+	         // ======================= 2) Parents =======================
+	
+	         // Parent spécial
+	         Parent parentSpecial = (Parent) buildUtilisateur(
+	                 "Parent",
+	                 "yasmine.aloukas28@gmail.com",
+	                 "Doe",
+	                 "John",
+	                 LocalDate.of(1975, 6, 15)
+	         );
+	         session.save(parentSpecial);
+	
+	         List<String> parentPrenoms = Arrays.asList("Lucas", "Oussama", "Marie", "Élodie", "Hassan", "Claire");
+	         List<String> parentNoms = Arrays.asList("Veslin", "Lahrach", "Dupont", "Moreau", "Benali", "Petit");
+	
+	         List<Parent> parents = new ArrayList<>();
+	         Map<Parent, Integer> parentChildCount = new HashMap<>();
+	
+	         for (int i = 0; i < 6; i++) {
+	             Parent p = (Parent) buildUtilisateur(
+	                     "Parent",
+	                     "parent" + (i + 1) + "@test.com",
+	                     parentNoms.get(i),
+	                     parentPrenoms.get(i),
+	                     LocalDate.of(1970 + i, rand.nextInt(12) + 1, rand.nextInt(28) + 1)
+	             );
+	             session.save(p);
+	             parents.add(p);
+	             parentChildCount.put(p, 0);
+	         }
+	
+	         // ajouter le parent spécial
+	         parents.add(parentSpecial);
+	         parentChildCount.put(parentSpecial, 0);
 
-            List<Parent> parents = new ArrayList<>();
-            Map<Parent, Integer> parentChildCount = new HashMap<>(); // suivi du nombre d'enfants par parent
-            for (int i = 0; i < 6; i++) {
-                Parent p = (Parent) buildUtilisateur("Parent",
-                        "parent" + (i + 1) + "@test.com",
-                        parentNoms.get(i),
-                        parentPrenoms.get(i),
-                        LocalDate.of(1970 + i, rand.nextInt(12) + 1, rand.nextInt(28) + 1));
-                session.save(p);
-                parents.add(p);
-                parentChildCount.put(p, 0); // aucun enfant pour le moment
-            }
 
             // ======================= 3) Groupes =======================
             Groupe groupeA = new Groupe();
@@ -62,33 +81,61 @@ public class BdTest {
             session.save(groupeA);
             session.save(groupeB);
 
-            // ======================= 4) Joueurs =======================
-            List<String> joueurPrenoms = Arrays.asList("Léo","Emma","Gabriel","Chloé","Louis","Jade","Lucas","Manon","Nathan","Louise",
-                    "Raphaël","Sarah","Arthur","Inès","Hugo","Camille","Ethan","Lina","Maxime","Zoé");
-            List<String> joueurNoms = Arrays.asList("Martin","Bernard","Thomas","Petit","Robert","Richard","Durand","Dubois","Moreau","Laurent",
-                    "Simon","Michel","Lefebvre","Garcia","David","Bertrand","Roux","Vincent","Fournier","Morel");
-
+         // ======================= 4) Joueurs =======================
             List<Joueur> joueurs = new ArrayList<>();
+
+            // Joueur spécial (fils du parent spécial)
+            Joueur joueurSpecial = (Joueur) buildUtilisateur(
+                    "Joueur",
+                    "yasminealoukas2002@gmail.com",
+                    "Doe",
+                    "Junior",
+                    LocalDate.of(2011, 3, 20)
+            );
+
+            joueurSpecial.setParents(List.of(parentSpecial));
+            parentChildCount.put(parentSpecial, 1);
+            joueurSpecial.addGroupe(groupeA);
+
+            session.save(joueurSpecial);
+            joueurs.add(joueurSpecial);
+
+            
+            
+            
+            
+            List<String> joueurPrenoms = Arrays.asList(
+                    "Léo","Emma","Gabriel","Chloé","Louis","Jade","Lucas","Manon","Nathan","Louise",
+                    "Raphaël","Sarah","Arthur","Inès","Hugo","Camille","Ethan","Lina","Maxime","Zoé"
+            );
+
+            List<String> joueurNoms = Arrays.asList(
+                    "Martin","Bernard","Thomas","Petit","Robert","Richard","Durand","Dubois","Moreau","Laurent",
+                    "Simon","Michel","Lefebvre","Garcia","David","Bertrand","Roux","Vincent","Fournier","Morel"
+            );
+
             for (int i = 0; i < 20; i++) {
-                Joueur j = (Joueur) buildUtilisateur("Joueur",
+                Joueur j = (Joueur) buildUtilisateur(
+                        "Joueur",
                         "joueur" + (i + 1) + "@test.com",
                         joueurNoms.get(i),
                         joueurPrenoms.get(i),
-                        LocalDate.of(2010, rand.nextInt(12) + 1, rand.nextInt(28) + 1));
+                        LocalDate.of(2010, rand.nextInt(12) + 1, rand.nextInt(28) + 1)
+                );
 
-                // Attribution de 1 à 2 parents aléatoires avec max 3 enfants par parent
                 List<Parent> pList = new ArrayList<>();
-                Collections.shuffle(parents); // mélange pour random
+                Collections.shuffle(parents);
+
                 for (Parent p : parents) {
-                    if (pList.size() >= 2) break;       // max 2 parents par joueur
-                    if (parentChildCount.get(p) < 3) { // max 3 enfants par parent
+                    if (pList.size() >= 2) break;
+                    if (parentChildCount.get(p) < 3) {
                         pList.add(p);
                         parentChildCount.put(p, parentChildCount.get(p) + 1);
                     }
                 }
+
                 j.setParents(pList);
 
-                // Attribution groupe
                 if (i < 10)
                     j.addGroupe(groupeA);
                 else

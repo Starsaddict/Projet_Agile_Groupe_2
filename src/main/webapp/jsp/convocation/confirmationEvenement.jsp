@@ -59,11 +59,11 @@
             <input type="hidden" name="token" value="${convocation.token}" />
 
             <div class="btn-group">
-                <button type="submit" name="peutJouer" value="oui" class="btn btn-primary">
+                <button type="submit" name="presence" value="oui" class="btn btn-primary">
                     ✅ Je serai présent
                 </button>
 
-                <button type="submit" name="peutJouer" value="non" class="btn danger">
+                <button type="submit" name="presence" value="non" class="btn danger">
                     ❌ Je ne serai pas présent
                 </button>
             </div>
